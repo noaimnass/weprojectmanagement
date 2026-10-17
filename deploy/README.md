@@ -49,6 +49,16 @@ L'application (Ruby on Rails + PostgreSQL + Docker) ne fonctionne **pas** sur l'
 9. **Après la première connexion** : suivre la section « Après l'installation » ci-dessous (paramètres Pilotage, rôles, `rake pilotage:seed_governance`, `rake pilotage:enable_all`).
 10. **Exploitation** : activer les sauvegardes automatiques du VPS dans hPanel, programmer un `pg_dump` hebdomadaire (section Sauvegarde), mettre à jour avec la section Mise à jour.
 
+## Tester sans serveur : GitHub Codespaces
+
+Le dépôt contient une configuration Codespaces (`.devcontainer/devcontainer.json`, machine 4 cœurs / 16 Go, Docker, port 8080 transféré). Depuis la page du dépôt sur GitHub : **Code › Codespaces › New with options**, machine « 4-core », créer. Dans le terminal du Codespace :
+
+```bash
+bash deploy/codespace.sh
+```
+
+Le script écrit `deploy/.env` avec l'URL du Codespace, construit l'image (20 à 40 min), démarre, puis amorce les instances, le pilotage et les données de démonstration. Il affiche l'adresse finale (`https://<codespace>-8080.app.github.dev`, `admin` / `admin1234`). Onglet **Ports** : passer le port 8080 en « Public » pour montrer la démo à quelqu'un d'autre. Arrêter le Codespace quand il ne sert pas (il consomme le quota gratuit tant qu'il tourne ; il s'arrête seul après 30 minutes d'inactivité). `bash deploy/codespace.sh --no-demo` pour une instance vierge.
+
 ## Premier démarrage (générique)
 
 ```bash
