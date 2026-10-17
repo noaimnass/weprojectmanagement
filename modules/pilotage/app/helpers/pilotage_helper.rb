@@ -31,7 +31,9 @@ module PilotageHelper
   end
 
   def pilotage_class_label(klass)
-    render(Primer::Beta::Label.new(scheme: klass == "A" ? :accent : :secondary)) { t("pilotage.classes.#{klass}", default: klass) }
+    render(Primer::Beta::Label.new(scheme: klass == "A" ? :accent : :secondary)) do
+      t("pilotage.classes.#{klass}", default: klass)
+    end
   end
 
   def pilotage_phase_label(key)

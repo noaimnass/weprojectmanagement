@@ -69,7 +69,7 @@ module Pilotage
 
     def measured_benefit_project_ids
       @measured_benefit_project_ids ||= Pilotage::RegisterItem.where(project_id: @project_ids, kind: "benefit")
-                                                              .where("details->>'measured_value' IS NOT NULL AND details->>'measured_value' <> ''")
+                                                              .where("COALESCE(details->>'measured_value', '') <> ''")
                                                               .distinct.pluck(:project_id)
     end
 

@@ -58,7 +58,13 @@ namespace :pilotage do
 
     root = Pilotage::Entity.find_or_create_by!(name: "Direction générale", kind: "organisation", code: "DG")
     divisions = ["Finance et achats", "Opérations", "Systèmes d'information", "Ressources humaines"].map.with_index do |name, i|
-      Pilotage::Entity.find_or_create_by!(name:) { |e| e.kind = "division"; e.parent = root; e.position = i; e.headcount = 40 + i * 25; e.budget = 5_000_000 + i * 2_000_000 }
+      Pilotage::Entity.find_or_create_by!(name:) do |e|
+        e.kind = "division"
+        e.parent = root
+        e.position = i
+        e.headcount = 40 + i * 25
+        e.budget = 5_000_000 + i * 2_000_000
+      end
     end
 
     categories = Pilotage::Lifecycle.categories
@@ -92,38 +98,57 @@ namespace :pilotage do
       end
       next if project.pilotage_register_items.any?
 
-      [["risk", "Disponibilité des ressources clés", 4, 4], ["risk", "Dérive du périmètre fonctionnel", 3, 3],
-       ["issue", "Environnement de recette instable", nil, nil], ["action", "Préparer le comité de pilotage", nil, nil],
-       ["decision", "Validation du planning directeur", nil, nil], ["deliverable", "Dossier de cadrage", nil, nil],
-       ["benefit", "Réduction des délais de traitement", nil, nil], ["stakeholder", "Direction métier", nil, nil],
-       ["impact", "Nouveau processus de validation", 3, 4], ["change_request", "Extension du périmètre aux filiales", nil, nil]].each do |kind, title, p, im|
+      samples = [
+        ["risk", "Disponibilité des ressources clés", 4, 4],
+        ["risk", "Dérive du périmètre fonctionnel", 3, 3],
+        ["issue", "Environnement de recette instable", nil, nil],
+        ["action", "Préparer le comité de pilotage", nil, nil],
+        ["decision", "Validation du planning directeur", nil, nil],
+        ["deliverable", "Dossier de cadrage", nil, nil],
+        ["benefit", "Réduction des délais de traitement", nil, nil],
+        ["stakeholder", "Direction métier", nil, nil],
+        ["impact", "Nouveau processus de validation", 3, 4],
+        ["change_request", "Extension du périmètre aux filiales", nil, nil]
+      ]
+      samples.each do |kind, title, p, im|
         details = case kind
-                  when "benefit" then { "indicator" => "Délai moyen (jours)", "unit" => "j", "target_value" => "10", "measured_value" => (i.even? ? "12" : nil) }.compact
-                  when "stakeholder" then { "entity_id" => divisions[i % divisions.size].id, "role" => "Sponsor métier", "influence" => "high", "support" => "medium" }
-                  when "impact" then { "entity_id" => divisions[(i + 1) % divisions.size].id, "population" => "Gestionnaires", "level" => "high" }
+                  when "benefit"
+                    { "indicator" => "Délai moyen (jours)", "unit" => "j", "target_value" => "10",
+                      "measured_value" => (i.even? ? "12" : nil) }.compact
+                  when "stakeholder"
+                    { "entity_id" => divisions[i % divisions.size].id, "role" => "Sponsor métier",
+                      "influence" => "high", "support" => "medium" }
+                  when "impact"
+                    { "entity_id" => divisions[(i + 1) % divisions.size].id, "population" => "Gestionnaires", "level" => "high" }
                   when "deliverable" then { "phase" => "P1", "version" => "1.0" }
                   when "decision" then { "instance" => "Comité projet" }
                   else {}
                   end
-        project.pilotage_register_items.create!(kind:, title:, probability: p, impact: im, owner: users.sample, created_by: admin,
-                                                due_date: Date.current + rand(-10..40), priority: 1 + rand(3), details:)
+        project.pilotage_register_items.create!(kind:, title:, probability: p, impact: im, owner: users.sample,
+                                                created_by: admin, due_date: Date.current + rand(-10..40),
+                                                priority: 1 + rand(3), details:)
       end
       [60, 30, 10].each_with_index do |days_ago, r|
         report = project.pilotage_status_reports.create!(
           period_start: Date.current - days_ago - 14, period_end: Date.current - days_ago,
-          health: %w[green amber green][(i + r) % 3], schedule_signal: %w[green amber red][(i + r) % 3], budget_signal: "green",
-          scope_signal: "green", risk_signal: %w[green green amber][(i + r) % 3], progress: [20, 45, 70][r] + i % 10,
-          summary: "Point d'avancement de démonstration (#{days_ago} jours).", next_steps: "Préparer la prochaine revue de jalon.",
+          health: %w[green amber green][(i + r) % 3], schedule_signal: %w[green amber red][(i + r) % 3],
+          budget_signal: "green", scope_signal: "green", risk_signal: %w[green green amber][(i + r) % 3],
+          progress: [20, 45, 70][r] + i % 10,
+          summary: "Point d'avancement de démonstration (#{days_ago} jours).",
+          next_steps: "Préparer la prochaine revue de jalon.",
           decisions_needed: r == 2 && i.even? ? "Arbitrage sur le renfort de l'équipe de recette." : nil
         )
+        next if r == 2 && i % 4 == 3
+
         report.update!(state: "validated", submitted_by: users.sample, submitted_at: report.period_end.to_time + 1.day,
-                       validated_by: admin, validated_at: report.period_end.to_time + 2.days) unless r == 2 && i % 4 == 3
+                       validated_by: admin, validated_at: report.period_end.to_time + 2.days)
       end
     end
 
     tower = Pilotage::Instance.find_by(level: "control_tower")
     tower.sessions.find_or_create_by!(title: "Tour de contrôle", held_on: Date.current.end_of_month) if tower
-    [["Nouveau portail des demandes internes", 1_200_000, 8, 3], ["Rénovation du siège", 25_000_000, 18, 2]].each do |title, budget, months, entities|
+    requests = [["Nouveau portail des demandes internes", 1_200_000, 8, 3], ["Rénovation du siège", 25_000_000, 18, 2]]
+    requests.each do |title, budget, months, entities|
       Pilotage::ProjectRequest.find_or_create_by!(title:) do |r|
         r.requester = users.sample
         r.entity = divisions.sample

@@ -26,7 +26,8 @@ module Pilotage
       @upcoming_milestones = Pilotage::MilestoneReview.where(project_id: ids).upcoming.includes(:project).order(:planned_on)
       @late_milestones = Pilotage::MilestoneReview.where(project_id: ids).late.includes(:project).order(:planned_on)
       @pending_requests = Pilotage::ProjectRequest.pending.includes(:requester, :entity).recent_first
-      @change_requests = Pilotage::RegisterItem.where(project_id: ids).of_kind("change_request").open_items.includes(:project).ordered
+      @change_requests = Pilotage::RegisterItem.where(project_id: ids).of_kind("change_request").open_items
+                                               .includes(:project).ordered
       @decisions_needed = latest_validated_reports(ids).select { |r| r.decisions_needed.present? }
       render_print "pilotage/reports/control_tower"
     end

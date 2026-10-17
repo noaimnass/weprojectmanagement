@@ -28,7 +28,8 @@ module Pilotage
       @month = parse_month
       ids = visible_project_ids
       @sessions = Pilotage::Session.in_month(@month).includes(:instance, :project).order(:held_on)
-      @milestones = Pilotage::MilestoneReview.where(project_id: ids).where(planned_on: @month.beginning_of_month..@month.end_of_month)
+      @milestones = Pilotage::MilestoneReview.where(project_id: ids)
+                                             .where(planned_on: @month.beginning_of_month..@month.end_of_month)
                                              .includes(:project).order(:planned_on)
       @reports_due = portfolio_summary(filters: {}, grouping: "none").rows.select { |r| r.signals.reporting != "green" }
       @days = (@month.beginning_of_month..@month.end_of_month).to_a

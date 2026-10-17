@@ -31,8 +31,10 @@ module Pilotage
       @children = @entity.children.active
       @summary = Pilotage::PortfolioSummary.new(user: current_user, projects: @entity.piloted_projects).call
       @impacting = @entity.impacting_projects.includes(:pilotage_profile).to_a
-      @benefits = Pilotage::RegisterItem.of_kind("benefit").where(project_id: @summary.project_ids).includes(:project).ordered.limit(20)
-      @stakeholders = Pilotage::RegisterItem.of_kind("stakeholder").where("details->>'entity_id' = ?", @entity.id.to_s).includes(:project)
+      @benefits = Pilotage::RegisterItem.of_kind("benefit").where(project_id: @summary.project_ids)
+                                        .includes(:project).ordered.limit(20)
+      @stakeholders = Pilotage::RegisterItem.of_kind("stakeholder").where("details->>'entity_id' = ?", @entity.id.to_s)
+                                            .includes(:project)
       @requests = @entity.project_requests.recent_first.limit(10)
       @workload = Pilotage::Workload.new(project_ids: @summary.project_ids, user: current_user, months: 6).call
     end

@@ -55,7 +55,9 @@ module Pilotage
     scope :open_items, -> { where(status: %w[open in_progress]) }
     scope :closed_items, -> { where(status: %w[closed cancelled]) }
     scope :overdue, -> { open_items.where("due_date < ?", Date.current) }
-    scope :ordered, -> { order(Arel.sql("CASE WHEN status IN ('open','in_progress') THEN 0 ELSE 1 END"), :priority, :due_date, :id) }
+    scope :ordered, -> {
+      order(Arel.sql("CASE WHEN status IN ('open','in_progress') THEN 0 ELSE 1 END"), :priority, :due_date, :id)
+    }
 
     def self.visible(user = User.current)
       where(project_id: Project.allowed_to(user, :view_pilotage).select(:id))

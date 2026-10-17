@@ -17,7 +17,9 @@ require_relative "../spec_helper"
 
 RSpec.describe Pilotage::Signals do
   let(:project) { create(:project) }
-  let!(:profile) { create(:pilotage_project_profile, project:, project_class: "B", budget_total: 1_000_000, budget_spent: 950_000) }
+  let!(:profile) do
+    create(:pilotage_project_profile, project:, project_class: "B", budget_total: 1_000_000, budget_spent: 950_000)
+  end
 
   it "is green on every signal for a fresh project with a validated report" do
     report = create(:pilotage_status_report, project:)

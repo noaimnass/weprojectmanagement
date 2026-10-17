@@ -26,7 +26,9 @@ module Pilotage
     validates :level, inclusion: { in: LEVELS }
     validates :periodicity, inclusion: { in: PERIODICITIES }, allow_blank: true
 
-    scope :ordered, -> { order(Arel.sql("array_position(ARRAY['strategic','control_tower','portfolio','project'], level)"), :position, :name) }
+    scope :ordered, -> {
+      order(Arel.sql("array_position(ARRAY['strategic','control_tower','portfolio','project'], level)"), :position, :name)
+    }
 
     def level_rank
       LEVELS.index(level)
