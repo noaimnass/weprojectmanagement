@@ -34,7 +34,7 @@ See COPYRIGHT and LICENSE files for more details.
           <% x1 = x_for(segment.from) %>
           <% x2 = [x_for(segment.to), x1 + 2].max %>
           <rect class="<%= segment_class(lane, segment) %>" x="<%= x1 %>" y="<%= y + LANE_PADDING %>" width="<%= (x2 - x1).round(1) %>" height="<%= lane_height - LANE_PADDING * 2 %>" rx="4">
-            <title><%= segment.key %> · <%= segment.label %> · <%= format_date(segment.from) %> → <%= format_date(segment.to) %></title>
+            <title><%= segment.key %> · <%= segment.label %> · <%= helpers.format_date(segment.from) %> → <%= helpers.format_date(segment.to) %></title>
           </rect>
           <% if x2 - x1 > 34 %>
             <text class="segment-label" x="<%= x1 + 5 %>" y="<%= y + lane_height / 2 + 4 %>"><%= segment.key %></text>
@@ -42,13 +42,13 @@ See COPYRIGHT and LICENSE files for more details.
         <% end %>
         <% if lane.baseline_end_on.present? %>
           <% bx = x_for(lane.baseline_end_on.clamp(plan.from, plan.to)) %>
-          <line class="baseline" x1="<%= bx %>" y1="<%= y + 4 %>" x2="<%= bx %>" y2="<%= y + lane_height - 4 %>"><title><%= t("pilotage.master_plan.baseline") %>: <%= format_date(lane.baseline_end_on) %></title></line>
+          <line class="baseline" x1="<%= bx %>" y1="<%= y + 4 %>" x2="<%= bx %>" y2="<%= y + lane_height - 4 %>"><title><%= t("pilotage.master_plan.baseline") %>: <%= helpers.format_date(lane.baseline_end_on) %></title></line>
         <% end %>
         <% if (text = variance_text(lane)) %>
           <text class="variance variance--<%= lane.variance_days.positive? ? 'late' : 'early' %>" x="<%= x_for(lane.end_on.clamp(plan.from, plan.to)) + 6 %>" y="<%= y + lane_height / 2 + 4 %>"><%= text %></text>
         <% end %>
       <% end %>
-      <line class="today-line" x1="<%= today_x %>" y1="<%= header_height - 6 %>" x2="<%= today_x %>" y2="<%= height %>"><title><%= format_date(Date.current) %></title></line>
+      <line class="today-line" x1="<%= today_x %>" y1="<%= header_height - 6 %>" x2="<%= today_x %>" y2="<%= height %>"><title><%= helpers.format_date(Date.current) %></title></line>
     </svg>
   <% end %>
 </div>

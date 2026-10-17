@@ -35,7 +35,7 @@ See COPYRIGHT and LICENSE files for more details.
   <% if fields.any? %>
     <h4><%= t("pilotage.registers.details_title") %></h4>
     <div class="pilotage-form__row">
-      <%= f.fields_for :details, OpenStruct.new(item.details) do |d| %>
+      <%= f.fields_for :details do |d| %>
         <% fields.each do |field| %>
           <div class="FormControl">
             <label class="FormControl-label" for="details_<%= field %>"><%= t("pilotage.registers.details.#{field}", default: field.humanize) %></label>
