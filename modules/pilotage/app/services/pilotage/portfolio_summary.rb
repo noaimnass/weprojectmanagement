@@ -109,7 +109,8 @@ module Pilotage
     private
 
     def base_scope
-      scope = (@scope || Project.allowed_to(@user, :view_pilotage)).active.where(templated: false)
+      scope = Project.allowed_to(@user, :view_pilotage).active.where(templated: false)
+      scope = scope.where(id: @scope.select(:id)) if @scope
       scope = scope.joins(:enabled_modules).where(enabled_modules: { name: "pilotage" })
       scope = scope.preload(:parent, :enabled_modules)
       if filters[:q].present?

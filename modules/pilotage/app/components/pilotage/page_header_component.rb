@@ -17,7 +17,8 @@ module Pilotage
   class PageHeaderComponent < ApplicationComponent
     include ApplicationHelper
 
-    options :title, :project, :description, :actions, breadcrumbs: []
+    options :title, :project, :description, :actions
+    options breadcrumbs: []
 
     def breadcrumb_items
       items = []

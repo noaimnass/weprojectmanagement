@@ -80,9 +80,12 @@ See COPYRIGHT and LICENSE files for more details.
     <span><strong><%= yield(:print_title) %></strong> <span class="muted">· <%= format_date(Date.current) %></span></span>
     <span>
       <a href="<%= yield(:print_back).presence || pilotage_cockpit_path %>"><%= t(:button_back) %></a>
-      <button class="primary" type="button" onclick="window.print()"><%= t("pilotage.reports.print") %></button>
+      <button class="primary" type="button" id="pilotage-print-button"><%= t("pilotage.reports.print") %></button>
     </span>
   </div>
   <%= yield %>
+  <%= nonced_javascript_tag do %>
+    document.getElementById("pilotage-print-button").addEventListener("click", function () { window.print(); });
+  <% end %>
 </body>
 </html>

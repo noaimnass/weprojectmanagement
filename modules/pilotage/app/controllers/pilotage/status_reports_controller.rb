@@ -15,7 +15,8 @@
 #++
 module Pilotage
   class StatusReportsController < BaseController
-    before_action :find_project_by_project_id
+    before_action :find_project_by_project_id, except: %i[validate reject]
+    before_action :find_project_for_validation, only: %i[validate reject]
     before_action :authorize, except: %i[validate reject]
     before_action :authorize_global, only: %i[validate reject]
     before_action :find_report, only: %i[show edit update destroy submit validate reject]
@@ -106,6 +107,11 @@ module Pilotage
 
     def find_report
       @report = @project.pilotage_status_reports.find(params[:id])
+    end
+
+    # Validators act with a global permission and may not be members of a private project.
+    def find_project_for_validation
+      @project = Project.active.find(params[:project_id])
     end
 
     def report_params

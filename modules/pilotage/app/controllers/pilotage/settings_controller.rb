@@ -38,7 +38,8 @@ module Pilotage
     def parse_labels(value)
       return value if value.is_a?(Hash)
 
-      YAML.safe_load(value.to_s).to_h
+      parsed = YAML.safe_load(value.to_s)
+      parsed.is_a?(Hash) ? parsed : {}
     rescue Psych::SyntaxError
       {}
     end

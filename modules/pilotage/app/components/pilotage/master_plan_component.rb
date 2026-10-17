@@ -18,7 +18,8 @@ module Pilotage
   class MasterPlanComponent < ApplicationComponent
     include OpPrimer::ComponentHelpers
 
-    options :plan, label_width: 220, lane_height: 34, header_height: 28, print: false
+    options :plan
+    options label_width: 220, lane_height: 34, header_height: 28, print: false
 
     LANE_PADDING = 6
 
@@ -56,7 +57,7 @@ module Pilotage
     def variance_text(lane)
       return nil if lane.variance_days.nil? || lane.variance_days.zero?
 
-      format("%+d j", lane.variance_days)
+      Kernel.format("%+d j", lane.variance_days)
     end
 
     def truncate_name(name, max = 32)

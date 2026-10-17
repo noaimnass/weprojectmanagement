@@ -21,6 +21,9 @@ Base : `opf/openproject`, branche `dev`, commit `de387b5d` (17 octobre 2026).
 - Styles `modules/pilotage/app/components/pilotage/_pilotage.sass` importés dans `frontend/src/global_styles/openproject.sass`.
 - Enregistrement dans `Gemfile.modules` et `Gemfile.lock`.
 
+### Relecture indépendante (corrections intégrées)
+- Déclarations `options` des composants scindées (défauts dans un appel séparé), constante `Pilotage::Exports::CSV` conforme à l'inflexion Zeitwerk, `workspace_type` et contrôle de la permission « Créer des projets » lors de la conversion d'une demande, bouton d'impression sans gestionnaire inline (CSP), analyse YAML robuste des libellés de jalons, normalisation du code d'entité, références aux utilisateurs enregistrées pour la suppression de comptes, clés étrangères en `on_delete: :nullify` (lots, réunions, projets convertis), périmètre de visibilité appliqué sur la page d'une entité, classification A/B/C recalculée seulement quand la classe n'est pas fixée à la main, validation des rapports possible sans être membre du projet.
+
 ### Non modifié volontairement
 - Le mécanisme de jeton Enterprise d'OpenProject GmbH et le code des add-ons Enterprise.
 - Les espaces de noms Ruby `OpenProject::…`, les migrations et l'API v3 du socle.

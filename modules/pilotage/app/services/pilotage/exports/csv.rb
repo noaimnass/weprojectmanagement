@@ -18,13 +18,13 @@ require "csv"
 module Pilotage
   module Exports
     # CSV exports (UTF-8 with BOM, semicolon separated) for registers and the portfolio.
-    module Csv
+    module CSV
       module_function
 
       BOM = "\xEF\xBB\xBF"
 
       def generate(headers, rows)
-        BOM + CSV.generate(col_sep: ";") do |csv|
+        BOM + ::CSV.generate(col_sep: ";") do |csv|
           csv << headers
           rows.each { |row| csv << row }
         end

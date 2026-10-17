@@ -464,6 +464,7 @@ fr:
       errors:
         decision: "Décision invalide."
         not_go: "Seule une demande décidée « Go » peut être convertie en projet."
+        add_project: "La création de projet requiert la permission globale « Créer des projets »."
 
     entities:
       description: "Structure de l'organisation : entités, responsables, effectifs et budgets ; projets pilotés et projets qui transforment chaque entité."

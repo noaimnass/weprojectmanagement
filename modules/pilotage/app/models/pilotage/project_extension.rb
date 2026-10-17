@@ -26,6 +26,7 @@ module Pilotage
       has_many :pilotage_status_reports, -> { order(period_end: :desc) },
                class_name: "Pilotage::StatusReport", dependent: :destroy
       has_many :pilotage_sessions, class_name: "Pilotage::Session", dependent: :nullify
+      has_many :pilotage_project_requests, class_name: "Pilotage::ProjectRequest", dependent: :nullify
     end
 
     def pilotage_profile!

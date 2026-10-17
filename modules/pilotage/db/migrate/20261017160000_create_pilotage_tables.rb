@@ -93,7 +93,7 @@ class CreatePilotageTables < ActiveRecord::Migration[8.1]
       t.string :decision, null: false, default: "pending"
       t.date :decided_on
       t.references :reviewed_by, foreign_key: { to_table: :users }
-      t.references :work_package, foreign_key: true
+      t.references :work_package, foreign_key: { on_delete: :nullify }
       t.text :notes
       t.integer :position, null: false, default: 0
       t.timestamps
@@ -143,7 +143,7 @@ class CreatePilotageTables < ActiveRecord::Migration[8.1]
       t.text :qualification_notes
       t.datetime :decided_at
       t.text :decision_notes
-      t.references :project, foreign_key: true
+      t.references :project, foreign_key: { on_delete: :nullify }
       t.timestamps
     end
     add_index :pilotage_project_requests, :state
@@ -161,7 +161,7 @@ class CreatePilotageTables < ActiveRecord::Migration[8.1]
     create_table :pilotage_sessions do |t|
       t.references :instance, null: false, foreign_key: { to_table: :pilotage_instances }
       t.references :project, foreign_key: true
-      t.references :meeting, foreign_key: true
+      t.references :meeting, foreign_key: { on_delete: :nullify }
       t.string :title, null: false
       t.date :held_on, null: false
       t.text :agenda

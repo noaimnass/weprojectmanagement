@@ -13,11 +13,12 @@ See COPYRIGHT and LICENSE files for more details.
 ++#%>
 <% html_title t("pilotage.label_project_requests"), @request_item.title %>
 <% can_manage = User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+<% can_convert = can_manage && User.current.allowed_globally?(:add_project) %>
 <%= render(Pilotage::PageHeaderComponent.new(title: @request_item.title,
                                              breadcrumbs: [{ href: pilotage_project_requests_path, text: t("pilotage.label_project_requests") }],
                                              actions: [
                                                ({ label: t(:button_edit), href: edit_pilotage_project_request_path(@request_item), icon: :pencil } if can_manage && !%w[converted].include?(@request_item.state)),
-                                               ({ label: t("pilotage.project_requests.convert"), href: convert_pilotage_project_request_path(@request_item), icon: :rocket, scheme: :primary, data: { turbo_method: :post, turbo_confirm: t(:text_are_you_sure) } } if can_manage && @request_item.state == "go"),
+                                               ({ label: t("pilotage.project_requests.convert"), href: convert_pilotage_project_request_path(@request_item), icon: :rocket, scheme: :primary, data: { turbo_method: :post, turbo_confirm: t(:text_are_you_sure) } } if can_convert && @request_item.state == "go"),
                                                ({ label: t("pilotage.project.open_cockpit"), href: project_pilotage_cockpit_path(@request_item.project), icon: :pulse, scheme: :primary } if @request_item.project)
                                              ].compact)) %>
 <div class="pilotage-grid-2">

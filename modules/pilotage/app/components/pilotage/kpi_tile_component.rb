@@ -17,7 +17,8 @@ module Pilotage
   class KpiTileComponent < ApplicationComponent
     include OpPrimer::ComponentHelpers
 
-    options :label, :value, :hint, :href, scheme: :default, unit: nil
+    options :label, :value, :hint, :href
+    options scheme: :default, unit: nil
 
     def scheme_class
       "pilotage-kpi--#{scheme}"

@@ -81,7 +81,7 @@ module Pilotage
 
     def export
       items = @project.pilotage_register_items.of_kind(@kind).includes(:owner).ordered
-      send_data Pilotage::Exports::Csv.register_items(items),
+      send_data Pilotage::Exports::CSV.register_items(items),
                 type: "text/csv; charset=utf-8; header=present",
                 filename: "#{@project.identifier}-#{@kind}-#{Date.current.iso8601}.csv"
     end

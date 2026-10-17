@@ -63,7 +63,7 @@ module Pilotage
       private
 
       def parse(content)
-        text = content.to_s.delete_prefix(Pilotage::Exports::Csv::BOM)
+        text = content.to_s.delete_prefix(Pilotage::Exports::CSV::BOM)
         separator = text.lines.first.to_s.count(";") >= text.lines.first.to_s.count(",") ? ";" : ","
         CSV.parse(text, headers: true, col_sep: separator).map { |r| r.to_h.transform_keys { |k| k.to_s.strip.downcase } }
       end

@@ -191,5 +191,13 @@ module OpenProject::Pilotage
     end
 
     include_module "Pilotage::ProjectExtension", into: "Project"
+
+    replace_principal_references "Pilotage::Entity" => %i[head_id],
+                                 "Pilotage::ProjectProfile" => %i[sponsor_id manager_id correspondent_id],
+                                 "Pilotage::RegisterItem" => %i[owner_id created_by_id],
+                                 "Pilotage::MilestoneReview" => %i[reviewed_by_id],
+                                 "Pilotage::StatusReport" => %i[submitted_by_id validated_by_id],
+                                 "Pilotage::ProjectRequest" => %i[requester_id qualified_by_id],
+                                 "Pilotage::Instance" => %i[chair_id]
   end
 end

@@ -27,6 +27,8 @@ module Pilotage
     has_many :project_requests, class_name: "Pilotage::ProjectRequest", foreign_key: :entity_id,
                                 dependent: :nullify, inverse_of: :entity
 
+    normalizes :code, with: ->(code) { code.presence }
+
     validates :name, presence: true, length: { maximum: 255 }
     validates :kind, inclusion: { in: KINDS }
     validates :code, uniqueness: true, allow_blank: true

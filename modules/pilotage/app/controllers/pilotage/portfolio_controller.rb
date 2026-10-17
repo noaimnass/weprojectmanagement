@@ -27,7 +27,7 @@ module Pilotage
       respond_to do |format|
         format.html
         format.csv do
-          send_data Pilotage::Exports::Csv.portfolio(@summary.rows),
+          send_data Pilotage::Exports::CSV.portfolio(@summary.rows),
                     type: "text/csv; charset=utf-8; header=present",
                     filename: "portefeuille-#{Date.current.iso8601}.csv"
         end

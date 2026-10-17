@@ -23,12 +23,16 @@ module Pilotage
 
     def call
       return ServiceResult.failure(message: I18n.t("pilotage.project_requests.errors.not_go")) unless @request.state == "go"
+      unless @user.allowed_globally?(:add_project)
+        return ServiceResult.failure(message: I18n.t("pilotage.project_requests.errors.add_project"))
+      end
 
       identifier = Project.suggest_identifier(@request.title).presence || "projet"
       result = Projects::CreateService.new(user: @user).call(
         name: @request.title,
         identifier: unique_identifier(identifier),
         description: @request.description,
+        workspace_type: "project",
         enabled_module_names: Setting.default_projects_modules | %w[pilotage]
       )
       return result if result.failure?

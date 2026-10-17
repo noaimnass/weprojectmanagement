@@ -464,6 +464,7 @@ en:
       errors:
         decision: "Invalid decision."
         not_go: "Only a request decided \"Go\" can be converted into a project."
+        add_project: "Creating the project requires the global \"Create projects\" permission."
 
     entities:
       description: "Structure of the organisation: entities, heads, headcount and budgets; projects led by and projects transforming each entity."

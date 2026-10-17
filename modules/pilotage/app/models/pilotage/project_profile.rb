@@ -75,9 +75,10 @@ module Pilotage
       errors.add(:end_on, :greater_than_start_date) if end_on < start_on
     end
 
+    # The class is computed from budget and entities unless it was set explicitly in the same change.
     def compute_class_if_blank
-      return if project_class.present? && !project_class_changed?
-      return if budget_total.blank?
+      return if project_class_changed? || budget_total.blank?
+      return unless new_record? || budget_total_changed? || entities_count_changed?
 
       self.project_class = Pilotage::Classification.classify(budget_total:, entities_count:)
     end
