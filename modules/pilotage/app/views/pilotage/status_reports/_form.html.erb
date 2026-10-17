@@ -1,0 +1,41 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: report %>
+<%= form_with model: report, url: (report.persisted? ? project_pilotage_status_report_path(@project, report) : project_pilotage_status_reports_path(@project)),
+              scope: :pilotage_status_report, class: "pilotage-form", data: { turbo: false } do |f| %>
+  <% if report.errors.any? %><%= render(Primer::Alpha::Banner.new(scheme: :danger, mb: 3)) { report.errors.full_messages.join(", ") } %><% end %>
+  <%= render(Primer::Alpha::Banner.new(scheme: :default, mb: 3)) { t("pilotage.reports.computed_hint", health: t("pilotage.health.#{@signals.computed_health}")) } %>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :period_start, kind: :date, label: t("pilotage.attributes.period_start"), required: true } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :period_end, kind: :date, label: t("pilotage.attributes.period_end"), required: true } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :progress, kind: :number, min: 0, max: 100, label: t("pilotage.attributes.progress") } %>
+  </div>
+  <div class="pilotage-form__row">
+    <% health_options = OpenProject::Pilotage::Defaults::HEALTH.map { |h| [t("pilotage.health.#{h}"), h] } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :health, kind: :select, options: health_options, include_blank: false, label: t("pilotage.attributes.health") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :schedule_signal, kind: :select, options: health_options, include_blank: false, label: t("pilotage.signals.schedule") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :budget_signal, kind: :select, options: health_options, include_blank: false, label: t("pilotage.signals.budget") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :scope_signal, kind: :select, options: health_options, include_blank: false, label: t("pilotage.signals.scope") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :risk_signal, kind: :select, options: health_options, include_blank: false, label: t("pilotage.signals.risk") } %>
+  </div>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :summary, kind: :textarea, label: t("pilotage.attributes.summary"), rows: 3 } %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :highlights, kind: :textarea, label: t("pilotage.attributes.highlights"), rows: 3 } %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :next_steps, kind: :textarea, label: t("pilotage.attributes.next_steps"), rows: 3 } %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :decisions_needed, kind: :textarea, label: t("pilotage.attributes.decisions_needed"), rows: 2, hint: t("pilotage.reports.decisions_hint") } %>
+  <div class="pilotage-form__actions">
+    <%= render(Primer::Beta::Button.new(type: :submit, scheme: :default)) { t("pilotage.reports.save_draft") } %>
+    <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary, name: "submit", value: "1")) { t("pilotage.reports.submit") } %>
+    <%= render(Primer::Beta::Button.new(tag: :a, href: project_pilotage_status_reports_path(@project))) { t(:button_cancel) } %>
+  </div>
+<% end %>

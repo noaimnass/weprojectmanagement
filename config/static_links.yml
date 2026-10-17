@@ -19,10 +19,10 @@ configuration_guide:
   href: https://www.openproject.org/docs/installation-and-operations/configuration/
   label: links.configuration_guide
 contact:
-  href: https://www.openproject.org/contact/
+  href: https://weworld.tech/contact
   label: links.get_in_touch
 contact_us:
-  href: https://www.openproject.org/contact/
+  href: https://weworld.tech/contact
 crowdin:
   href: https://www.openproject.org/docs/contributions-guide/translate-openproject/
   label: :label_add_edit_translations
@@ -262,7 +262,7 @@ user_guide:
 webinar_videos:
   href: https://www.youtube.com/watch?v=un6zCm8_FT4
 website:
-  href: https://www.openproject.org
+  href: https://weworld.tech
   label: label_openproject_website
 jira_migrator_project:
   href: https://community.openproject.org/projects/jira-migration/dashboard

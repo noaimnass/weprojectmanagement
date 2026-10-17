@@ -1,0 +1,54 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<div class="pilotage-masterplan">
+  <% if plan.lanes.empty? %>
+    <%= render(Primer::Beta::Blankslate.new(border: true)) do |bs| %>
+      <% bs.with_visual_icon(icon: :graph) %>
+      <% bs.with_heading(tag: :h3) { t("pilotage.master_plan.empty_title") } %>
+      <% bs.with_description { t("pilotage.master_plan.empty_description") } %>
+    <% end %>
+  <% else %>
+    <svg viewBox="0 0 <%= width %> <%= height %>" width="<%= width %>" height="<%= height %>" role="img" aria-label="<%= t("pilotage.label_master_plan") %>">
+      <% plan.months.each do |month| %>
+        <line class="grid-line" x1="<%= x_for(month) %>" y1="<%= header_height - 6 %>" x2="<%= x_for(month) %>" y2="<%= height %>"></line>
+        <text class="month-label" x="<%= x_for(month) + 3 %>" y="<%= header_height - 10 %>"><%= month_label(month) %></text>
+      <% end %>
+      <% plan.lanes.each_with_index do |lane, index| %>
+        <% y = lane_y(index) %>
+        <line class="grid-line" x1="0" y1="<%= y + lane_height %>" x2="<%= width %>" y2="<%= y + lane_height %>"></line>
+        <text class="lane-label" x="8" y="<%= y + lane_height / 2 + 4 %>">
+          <title><%= lane.row.project.name %></title><%= truncate_name(lane.row.project.name) %>
+        </text>
+        <% lane.segments.each do |segment| %>
+          <% x1 = x_for(segment.from) %>
+          <% x2 = [x_for(segment.to), x1 + 2].max %>
+          <rect class="<%= segment_class(lane, segment) %>" x="<%= x1 %>" y="<%= y + LANE_PADDING %>" width="<%= (x2 - x1).round(1) %>" height="<%= lane_height - LANE_PADDING * 2 %>" rx="4">
+            <title><%= segment.key %> · <%= segment.label %> · <%= format_date(segment.from) %> → <%= format_date(segment.to) %></title>
+          </rect>
+          <% if x2 - x1 > 34 %>
+            <text class="segment-label" x="<%= x1 + 5 %>" y="<%= y + lane_height / 2 + 4 %>"><%= segment.key %></text>
+          <% end %>
+        <% end %>
+        <% if lane.baseline_end_on.present? %>
+          <% bx = x_for(lane.baseline_end_on.clamp(plan.from, plan.to)) %>
+          <line class="baseline" x1="<%= bx %>" y1="<%= y + 4 %>" x2="<%= bx %>" y2="<%= y + lane_height - 4 %>"><title><%= t("pilotage.master_plan.baseline") %>: <%= format_date(lane.baseline_end_on) %></title></line>
+        <% end %>
+        <% if (text = variance_text(lane)) %>
+          <text class="variance variance--<%= lane.variance_days.positive? ? 'late' : 'early' %>" x="<%= x_for(lane.end_on.clamp(plan.from, plan.to)) + 6 %>" y="<%= y + lane_height / 2 + 4 %>"><%= text %></text>
+        <% end %>
+      <% end %>
+      <line class="today-line" x1="<%= today_x %>" y1="<%= header_height - 6 %>" x2="<%= today_x %>" y2="<%= height %>"><title><%= format_date(Date.current) %></title></line>
+    </svg>
+  <% end %>
+</div>

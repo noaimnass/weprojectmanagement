@@ -87,7 +87,7 @@ module Settings
         default: false
       },
       app_title: {
-        default: "OpenProject"
+        default: "WeProjectManagement"
       },
       organization_name: {
         default: "My Organization"

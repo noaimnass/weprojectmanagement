@@ -1,0 +1,20 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: signals (Pilotage::Signals::Result) %>
+<span class="pilotage-signals">
+  <%= pilotage_signal_dot(signals.schedule, title: "#{t('pilotage.signals.schedule')}: #{t("pilotage.health.#{signals.schedule}")}") %>
+  <%= pilotage_signal_dot(signals.budget, title: "#{t('pilotage.signals.budget')}: #{t("pilotage.health.#{signals.budget}")}") %>
+  <%= pilotage_signal_dot(signals.risk, title: "#{t('pilotage.signals.risk')}: #{t("pilotage.health.#{signals.risk}")}") %>
+  <%= pilotage_signal_dot(signals.reporting, title: "#{t('pilotage.signals.reporting')}: #{t("pilotage.health.#{signals.reporting}")}") %>
+</span>

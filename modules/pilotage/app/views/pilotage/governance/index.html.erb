@@ -1,0 +1,45 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_pilotage"), t("pilotage.label_governance") %>
+<% can_manage = User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_governance"), description: t("pilotage.governance.description"),
+                                             actions: [
+                                               { label: t("pilotage.governance.agenda"), href: pilotage_governance_agenda_path, icon: :calendar },
+                                               { label: t("pilotage.governance.decisions"), href: pilotage_governance_decisions_path, icon: :law },
+                                               ({ label: t("pilotage.governance.new_instance"), href: new_pilotage_instance_path, icon: :plus, scheme: :primary } if can_manage)
+                                             ].compact)) %>
+<div class="pilotage-grid-2">
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.governance.instances") %></h3>
+    <p class="pilotage-muted"><%= t("pilotage.governance.cascade") %></p>
+    <% if @instances.empty? %><p class="pilotage-muted"><%= t("pilotage.governance.no_instances") %></p><% else %>
+      <table class="pilotage-table">
+        <thead><tr><th><%= t("pilotage.attributes.name") %></th><th><%= t("pilotage.attributes.level") %></th><th><%= t("pilotage.attributes.periodicity") %></th><th><%= t("pilotage.attributes.chair") %></th></tr></thead>
+        <tbody>
+          <% @instances.each do |i| %>
+            <tr><td><%= link_to i.name, pilotage_instance_path(i) %></td><td><%= t("pilotage.governance.levels.#{i.level}") %></td><td><%= i.periodicity.present? ? t("pilotage.governance.periodicities.#{i.periodicity}") : "–" %></td><td><%= pilotage_user(i.chair) %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.governance.upcoming_sessions") %></h3>
+    <% if @upcoming.empty? %><p class="pilotage-muted">–</p><% else %>
+      <table class="pilotage-table">
+        <% @upcoming.each do |s| %><tr><td><%= format_date(s.held_on) %></td><td><%= link_to s.title, pilotage_instance_session_path(s.instance, s) %></td><td class="pilotage-muted"><%= s.instance.name %></td><td><%= s.project ? link_to(s.project.name, project_pilotage_cockpit_path(s.project)) : "" %></td></tr><% end %>
+      </table>
+    <% end %>
+  </div>
+</div>

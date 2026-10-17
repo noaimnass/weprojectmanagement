@@ -1,0 +1,43 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_governance"), t("pilotage.governance.agenda") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: "#{t('pilotage.governance.agenda')} · #{l(@month, format: '%B %Y')}",
+                                             breadcrumbs: [{ href: pilotage_governance_path, text: t("pilotage.label_governance") }],
+                                             actions: [
+                                               { label: t("pilotage.governance.previous_month"), href: pilotage_governance_agenda_path(month: (@month << 1).strftime("%Y-%m")), icon: :"chevron-left" },
+                                               { label: t("pilotage.governance.next_month"), href: pilotage_governance_agenda_path(month: (@month >> 1).strftime("%Y-%m")), icon: :"chevron-right" }
+                                             ])) %>
+<% sessions_by_day = @sessions.group_by(&:held_on) %>
+<% milestones_by_day = @milestones.group_by(&:planned_on) %>
+<div class="pilotage-agenda pilotage-section">
+  <% offset = (@days.first.wday - 1) % 7 %>
+  <% offset.times do %><div></div><% end %>
+  <% @days.each do |day| %>
+    <div class="pilotage-agenda__day <%= 'pilotage-agenda__day--weekend' if day.saturday? || day.sunday? %> <%= 'pilotage-agenda__day--today' if day == Date.current %>">
+      <div class="pilotage-agenda__date"><%= day.day %></div>
+      <% sessions_by_day.fetch(day, []).each do |s| %>
+        <%= link_to s.title, pilotage_instance_session_path(s.instance, s), class: "pilotage-agenda__item", title: s.instance.name %>
+      <% end %>
+      <% milestones_by_day.fetch(day, []).each do |m| %>
+        <%= link_to "#{m.key} · #{m.project.name}", project_pilotage_milestone_reviews_path(m.project), class: "pilotage-agenda__item pilotage-agenda__item--milestone", title: m.label %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class="pilotage-card">
+  <h3 class="pilotage-card__title"><%= t("pilotage.governance.reports_due") %></h3>
+  <% if @reports_due.empty? %><p class="pilotage-muted"><%= t("pilotage.governance.all_up_to_date") %></p><% else %>
+    <ul><% @reports_due.each do |r| %><li><%= link_to r.project.name, project_pilotage_status_reports_path(r.project) %> <%= pilotage_health_label(r.signals.reporting) %> <span class="pilotage-muted">· <%= t("pilotage.classes.#{r.project_class}") %></span></li><% end %></ul>
+  <% end %>
+</div>

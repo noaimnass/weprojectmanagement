@@ -1,0 +1,47 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_pilotage"), t("pilotage.label_project_requests") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_project_requests"), description: t("pilotage.project_requests.description",
+                                                                                                          budget: Setting.pilotage_eligibility_budget, months: Setting.pilotage_eligibility_months, entities: Setting.pilotage_eligibility_entities, currency: Setting.pilotage_currency),
+                                             actions: [{ label: t("pilotage.project_requests.new"), href: new_pilotage_project_request_path, icon: :plus, scheme: :primary }])) %>
+<div class="pilotage-kpi-grid">
+  <% Pilotage::ProjectRequest::STATES.each do |state| %>
+    <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.project_requests.states.#{state}"), value: @counts[state] || 0, href: pilotage_project_requests_path(state:), scheme: params[:state] == state ? :accent : :default)) %>
+  <% end %>
+</div>
+<% if @requests.empty? %>
+  <%= render(Primer::Beta::Blankslate.new(border: true)) do |bs| %>
+    <% bs.with_visual_icon(icon: :inbox) %>
+    <% bs.with_heading(tag: :h3) { t("pilotage.project_requests.empty") } %>
+  <% end %>
+<% else %>
+  <table class="pilotage-table">
+    <thead><tr><th><%= t("pilotage.attributes.title") %></th><th><%= t("pilotage.attributes.requester") %></th><th><%= t("pilotage.attributes.pilot_entity") %></th><th class="num"><%= t("pilotage.attributes.estimated_budget") %></th><th><%= t("pilotage.attributes.eligibility") %></th><th><%= t("pilotage.attributes.suggested_class") %></th><th><%= t("pilotage.attributes.state") %></th><th><%= t("pilotage.attributes.submitted_at") %></th></tr></thead>
+    <tbody>
+      <% @requests.each do |r| %>
+        <tr>
+          <td><%= link_to r.title, pilotage_project_request_path(r) %></td>
+          <td><%= pilotage_user(r.requester) %></td>
+          <td><%= r.entity&.name || "–" %></td>
+          <td class="num"><%= pilotage_money(r.estimated_budget, unit: true) %></td>
+          <td><%= r.eligible? ? pilotage_health_label("green", text: t("pilotage.project_requests.eligible")) : pilotage_health_label("amber", text: t("pilotage.project_requests.not_eligible")) %></td>
+          <td><%= pilotage_class_label(r.suggested_class) %></td>
+          <td><%= pilotage_state_label(r.state, scope: "project_requests") %></td>
+          <td><%= r.submitted_at ? format_date(r.submitted_at) : "–" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= pagination_links_full @requests %>
+<% end %>

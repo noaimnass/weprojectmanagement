@@ -5,7 +5,7 @@ page:
   margin_left: 36
   margin_right: 36
   page_break_threshold: 200
-  link_color: "175A8E"
+  link_color: "5521AD"
 
 page_header:
   offset: 20
@@ -175,7 +175,7 @@ work_package:
       checked: "☑"
       unchecked: "☐"
     link:
-      color: "175A8E"
+      color: "5521AD"
       styles: [ ]
     code:
       color: "880000"

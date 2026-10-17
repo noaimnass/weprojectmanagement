@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 #-- copyright
 # OpenProject is an open source project management software.
 # Copyright (C) the OpenProject GmbH
+# WeProjectManagement is a derivative work by WeWorld Tech (weworld.tech).
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License version 3.
@@ -29,7 +32,7 @@ module OpenProject::CustomStyles
   module ColorThemes
     module_function
 
-    OpenProject::CustomStyles::ColorThemes::DEFAULT_THEME_NAME = "OpenProject (default)".freeze
+    OpenProject::CustomStyles::ColorThemes::DEFAULT_THEME_NAME = "WeProjectManagement Violet (default)".freeze
 
     DEPRECATED_ALTERNATIVE_COLOR = "#35C53F".freeze
     DEPRECATED_PRIMARY_COLOR = "#1A67A3".freeze
@@ -37,8 +40,15 @@ module OpenProject::CustomStyles
     DEPRECATED_PRIMARY_DARK_COLOR = "#175A8E".freeze
     DEPRECATED_LINK_COLOR = "#155282".freeze
     DEPRECATED_MAIN_MENU_COLOR = "#333739".freeze
-    PRIMER_PRIMARY_BUTTON_COLOR = "#1F883D".freeze
-    ACCENT_COLOR = "#1A67A3".freeze
+
+    # weworld brand palette
+    WEWORLD_VIOLET = "#6C2BD9".freeze
+    WEWORLD_VIOLET_DARK = "#4C1D95".freeze
+    WEWORLD_VIOLET_DEEP = "#2E1065".freeze
+    WEWORLD_VIOLET_SOFT = "#F3EEFC".freeze
+
+    PRIMER_PRIMARY_BUTTON_COLOR = "#7C3AED".freeze
+    ACCENT_COLOR = WEWORLD_VIOLET
 
     THEMES = [
       {
@@ -46,30 +56,30 @@ module OpenProject::CustomStyles
         colors: {
           "primary-button-color" => PRIMER_PRIMARY_BUTTON_COLOR,
           "accent-color" => ACCENT_COLOR,
-          "header-bg-color" => "#1A67A3",
+          "header-bg-color" => WEWORLD_VIOLET,
           "main-menu-bg-color" => "#FFFFFF",
-          "main-menu-bg-selected-background" => "#175A8E",
+          "main-menu-bg-selected-background" => WEWORLD_VIOLET_DARK
         }
       },
       {
-        theme: "OpenProject Gray",
+        theme: "WeProjectManagement Clair",
         colors: {
           "primary-button-color" => PRIMER_PRIMARY_BUTTON_COLOR,
           "accent-color" => ACCENT_COLOR,
           "header-bg-color" => "#FAFAFA",
-          "main-menu-bg-color" => "#ECECEC",
-          "main-menu-bg-selected-background" => "#A9A9A9",
+          "main-menu-bg-color" => WEWORLD_VIOLET_SOFT,
+          "main-menu-bg-selected-background" => WEWORLD_VIOLET
         },
-        logo: "logo_openproject.png"
+        logo: "logo_weprojectmanagement.png"
       },
       {
-        theme: "OpenProject Navy Blue",
+        theme: "WeProjectManagement Sombre",
         colors: {
           "primary-button-color" => PRIMER_PRIMARY_BUTTON_COLOR,
           "accent-color" => ACCENT_COLOR,
-          "header-bg-color" => "#05002C",
-          "main-menu-bg-color" => "#0E2045",
-          "main-menu-bg-selected-background" => "#3270DB",
+          "header-bg-color" => "#1B1030",
+          "main-menu-bg-color" => WEWORLD_VIOLET_DEEP,
+          "main-menu-bg-selected-background" => WEWORLD_VIOLET
         }
       }
     ].freeze

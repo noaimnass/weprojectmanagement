@@ -1,0 +1,28 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: instance %>
+<%= form_with model: instance, url: (instance.persisted? ? pilotage_instance_path(instance) : pilotage_instances_path), scope: :pilotage_instance, class: "pilotage-form", data: { turbo: false } do |f| %>
+  <% if instance.errors.any? %><%= render(Primer::Alpha::Banner.new(scheme: :danger, mb: 3)) { instance.errors.full_messages.join(", ") } %><% end %>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :name, label: t("pilotage.attributes.name"), required: true } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :level, kind: :select, options: Pilotage::Instance::LEVELS.map { |l| [t("pilotage.governance.levels.#{l}"), l] }, include_blank: false, label: t("pilotage.attributes.level") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :periodicity, kind: :select, options: Pilotage::Instance::PERIODICITIES.map { |p| [t("pilotage.governance.periodicities.#{p}"), p] }, label: t("pilotage.attributes.periodicity") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :chair_id, kind: :select, options: pilotage_user_options, label: t("pilotage.attributes.chair") } %>
+  </div>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :description, kind: :textarea, label: t("pilotage.attributes.description") } %>
+  <div class="pilotage-form__actions">
+    <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary)) { t(:button_save) } %>
+    <%= render(Primer::Beta::Button.new(tag: :a, href: pilotage_governance_path)) { t(:button_cancel) } %>
+  </div>
+<% end %>

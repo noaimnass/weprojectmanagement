@@ -1,0 +1,71 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t(:label_administration), t("pilotage.label_pilotage") %>
+<%= render(Primer::OpenProject::PageHeader.new) do |header| %>
+  <% header.with_title { t("pilotage.label_pilotage") } %>
+  <% header.with_breadcrumbs([{ href: admin_index_path, text: t("label_administration") }, t("pilotage.label_pilotage")]) %>
+<% end %>
+<%=
+  settings_primer_form_with(scope: :settings, action: :update, method: :patch) do |settings_form|
+    render_inline_settings_form(settings_form) do |form|
+      form.html_content do
+        render(Primer::Beta::Subhead.new(hide_border: true)) do |subhead|
+          subhead.with_heading(tag: :h3, size: :medium) { t("pilotage.settings.general") }
+        end
+      end
+      form.text_field(name: :pilotage_currency, input_width: :xsmall)
+      form.text_field(name: :pilotage_budget_unit, input_width: :small, caption: t("pilotage.settings.budget_unit_caption"))
+      form.text_field(name: :pilotage_horizon_days, input_width: :xsmall)
+      form.text_field(name: :pilotage_monthly_capacity_hours, input_width: :xsmall)
+
+      form.html_content do
+        render(Primer::Beta::Subhead.new(hide_border: true)) do |subhead|
+          subhead.with_heading(tag: :h3, size: :medium) { t("pilotage.settings.eligibility") }
+          subhead.with_description { t("pilotage.settings.eligibility_caption") }
+        end
+      end
+      form.text_field(name: :pilotage_eligibility_budget, input_width: :xsmall)
+      form.text_field(name: :pilotage_eligibility_months, input_width: :xsmall)
+      form.text_field(name: :pilotage_eligibility_entities, input_width: :xsmall)
+
+      form.html_content do
+        render(Primer::Beta::Subhead.new(hide_border: true)) do |subhead|
+          subhead.with_heading(tag: :h3, size: :medium) { t("pilotage.settings.classes") }
+          subhead.with_description { t("pilotage.settings.classes_caption") }
+        end
+      end
+      form.text_field(name: :pilotage_class_a_budget, input_width: :xsmall)
+      form.text_field(name: :pilotage_class_a_entities, input_width: :xsmall)
+      form.text_field(name: :pilotage_class_a_entities_budget, input_width: :xsmall)
+      form.text_field(name: :pilotage_class_b_budget, input_width: :xsmall)
+      form.text_field(name: :pilotage_class_b_entities, input_width: :xsmall)
+      form.text_field(name: :pilotage_class_b_entities_budget, input_width: :xsmall)
+      form.text_field(name: :pilotage_cadence_a_days, input_width: :xsmall)
+      form.text_field(name: :pilotage_cadence_b_days, input_width: :xsmall)
+      form.text_field(name: :pilotage_cadence_c_days, input_width: :xsmall)
+
+      form.html_content do
+        render(Primer::Beta::Subhead.new(hide_border: true)) do |subhead|
+          subhead.with_heading(tag: :h3, size: :medium) { t("pilotage.settings.taxonomy") }
+          subhead.with_description { t("pilotage.settings.taxonomy_caption") }
+        end
+      end
+      form.text_area(name: :pilotage_categories, value: Array(Setting.pilotage_categories).join("\n"), rows: 6, caption: t("pilotage.settings.one_per_line"))
+      form.text_area(name: :pilotage_strategic_axes, value: Array(Setting.pilotage_strategic_axes).join("\n"), rows: 6, caption: t("pilotage.settings.one_per_line"))
+      form.text_area(name: :pilotage_lifecycle_labels, value: Setting.pilotage_lifecycle_labels.to_h.to_yaml.delete_prefix("---\n"), rows: 10, caption: t("pilotage.settings.lifecycle_labels_caption"))
+
+      form.submit
+    end
+  end
+%>

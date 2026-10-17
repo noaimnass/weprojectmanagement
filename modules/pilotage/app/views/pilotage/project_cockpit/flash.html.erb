@@ -1,0 +1,76 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% content_for :print_title, "#{t('pilotage.label_flash_report')} · #{@project.name}" %>
+<% content_for :print_back, project_pilotage_cockpit_path(@project) %>
+<section class="page">
+  <%= render partial: "pilotage/reports/page_header", locals: { title: "#{t('pilotage.label_flash_report')} · #{@project.name}" } %>
+  <div class="kpis">
+    <div class="kpi kpi--<%= @signals.computed_health %>"><div class="kpi__label"><%= t("pilotage.attributes.health") %></div><div class="kpi__value"><%= t("pilotage.health.#{@signals.computed_health}") %></div></div>
+    <div class="kpi"><div class="kpi__label"><%= t("pilotage.attributes.project_class") %> · <%= t("pilotage.attributes.phase") %></div><div class="kpi__value"><%= @profile.project_class %> · <%= @profile.phase %></div></div>
+    <div class="kpi"><div class="kpi__label"><%= t("pilotage.attributes.progress") %></div><div class="kpi__value"><%= pilotage_percent(@signals.progress) %></div></div>
+    <div class="kpi"><div class="kpi__label"><%= t("pilotage.attributes.budget_consumption") %></div><div class="kpi__value"><%= pilotage_percent(@profile.budget_consumption_ratio) %></div></div>
+  </div>
+  <div class="signals">
+    <% { schedule: @signals.schedule, budget: @signals.budget, risk: @signals.risk, reporting: @signals.reporting }.each do |key, level| %>
+      <div class="signal"><div class="signal__label"><%= t("pilotage.signals.#{key}") %></div><span class="dot dot--<%= level %>"></span><%= t("pilotage.health.#{level}") %></div>
+    <% end %>
+  </div>
+  <h3><%= t("pilotage.label_lifecycle") %></h3>
+  <% by_key = @milestones.index_by(&:key) %>
+  <div class="phases">
+    <% Pilotage::Lifecycle::KEYS.each_with_index do |key, index| %>
+      <% review = by_key[key] %>
+      <div class="phase <%= 'phase--passed' if review&.passed? || index < @profile.phase_index %> <%= 'phase--current' if key == @profile.phase %>"><strong><%= key %></strong><br><%= review&.effective_date ? format_date(review.effective_date) : "–" %></div>
+    <% end %>
+  </div>
+  <div class="cols">
+    <div>
+      <h3><%= t("pilotage.project.identity") %></h3>
+      <table>
+        <tr><th><%= t("pilotage.attributes.sponsor") %></th><td><%= pilotage_user(@profile.sponsor) %></td></tr>
+        <tr><th><%= t("pilotage.attributes.manager") %></th><td><%= pilotage_user(@profile.manager) %></td></tr>
+        <tr><th><%= t("pilotage.attributes.pilot_entity") %></th><td><%= @profile.pilot_entity&.name || "–" %></td></tr>
+        <tr><th><%= t("pilotage.attributes.dates") %></th><td><%= pilotage_date(@profile.start_on) %> → <%= pilotage_date(@profile.end_on) %></td></tr>
+        <tr><th><%= t("pilotage.attributes.budget_total") %></th><td><%= pilotage_money(@profile.budget_total, unit: true) %> · <%= t("pilotage.cockpit.spent") %> <%= pilotage_money(@profile.budget_spent, unit: true) %></td></tr>
+      </table>
+      <h3><%= t("pilotage.label_status_reports") %></h3>
+      <% if @latest_report %>
+        <p class="muted"><%= format_date(@latest_report.period_start) %> → <%= format_date(@latest_report.period_end) %></p>
+        <%= simple_format(@latest_report.summary.presence || "–") %>
+        <% if @latest_report.highlights.present? %><p><strong><%= t("pilotage.attributes.highlights") %></strong><%= simple_format(@latest_report.highlights) %></p><% end %>
+        <% if @latest_report.next_steps.present? %><p><strong><%= t("pilotage.attributes.next_steps") %></strong><%= simple_format(@latest_report.next_steps) %></p><% end %>
+        <% if @latest_report.decisions_needed.present? %><p><strong><%= t("pilotage.attributes.decisions_needed") %></strong><%= simple_format(@latest_report.decisions_needed) %></p><% end %>
+      <% else %><p class="empty"><%= t("pilotage.reports.none_validated") %></p><% end %>
+    </div>
+    <div>
+      <h3><%= t("pilotage.project.top_risks") %></h3>
+      <% if @top_risks.empty? %><p class="empty">–</p><% else %>
+        <table><% @top_risks.each do |r| %><tr><td><%= r.reference %> <%= r.title %></td><td class="num"><span class="pill pill--<%= r.criticality_level %>"><%= r.criticality %></span></td><td><%= pilotage_user(r.owner) %></td></tr><% end %></table>
+      <% end %>
+      <h3><%= t("pilotage.registers.kinds.issue") %></h3>
+      <% if @open_issues.empty? %><p class="empty">–</p><% else %>
+        <table><% @open_issues.each do |i| %><tr><td><%= i.reference %> <%= i.title %></td><td><%= pilotage_user(i.owner) %></td><td><%= pilotage_date(i.due_date) %></td></tr><% end %></table>
+      <% end %>
+      <h3><%= t("pilotage.project.open_actions") %></h3>
+      <% if @open_actions.empty? %><p class="empty">–</p><% else %>
+        <table><% @open_actions.each do |a| %><tr><td><%= a.reference %> <%= a.title %></td><td><%= pilotage_user(a.owner) %></td><td><%= pilotage_date(a.due_date) %></td></tr><% end %></table>
+      <% end %>
+      <h3><%= t("pilotage.project.recent_decisions") %></h3>
+      <% if @recent_decisions.empty? %><p class="empty">–</p><% else %>
+        <ul><% @recent_decisions.each do |d| %><li><%= d.reference %> <%= d.title %> <span class="muted">· <%= format_date(d.created_at) %></span></li><% end %></ul>
+      <% end %>
+    </div>
+  </div>
+  <%= render partial: "pilotage/reports/page_footer", locals: { page: 1, total: 1, subject: @project.name } %>
+</section>

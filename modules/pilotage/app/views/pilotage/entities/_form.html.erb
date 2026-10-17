@@ -1,0 +1,37 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: entity %>
+<%= form_with model: entity, url: (entity.persisted? ? pilotage_entity_path(entity) : pilotage_entities_path), scope: :pilotage_entity, class: "pilotage-form", data: { turbo: false } do |f| %>
+  <% if entity.errors.any? %><%= render(Primer::Alpha::Banner.new(scheme: :danger, mb: 3)) { entity.errors.full_messages.join(", ") } %><% end %>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :name, label: t("pilotage.attributes.name"), required: true } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :code, label: t("pilotage.attributes.code") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :kind, kind: :select, options: Pilotage::Entity::KINDS.map { |k| [t("pilotage.entities.kinds.#{k}"), k] }, include_blank: false, label: t("pilotage.attributes.kind") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :parent_id, kind: :select, options: pilotage_entity_options.reject { |_, id| id == entity.id }, label: t("pilotage.attributes.parent") } %>
+  </div>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :head_id, kind: :select, options: pilotage_user_options, label: t("pilotage.attributes.head") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :headcount, kind: :number, min: 0, label: t("pilotage.attributes.headcount") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :budget, kind: :number, step: 0.01, min: 0, label: "#{t('pilotage.attributes.budget')} (#{Setting.pilotage_currency})" } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :cost_center, label: t("pilotage.attributes.cost_center") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :external_ref, label: t("pilotage.attributes.external_ref"), hint: t("pilotage.entities.external_ref_hint") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :position, kind: :number, label: t("pilotage.attributes.position") } %>
+  </div>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :description, kind: :textarea, label: t("pilotage.attributes.description") } %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :active, kind: :checkbox, label: t("pilotage.attributes.active") } %>
+  <div class="pilotage-form__actions">
+    <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary)) { t(:button_save) } %>
+    <%= render(Primer::Beta::Button.new(tag: :a, href: pilotage_entities_path)) { t(:button_cancel) } %>
+  </div>
+<% end %>

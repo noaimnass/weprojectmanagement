@@ -1,0 +1,44 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title @project.name, t("pilotage.label_status_reports") %>
+<% can_manage = User.current.allowed_in_project?(:manage_pilotage, @project) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_status_reports"), project: @project,
+                                             description: t("pilotage.reports.cadence_description", days: @profile.reporting_cadence_days, klass: @profile.project_class),
+                                             actions: [({ label: t("pilotage.reports.new_status_report"), href: new_project_pilotage_status_report_path(@project), icon: :plus, scheme: :primary } if can_manage)].compact)) %>
+<% if @reports.empty? %>
+  <%= render(Primer::Beta::Blankslate.new(border: true)) do |bs| %>
+    <% bs.with_visual_icon(icon: :report) %>
+    <% bs.with_heading(tag: :h3) { t("pilotage.reports.empty_title") } %>
+    <% bs.with_description { t("pilotage.reports.empty_description") } %>
+  <% end %>
+<% else %>
+  <table class="pilotage-table">
+    <thead><tr><th><%= t("pilotage.attributes.period") %></th><th><%= t("pilotage.attributes.health") %></th><th><%= t("pilotage.attributes.signals") %></th><th class="num"><%= t("pilotage.attributes.progress") %></th><th><%= t("pilotage.attributes.state") %></th><th><%= t("pilotage.attributes.submitted_by") %></th><th><%= t("pilotage.attributes.validated_by") %></th><th><%= t("pilotage.attributes.summary") %></th></tr></thead>
+    <tbody>
+      <% @reports.each do |r| %>
+        <tr>
+          <td><%= link_to "#{format_date(r.period_start)} → #{format_date(r.period_end)}", project_pilotage_status_report_path(@project, r) %></td>
+          <td><%= pilotage_health_label(r.health) %></td>
+          <td><span class="pilotage-signals"><%= pilotage_signal_dot(r.schedule_signal, title: t("pilotage.signals.schedule")) %><%= pilotage_signal_dot(r.budget_signal, title: t("pilotage.signals.budget")) %><%= pilotage_signal_dot(r.scope_signal, title: t("pilotage.signals.scope")) %><%= pilotage_signal_dot(r.risk_signal, title: t("pilotage.signals.risk")) %></span></td>
+          <td class="num"><%= r.progress %> %</td>
+          <td><%= pilotage_state_label(r.state, scope: "reports") %></td>
+          <td><%= pilotage_user(r.submitted_by) %></td>
+          <td><%= pilotage_user(r.validated_by) %></td>
+          <td class="pilotage-muted"><%= truncate(r.summary.to_s, length: 90) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= pagination_links_full @reports %>
+<% end %>

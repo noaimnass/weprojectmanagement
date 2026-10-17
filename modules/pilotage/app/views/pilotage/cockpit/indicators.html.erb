@@ -1,0 +1,29 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_pilotage"), t("pilotage.indicators.title") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.indicators.title"), description: t("pilotage.indicators.description"))) %>
+<table class="pilotage-table">
+  <thead><tr><th><%= t("pilotage.indicators.indicator") %></th><th class="num"><%= t("pilotage.indicators.value") %></th><th class="num"><%= t("pilotage.indicators.target") %></th><th><%= t("pilotage.indicators.status") %></th><th><%= t("pilotage.indicators.definition") %></th></tr></thead>
+  <tbody>
+    <% @indicators.each do |ind| %>
+      <tr>
+        <td><%= t("pilotage.indicators.#{ind.key}") %></td>
+        <td class="num"><%= ind.value.nil? ? "–" : "#{ind.value}#{ind.unit == 'd' ? ' j' : ind.unit}" %><% if ind.ratio? && ind.denominator %> <span class="pilotage-muted">(<%= ind.numerator %>/<%= ind.denominator %>)</span><% end %></td>
+        <td class="num"><%= ind.target %><%= ind.unit == 'd' ? ' j' : ind.unit %></td>
+        <td><% if ind.on_target?.nil? %><span class="pilotage-muted">–</span><% else %><%= pilotage_health_label(ind.on_target? ? "green" : "amber") %><% end %></td>
+        <td class="pilotage-muted"><%= t("pilotage.indicators.definitions.#{ind.key}") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

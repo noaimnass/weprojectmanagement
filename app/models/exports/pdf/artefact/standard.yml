@@ -5,7 +5,7 @@ page:
   margin_left: 60
   margin_right: 60
   page_break_threshold: 120
-  link_color: "175A8E"
+  link_color: "5521AD"
 
 page_header:
   offset: 20
@@ -162,7 +162,7 @@ project:
       checked: "☑"
       unchecked: "☐"
     link:
-      color: "175A8E"
+      color: "5521AD"
       styles: [ ]
     code:
       color: "880000"
@@ -355,7 +355,7 @@ budgets:
       no_border_top: true
     cell_budget_heading:
       size: 10
-      color: "175A8E"
+      color: "5521AD"
       styles: [ "bold" ]
       padding_left: 0
       padding_right: 10
@@ -506,7 +506,7 @@ work_package:
       checked: "☑"
       unchecked: "☐"
     link:
-      color: "175A8E"
+      color: "5521AD"
       styles: [ ]
     code:
       color: "880000"

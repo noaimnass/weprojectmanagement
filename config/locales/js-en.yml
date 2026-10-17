@@ -100,7 +100,7 @@ en:
         can be requested.
       options: Options
       request_backup: Request backup
-      title: Backup OpenProject
+      title: Backup WeProjectManagement
     baseline:
       apply: "Apply"
       clear: "Clear"
@@ -727,7 +727,7 @@ en:
           lists_basic: "Here you can create multiple lists (columns) within your agile board."
           lists_kanban: "Here you can create multiple lists (columns) within your board. This feature allows you to create a <b>Kanban board</b>, for example."
           overview: "Select <b>boards</b> to shift the view and manage your project using the agile boards view."
-        help_menu: "The Help (?) menu provides <b>additional help resources</b>. Here you can find a user guide, helpful how-to videos and more. <br> Enjoy your work with OpenProject!"
+        help_menu: "The Help (?) menu provides <b>additional help resources</b>. Here you can find a user guide, helpful how-to videos and more. <br> Enjoy your work with WeProjectManagement!"
         members: "Invite new <b>members</b> to join your project."
         quick_add_button: "Click on the plus (+) icon in the header navigation to <b>create a new project</b> or to <b>invite coworkers</b>."
         sidebar_arrow: "Use the return arrow in the top left corner to return to the project’s <b>main menu</b>."

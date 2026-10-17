@@ -1,0 +1,34 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title @instance.name, @session.title %>
+<% can_manage = User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: "#{@session.title} · #{format_date(@session.held_on)}", description: @instance.name,
+                                             breadcrumbs: [{ href: pilotage_governance_path, text: t("pilotage.label_governance") }, { href: pilotage_instance_path(@instance), text: @instance.name }],
+                                             actions: [({ label: t(:button_edit), href: edit_pilotage_instance_session_path(@instance, @session), icon: :pencil } if can_manage)].compact)) %>
+<div class="pilotage-grid-2">
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.agenda") %> <%= pilotage_state_label(@session.state, scope: "governance") %></h3>
+    <%= simple_format(@session.agenda.presence || "–") %>
+    <% if @session.project %><p><%= Project.model_name.human %> : <%= link_to @session.project.name, project_pilotage_cockpit_path(@session.project) %></p><% end %>
+    <% if @session.meeting %><p><%= link_to t("pilotage.governance.linked_meeting"), project_meeting_path(@session.meeting.project, @session.meeting) %></p><% end %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.minutes") %></h3>
+    <%= simple_format(@session.minutes.presence || "–") %>
+    <h3 class="pilotage-card__title"><%= t("pilotage.governance.decisions") %></h3>
+    <% if @decisions.empty? %><p class="pilotage-muted"><%= t("pilotage.governance.no_decisions_session") %></p><% else %>
+      <ul><% @decisions.each do |d| %><li><%= link_to "#{d.reference} #{d.title}", project_pilotage_register_item_path(d.project, d) %> <span class="pilotage-muted">· <%= d.project.name %></span></li><% end %></ul>
+    <% end %>
+  </div>
+</div>

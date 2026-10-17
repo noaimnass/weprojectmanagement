@@ -1,0 +1,146 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title @project.name, t("pilotage.label_cockpit") %>
+<% can_manage = User.current.allowed_in_project?(:manage_pilotage, @project) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_cockpit"), project: @project,
+                                             actions: [
+                                               ({ label: t("pilotage.project.edit_profile"), href: project_pilotage_profile_edit_path(@project), icon: :pencil } if can_manage),
+                                               { label: t("pilotage.label_flash_report"), href: project_pilotage_flash_path(@project), icon: :report, target: "_blank" },
+                                               ({ label: t("pilotage.reports.new_status_report"), href: new_project_pilotage_status_report_path(@project), icon: :plus, scheme: :primary } if can_manage)
+                                             ].compact)) %>
+
+<div class="pilotage-kpi-grid">
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.health"), value: t("pilotage.health.#{@signals.computed_health}"), scheme: @signals.computed_health.to_sym,
+                                            hint: @signals.false_green ? t("pilotage.portfolio.false_green") : "#{t('pilotage.attributes.declared_health')}: #{t("pilotage.health.#{@signals.declared_health}")}")) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.project_class"), value: @profile.project_class, hint: Pilotage::Lifecycle.category_label(@profile.category))) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.phase"), value: @profile.phase, hint: @profile.phase_label)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.progress"), value: @signals.progress, unit: " %")) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.budget_total"), value: pilotage_money(@profile.budget_total, unit: true), hint: "#{t('pilotage.attributes.budget_consumption')}: #{pilotage_percent(@profile.budget_consumption_ratio)}")) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.end_on"), value: pilotage_date(@profile.end_on), hint: @profile.schedule_variance_days ? "#{t('pilotage.attributes.variance')}: #{format('%+d', @profile.schedule_variance_days)} j" : nil,
+                                            scheme: @profile.schedule_variance_days.to_i.positive? ? :amber : :default)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.project.work_packages"), value: @open_work_packages, hint: t("pilotage.project.overdue_work_packages", count: @overdue_work_packages), scheme: @overdue_work_packages.positive? ? :amber : :default)) %>
+</div>
+
+<div class="pilotage-section pilotage-card">
+  <h3 class="pilotage-card__title"><%= t("pilotage.signals.title") %></h3>
+  <div class="pilotage-kpi-grid">
+    <% { schedule: @signals.schedule, budget: @signals.budget, risk: @signals.risk, reporting: @signals.reporting }.each do |key, level| %>
+      <div class="pilotage-kpi pilotage-kpi--<%= level %>">
+        <span class="pilotage-kpi__label"><%= t("pilotage.signals.#{key}") %></span>
+        <span class="pilotage-kpi__value"><%= pilotage_signal_dot(level) %> <%= t("pilotage.health.#{level}") %></span>
+        <span class="pilotage-kpi__hint">
+          <% if key == :schedule %><%= t("pilotage.signals.hint_schedule", late: @signals.details[:late_milestone_days], overdue: @signals.details[:overdue_ratio]) %>
+          <% elsif key == :budget %><%= t("pilotage.signals.hint_budget", consumption: @signals.details[:budget_consumption] || 0, progress: @signals.progress || 0) %>
+          <% elsif key == :risk %><%= t("pilotage.signals.hint_risk", criticality: @signals.details[:max_criticality] || 0) %>
+          <% elsif key == :reporting %><%= @signals.details[:last_validated_at] ? t("pilotage.signals.hint_reporting", days: @signals.details[:report_age_days], cadence: @profile.reporting_cadence_days) : t("pilotage.compliance.never") %>
+          <% end %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="pilotage-section pilotage-card">
+  <h3 class="pilotage-card__title"><%= t("pilotage.label_lifecycle") %> <%= link_to t("pilotage.label_milestone_reviews"), project_pilotage_milestone_reviews_path(@project), class: "pilotage-muted" %></h3>
+  <%= render partial: "pilotage/shared/phases", locals: { profile: @profile, milestones: @milestones } %>
+</div>
+
+<div class="pilotage-grid-2 pilotage-section">
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.project.identity") %></h3>
+    <table class="pilotage-table">
+      <tr><th><%= t("pilotage.attributes.sponsor") %></th><td><%= pilotage_user(@profile.sponsor) %></td></tr>
+      <tr><th><%= t("pilotage.attributes.manager") %></th><td><%= pilotage_user(@profile.manager) %></td></tr>
+      <tr><th><%= t("pilotage.attributes.correspondent") %></th><td><%= pilotage_user(@profile.correspondent) %></td></tr>
+      <tr><th><%= t("pilotage.attributes.pilot_entity") %></th><td><%= @profile.pilot_entity ? link_to(@profile.pilot_entity.name, pilotage_entity_path(@profile.pilot_entity)) : "–" %></td></tr>
+      <tr><th><%= t("pilotage.attributes.portfolio") %></th><td><%= @profile.portfolio.presence || "–" %><% if @profile.program.present? %> · <%= @profile.program %><% end %></td></tr>
+      <tr><th><%= t("pilotage.attributes.strategic_axis") %></th><td><%= Pilotage::Lifecycle.axis_label(@profile.strategic_axis).presence || "–" %></td></tr>
+      <tr><th><%= t("pilotage.attributes.financial_ref") %></th><td><%= @profile.financial_ref.presence || "–" %></td></tr>
+      <tr><th><%= t("pilotage.attributes.dates") %></th><td><%= pilotage_date(@profile.start_on) %> → <%= pilotage_date(@profile.end_on) %><% if @profile.baseline_end_on %> <span class="pilotage-muted">(<%= t("pilotage.master_plan.baseline") %>: <%= format_date(@profile.baseline_end_on) %>)</span><% end %></td></tr>
+      <tr><th><%= t("pilotage.attributes.objectives") %></th><td><%= simple_format(@profile.objectives.presence || "–") %></td></tr>
+    </table>
+  </div>
+
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.label_status_reports") %> <%= link_to t(:label_history), project_pilotage_status_reports_path(@project), class: "pilotage-muted" %></h3>
+    <% if @latest_report %>
+      <p><strong><%= format_date(@latest_report.period_start) %> → <%= format_date(@latest_report.period_end) %></strong> <%= pilotage_health_label(@latest_report.health) %> <%= pilotage_state_label(@latest_report.state, scope: "reports") %></p>
+      <%= simple_format(@latest_report.summary.presence || "–") %>
+      <% if @latest_report.decisions_needed.present? %><p><strong><%= t("pilotage.attributes.decisions_needed") %></strong><br><%= simple_format(@latest_report.decisions_needed) %></p><% end %>
+      <%= link_to t(:label_details), project_pilotage_status_report_path(@project, @latest_report) %>
+    <% else %>
+      <p class="pilotage-muted"><%= t("pilotage.reports.none_validated") %></p>
+    <% end %>
+    <% if @pending_report %>
+      <p><%= link_to t("pilotage.reports.pending", state: t("pilotage.reports.states.#{@pending_report.state}")), project_pilotage_status_report_path(@project, @pending_report) %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="pilotage-section">
+  <h3 class="pilotage-section__title"><%= t("pilotage.label_registers") %></h3>
+  <div class="pilotage-kpi-grid">
+    <% @registers.each do |kind, c| %>
+      <%= render(Pilotage::KpiTileComponent.new(label: pilotage_kind_label(kind), value: c[:open], href: project_pilotage_register_items_path(@project, kind:),
+                                                hint: "#{c[:total]} #{t('pilotage.registers.total').downcase}#{c[:overdue].positive? ? " · #{c[:overdue]} #{t('pilotage.registers.overdue').downcase}" : ''}",
+                                                scheme: c[:overdue].positive? ? :amber : :default)) %>
+    <% end %>
+  </div>
+</div>
+
+<div class="pilotage-grid-2 pilotage-section">
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.project.top_risks") %></h3>
+    <% if @top_risks.empty? %><p class="pilotage-muted">–</p><% else %>
+      <table class="pilotage-table">
+        <% @top_risks.each do |r| %>
+          <tr><td><%= link_to "#{r.reference} #{r.title}", project_pilotage_register_item_path(@project, r) %></td><td><%= r.criticality ? pilotage_health_label(r.criticality_level, text: r.criticality.to_s) : "–" %></td><td><%= pilotage_user(r.owner) %></td></tr>
+        <% end %>
+      </table>
+    <% end %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.project.open_actions") %></h3>
+    <% if @open_actions.empty? %><p class="pilotage-muted">–</p><% else %>
+      <table class="pilotage-table">
+        <% @open_actions.each do |a| %>
+          <tr><td><%= link_to "#{a.reference} #{a.title}", project_pilotage_register_item_path(@project, a) %></td><td><%= pilotage_user(a.owner) %></td><td><%= a.overdue? ? pilotage_health_label("red", text: format_date(a.due_date)) : pilotage_date(a.due_date) %></td></tr>
+        <% end %>
+      </table>
+    <% end %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.project.recent_decisions") %></h3>
+    <% if @recent_decisions.empty? %><p class="pilotage-muted">–</p><% else %>
+      <ul><% @recent_decisions.each do |d| %><li><%= link_to "#{d.reference} #{d.title}", project_pilotage_register_item_path(@project, d) %> <span class="pilotage-muted">· <%= format_date(d.created_at) %></span></li><% end %></ul>
+    <% end %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.registers.kinds.deliverable") %></h3>
+    <% if @deliverables.empty? %><p class="pilotage-muted">–</p><% else %>
+      <table class="pilotage-table">
+        <% @deliverables.each do |d| %>
+          <tr><td><%= link_to "#{d.reference} #{d.title}", project_pilotage_register_item_path(@project, d) %></td><td><%= d.detail(:phase) %></td><td><%= pilotage_state_label(d.status, scope: "registers") %></td><td><%= pilotage_date(d.due_date) %></td></tr>
+        <% end %>
+      </table>
+    <% end %>
+  </div>
+</div>
+
+<% if @sessions.any? %>
+  <div class="pilotage-section pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.label_governance") %></h3>
+    <ul><% @sessions.each do |s| %><li><%= link_to "#{format_date(s.held_on)} · #{s.title}", pilotage_instance_session_path(s.instance, s) %> <span class="pilotage-muted">· <%= s.instance.name %></span></li><% end %></ul>
+  </div>
+<% end %>

@@ -610,7 +610,7 @@ fr:
         empty: ne peut pas être vide.
         enterprise_plan_required: nécessite au minimum l'abonnement %{plan_name}.
         error_conflict: Cette information a été mise à jour par au moins un autre utilisateur entre-temps.
-        error_enterprise_only: "%{action} n'est disponible que dans l'édition Enterprise d'OpenProject."
+        error_enterprise_only: "%{action} n'est disponible que dans l'édition Enterprise d'WeProjectManagement."
         error_not_found: introuvable.
         error_readonly: a tenté d'être écrit mais n'est pas accessible en écriture.
         error_unauthorized: est interdit d'accès.
@@ -660,7 +660,7 @@ fr:
         regex_match_failed: ne correspond pas à l'expression régulière %{expression}.
         smaller_than_or_equal_to_max_length: doit être inférieur ou égal à la longueur maximale.
         smaller_than_or_equal_to_max_value: doit être inférieure ou égale à la valeur maximale.
-        ssrf_filtered: enfreint la politique SSRF de cette instance OpenProject.
+        ssrf_filtered: enfreint la politique SSRF de cette instance WeProjectManagement.
         status_transition_invalid: n'est pas valide, car les rôles de l'utilisateur actuel ne permettent aucune transition de l'ancien statut vers le nouveau.
         system_wide_non_working_day_exists: entre en conflit avec un jour non travaillé existant dans l'ensemble du système pour cette date.
         taken: a déjà été pris.
@@ -786,13 +786,13 @@ fr:
         llm_connection:
           attributes:
             api_format:
-              not_supported: nécessite des informations de connexion qu'OpenProject ne peut pas stocker, comme une clé secrète distincte ou un identifiant de région.
+              not_supported: nécessite des informations de connexion qu'WeProjectManagement ne peut pas stocker, comme une clé secrète distincte ou un identifiant de région.
             api_key:
               invalid_api_key: a été rejeté par le serveur LLM.
             base:
               singleton: Une seule connexion LLM peut être active.
             base_url:
-              cannot_be_connected_to: n'a pas pu être atteint. Veuillez vous assurer que le serveur LLM est en cours d'exécution et accessible depuis OpenProject.
+              cannot_be_connected_to: n'a pas pu être atteint. Veuillez vous assurer que le serveur LLM est en cours d'exécution et accessible depuis WeProjectManagement.
               models_endpoint_missing: n'a pas de liste de modèles à cette adresse, donc la clé API n'a pas pu être vérifiée non plus. Veuillez vérifier l'URL, en particulier qu'il inclut le segment de version de l'API (par exemple https://example.com/v1).
               not_openai_compatible: n'a pas retourné de liste de modèles valide. Veuillez vous assurer que les points d'URL d'un point de terminaison compatible avec OpenAI-API, y compris le segment de version de l'API (par exemple https://example.com/v1).
               request_timed_out: n'a pas répondu à temps. Veuillez vous assurer que le serveur LLM est accessible et qu'il n'est pas surchargé.
@@ -951,7 +951,7 @@ fr:
         repository:
           invalid_url: n'est pas une URL ou un chemin de dépôt valide.
           must_not_be_ssh: ne doit pas être une url SSH.
-          must_not_point_to_openproject_directory: ne doit pas pointer vers un répertoire de dépôt géré par OpenProject.
+          must_not_point_to_openproject_directory: ne doit pas pointer vers un répertoire de dépôt géré par WeProjectManagement.
           no_directory: n'est pas un répertoire.
           not_available: Le fournisseur de gestion de contrôle de sources n'est pas disponible
           not_whitelisted: n'est pas autorisé par la configuration.
@@ -1522,10 +1522,10 @@ fr:
     custom_styles:
       branding:
         desktop:
-          description: Par défaut, ce sont les logos d'OpenProject qui sont utilisés, mais si vous importez de nouveaux logos, le thème passera automatiquement au thème « Personnalisé ». Pour un meilleur rendu, nous vous recommandons d'utiliser un logo transparent.
+          description: Par défaut, ce sont les logos d'WeProjectManagement qui sont utilisés, mais si vous importez de nouveaux logos, le thème passera automatiquement au thème « Personnalisé ». Pour un meilleur rendu, nous vous recommandons d'utiliser un logo transparent.
           title: Logos personnalisés pour le bureau
         mobile:
-          description: Par défaut, ce sont les logos OpenProject qui sont utilisés pour la version mobile accessible via un navigateur ; l'application mobile native ne sera pas concernée par cette modification. Pour un rendu optimal, nous vous recommandons d'utiliser un logo transparent.
+          description: Par défaut, ce sont les logos WeProjectManagement qui sont utilisés pour la version mobile accessible via un navigateur ; l'application mobile native ne sera pas concernée par cette modification. Pour un rendu optimal, nous vous recommandons d'utiliser un logo transparent.
           title: Logos personnalisés pour mobiles
         modes:
           dark:
@@ -1542,7 +1542,7 @@ fr:
         main_menu: Menu latéral principal
         top_header_colors: Couleurs de l'en-tête supérieur
       color_theme: Thème de couleur
-      color_theme_caption: Utilisez l'un des thèmes par défaut d'OpenProject ou créez votre propre thème avec vos couleurs en sélectionnant « Thème personnalisé ».
+      color_theme_caption: Utilisez l'un des thèmes par défaut d'WeProjectManagement ou créez votre propre thème avec vos couleurs en sélectionnant « Thème personnalisé ».
       color_theme_custom: "(Personnalisé)"
       colors:
         accent-color: Couleur d'accentuation
@@ -1606,7 +1606,7 @@ fr:
     import:
       title: Importation
     info:
-      database_deprecation_html: 'À partir d''OpenProject 16.0, PostgreSQL 16 est nécessaire pour utiliser OpenProject. Votre installation restera fonctionnelle avec votre base de données actuelle, mais attendez-vous à des incompatibilités dans les prochaines versions. <br/> Nous avons préparé des [guides de mise à jour pour toutes les méthodes d''installation](upgrade_guide). Vous pouvez effectuer la mise à jour à tout moment avant la prochaine version en suivant les guides.
+      database_deprecation_html: 'À partir d''OpenProject 16.0, PostgreSQL 16 est nécessaire pour utiliser WeProjectManagement. Votre installation restera fonctionnelle avec votre base de données actuelle, mais attendez-vous à des incompatibilités dans les prochaines versions. <br/> Nous avons préparé des [guides de mise à jour pour toutes les méthodes d''installation](upgrade_guide). Vous pouvez effectuer la mise à jour à tout moment avant la prochaine version en suivant les guides.
 
         '
     jemalloc_allocator: Allocateur de mémoire Jemalloc
@@ -1621,7 +1621,7 @@ fr:
         description: Ce Jira Migrator est actuellement en version bêta. Nous ne prenons actuellement en charge que les versions 10.x et 11.x de Jira Server/Data Center. Les instances Cloud ne sont pas prises en charge pour le moment.
         title: Version bêta disponible. Essayez-la !
       blank:
-        description: Configurez un hôte Jira pour commencer à importer des éléments de Jira vers cette instance d'OpenProject.
+        description: Configurez un hôte Jira pour commencer à importer des éléments de Jira vers cette instance d'WeProjectManagement.
         title: Aucun hôte Jira n'est encore configuré
       client:
         401_error: L'API Jira a renvoyé une erreur 401. Votre jeton d'authentification peut avoir expiré ou ne pas avoir les autorisations requises. Veuillez vous assurer que le jeton appartient à un administrateur Jira.
@@ -1649,7 +1649,7 @@ fr:
         cannot_delete_with_imports: Impossible de supprimer un hôte Jira avec des importations existantes
         custom_field_creation_failed: 'Échec de la création du champ personnalisé « %{name} » : %{message}'
         semantic_identifiers_must_be_enabled:
-          description: Jira utilise des identifiants de ticket composés d'une clé de projet et d'un numéro de séquence (PRJ-123). OpenProject le prend également en charge, mais cela doit être activé [ici](link).
+          description: Jira utilise des identifiants de ticket composés d'une clé de projet et d'un numéro de séquence (PRJ-123). WeProjectManagement le prend également en charge, mais cela doit être activé [ici](link).
           title: Les identifiants sémantiques basés sur les projets doivent être activés.
       form:
         button_add: Ajouter la configuration
@@ -1759,7 +1759,7 @@ fr:
           import_dialog:
             confirm: Je comprends et j'ai une copie de sauvegarde
             confirm_button: Démarrer l'importation
-            description: 'Les importations modifient la configuration d''OpenProject. Après l''importation, vous aurez la possibilité de revoir les changements. Pendant la révision, vous avez la possibilité de revenir en arrière ou d''approuver l''importation. Après l''approbation de l''importation, il ne sera plus possible de revenir en arrière. Par conséquent, assurez-vous d''avoir [une copie de sauvegarde de votre instance OpenProject](link) avant de continuer.
+            description: 'Les importations modifient la configuration d''WeProjectManagement. Après l''importation, vous aurez la possibilité de revoir les changements. Pendant la révision, vous avez la possibilité de revenir en arrière ou d''approuver l''importation. Après l''approbation de l''importation, il ne sera plus possible de revenir en arrière. Par conséquent, assurez-vous d''avoir [une copie de sauvegarde de votre instance WeProjectManagement](link) avant de continuer.
 
               '
             title: Assurez-vous d'avoir une copie de sauvegarde !
@@ -1846,7 +1846,7 @@ fr:
               button_continue: Continuer
               button_select: Sélectionner les projets
               button_select_projects: Sélectionnez les projets à importer
-              caption: Choisissez ce que vous voulez importer dans OpenProject
+              caption: Choisissez ce que vous voulez importer dans WeProjectManagement
               caption_done: Terminé
               caption_done_description:
                 one: "%{count} project selected as scope"
@@ -1963,7 +1963,7 @@ fr:
     llm_connections:
       delete_api_key:
         configured_from_env: This connection is configured through the environment and cannot be changed here.
-        description: OpenProject cessera d'envoyer une clé API avec ses requêtes. Les fonctionnalités continueront de fonctionner uniquement si le serveur ne nécessite aucune authentification. Vous pouvez saisir une nouvelle clé à tout moment.
+        description: WeProjectManagement cessera d'envoyer une clé API avec ses requêtes. Les fonctionnalités continueront de fonctionner uniquement si le serveur ne nécessite aucune authentification. Vous pouvez saisir une nouvelle clé à tout moment.
         heading: Supprimer la clé API enregistrée ?
         menu_label: Supprime la clé API
         success: La clé API a été supprimée.
@@ -1971,17 +1971,17 @@ fr:
       disabled_notice: LLM features are switched off for this instance. Switch them on here first.
       disconnect:
         configured_from_env: This connection is configured through the environment and cannot be changed here.
-        description: OpenProject will stop using the LLM server. AI features will be unavailable until you connect again.
+        description: WeProjectManagement will stop using the LLM server. AI features will be unavailable until you connect again.
         heading: Disconnect from the LLM server?
         keeps_bindings: 'The model chosen for each feature is kept: %{features}.'
         keeps_models: The model list, including any models you added manually, is kept.
         keeps_settings: The endpoint and API format are kept. Only the stored API key is removed.
         menu_label: Disconnect
-        success: OpenProject s'est déconnecté du serveur LLM.
+        success: WeProjectManagement s'est déconnecté du serveur LLM.
         title: Déconnecter
       form:
         api_format_caption: Which API the server speaks. Choose OpenAI for most gateways and self-hosted servers.
-        api_key_caption: The key OpenProject authenticates with. Leave blank if the server requires no authentication.
+        api_key_caption: The key WeProjectManagement authenticates with. Leave blank if the server requires no authentication.
         api_key_caption_discarded: The key you entered was not saved and is not shown again. Enter it once more to save it, or leave blank to keep the stored key.
         api_key_caption_env: The key comes from the environment.
         api_key_caption_stored: A key is stored. Leave blank to keep the current key, or enter a new one to replace it.
@@ -1993,10 +1993,10 @@ fr:
         env_pending: Environment variables configure this connection but have not been applied yet. The next database seed replaces the values below and locks this page.
         label_connecting: Contacting the LLM server…
         llm_features_enabled_caption: Une fois désactivées, toutes les fonctionnalités d'IA basées sur le LLM cessent de fonctionner. Les paramètres de connexion sont conservés.
-        server_description: Connectez OpenProject à un serveur prenant en charge l'API « %{api_format} », afin que les fonctionnalités d'IA puissent l'utiliser. L'URL de l'hôte ci-dessous permet de déterminer de quel serveur il s'agit.
+        server_description: Connectez WeProjectManagement à un serveur prenant en charge l'API « %{api_format} », afin que les fonctionnalités d'IA puissent l'utiliser. L'URL de l'hôte ci-dessous permet de déterminer de quel serveur il s'agit.
         server_group: Serveur
       show:
-        description: Connectez OpenProject à un serveur LLM afin que les fonctionnalités d'IA puissent l'utiliser.
+        description: Connectez WeProjectManagement à un serveur LLM afin que les fonctionnalités d'IA puissent l'utiliser.
         description_enabled: Une fois connecté, consultez les modèles proposés par le serveur dans l'onglet [Modèles](models_url).
       tabs:
         connection: Connexion
@@ -2029,7 +2029,7 @@ fr:
       create_health_status_report:
         success: The checks have run.
       show:
-        blankslate_description: Run the checks to find out whether OpenProject can reach the LLM server, whether it accepts the API key, and whether every AI feature has a usable model.
+        blankslate_description: Run the checks to find out whether WeProjectManagement can reach the LLM server, whether it accepts the API key, and whether every AI feature has a usable model.
         blankslate_heading: This connection has not been checked yet
         download: Download report
         last_check: Last checked %{datetime}.
@@ -2056,7 +2056,7 @@ fr:
         success: "%{model} has been removed."
         title: Remove model
       edit:
-        description: Edit how OpenProject uses this model.
+        description: Edit how WeProjectManagement uses this model.
       form:
         context_window: Context window
         context_window_caption: How many tokens this model accepts. Leave blank if you do not know.
@@ -2100,11 +2100,11 @@ fr:
         success: "%{model} a été mis à jour."
     mcp_configurations:
       index:
-        description: Le protocole de contexte de modèle permet aux agents d'IA de fournir à leurs utilisateurs les outils et les ressources exposés par cette instance d'OpenProject. Cette fonctionnalité est encore en version bêta.
-        resources_description: OpenProject implémente les ressources suivantes. Chacune d'entre elles peut être activée, renommée et décrite comme vous le souhaitez. Pour en savoir plus, veuillez vous référer à la [documentation sur les ressources MCP](docs_url).
+        description: Le protocole de contexte de modèle permet aux agents d'IA de fournir à leurs utilisateurs les outils et les ressources exposés par cette instance d'WeProjectManagement. Cette fonctionnalité est encore en version bêta.
+        resources_description: WeProjectManagement implémente les ressources suivantes. Chacune d'entre elles peut être activée, renommée et décrite comme vous le souhaitez. Pour en savoir plus, veuillez vous référer à la [documentation sur les ressources MCP](docs_url).
         resources_heading: Ressources
         resources_submit: Mettre à jour les ressources
-        tools_description: OpenProject implémente les outils suivants. Chacun d'entre eux peut être activé, renommé et décrit comme vous le souhaitez. Pour en savoir plus, veuillez vous référer à la [documentation sur les outils MCP](docs_url).
+        tools_description: WeProjectManagement implémente les outils suivants. Chacun d'entre eux peut être activé, renommé et décrit comme vous le souhaitez. Pour en savoir plus, veuillez vous référer à la [documentation sur les outils MCP](docs_url).
         tools_heading: Outils
         tools_submit: Mettre à jour les outils
       multi_update:
@@ -2186,19 +2186,19 @@ fr:
       edit:
         label_delete_scim_client: Supprimer le client SCIM
       form:
-        auth_provider_description: Il s'agit du service que les utilisateurs ajoutés par le fournisseur SCIM utiliseront pour s'authentifier dans OpenProject.
-        authentication_method_description_html: Voici comment le client SCIM s'authentifie dans OpenProject. Veuillez vous assurer que les jetons OAuth incluent la portée <code>scim_v2</code>.
+        auth_provider_description: Il s'agit du service que les utilisateurs ajoutés par le fournisseur SCIM utiliseront pour s'authentifier dans WeProjectManagement.
+        authentication_method_description_html: Voici comment le client SCIM s'authentifie dans WeProjectManagement. Veuillez vous assurer que les jetons OAuth incluent la portée <code>scim_v2</code>.
         description: Veuillez consulter notre [documentation sur la configuration des clients SCIM](docs_url) pour obtenir plus d'informations sur ces options de configuration.
         jwt_sub_description: Par exemple, pour Keycloak, il s'agit de l'UUID du compte de service associé au client SCIM. Consultez [notre documentation](docs_url) pour savoir comment trouver la revendication de sujet selon votre cas d'utilisation.
         name_description: Choisissez un nom qui aidera les autres administrateurs à mieux comprendre pourquoi ce client a été configuré.
       index:
-        description: Les clients SCIM configurés ici peuvent interagir avec l'API SCIM du serveur OpenProject pour créer, mettre à jour et désactiver des comptes utilisateurs et des groupes.
+        description: Les clients SCIM configurés ici peuvent interagir avec l'API SCIM du serveur WeProjectManagement pour créer, mettre à jour et désactiver des comptes utilisateurs et des groupes.
         label_create_button: Ajouter un client SCIM
       new:
         title: Nouveau client SCIM
       revoke_static_token_dialog_component:
         confirm_button: Révoquer
-        description: Le client SCIM qui utilise ce jeton ne pourra plus accéder à l'API SCIM du serveur OpenProject.
+        description: Le client SCIM qui utilise ce jeton ne pourra plus accéder à l'API SCIM du serveur WeProjectManagement.
         heading: Voulez-vous vraiment révoquer ce jeton ?
         title: Révoquer le jeton statique
       table_component:
@@ -2207,7 +2207,7 @@ fr:
           title: Aucun client SCIM configuré pour le moment
         user_count: Utilisateurs
       token_list_component:
-        description: Les jetons que vous générez ici peuvent être transmis par un client SCIM pour accéder à l'API SCIM d'OpenProject.
+        description: Les jetons que vous générez ici peuvent être transmis par un client SCIM pour accéder à l'API SCIM d'WeProjectManagement.
         heading: Jetons
         label_add_token: Jeton
         label_aria_add_token: Ajouter un jeton
@@ -2285,7 +2285,7 @@ fr:
             one: "... %{count} more project"
             other: "... %{count} more projects"
         banner:
-          existing_identifiers_notice: 'Les identifiants existants de %{project_count} projets ne répondent pas aux exigences des identifiants sémantiques basés sur les projets. OpenProject peut les mettre à jour automatiquement pour qu''ils soient valides, comme dans les exemples ci-dessous. Cliquez sur « Convertir les identifiants » pour mettre à jour de cette manière les identifiants de tous les projets et activer les identifiants sémantiques basés sur les projets.
+          existing_identifiers_notice: 'Les identifiants existants de %{project_count} projets ne répondent pas aux exigences des identifiants sémantiques basés sur les projets. WeProjectManagement peut les mettre à jour automatiquement pour qu''ils soient valides, comme dans les exemples ci-dessous. Cliquez sur « Convertir les identifiants » pour mettre à jour de cette manière les identifiants de tous les projets et activer les identifiants sémantiques basés sur les projets.
 
             '
         box_header:
@@ -2607,7 +2607,7 @@ fr:
     work_package_id: Lot de travaux
   authentication:
     instructions:
-      additional_form_action_urls: 'N''utilisez cette option que si la connexion échoue parce que le fournisseur d''identité redirige le navigateur vers d''autres serveurs. Saisissez une URL par ligne, par exemple l''adresse que la console du navigateur indique comme étant bloquée. Lors de la connexion, OpenProject autorise les redirections vers les serveurs correspondant à ces URL.
+      additional_form_action_urls: 'N''utilisez cette option que si la connexion échoue parce que le fournisseur d''identité redirige le navigateur vers d''autres serveurs. Saisissez une URL par ligne, par exemple l''adresse que la console du navigateur indique comme étant bloquée. Lors de la connexion, WeProjectManagement autorise les redirections vers les serveurs correspondant à ces URL.
 
         '
     login_and_registration: Connexion et inscription
@@ -2632,7 +2632,7 @@ fr:
       button:
         button_label: Button label
         label: Button press
-      more_coming: OpenProject will add more trigger types soon.
+      more_coming: WeProjectManagement will add more trigger types soon.
       name: Triggers
   background_jobs:
     status:
@@ -2658,7 +2658,7 @@ fr:
       checkbox_confirmation_reset: Je comprends que le jeton de sauvegarde actuel sera invalidé
       heading_create: Créer un jeton de sauvegarde
       heading_reset: Réinitialiser le jeton de sauvegarde
-      implications: 'L''activation des sauvegardes permettra à tout utilisateur ayant les autorisations requises et ce jeton de sauvegarde de télécharger une sauvegarde contenant toutes les données de cette installation OpenProject. Cela inclut les données de tous les autres utilisateurs.
+      implications: 'L''activation des sauvegardes permettra à tout utilisateur ayant les autorisations requises et ce jeton de sauvegarde de télécharger une sauvegarde contenant toutes les données de cette installation WeProjectManagement. Cela inclut les données de tous les autres utilisateurs.
 
         '
       info: 'Vous devrez générer un jeton de sauvegarde pour pouvoir créer une sauvegarde. Vous devrez fournir ce jeton à chaque fois que vous demanderez une sauvegarde. Vous pouvez supprimer le jeton de sauvegarde pour désactiver les sauvegardes pour cet utilisateur.
@@ -2958,7 +2958,7 @@ fr:
     no_results_title_text: There are currently no custom fields.
     no_role_assigment: Aucune attribution de rôle
     overview:
-      description: 'In OpenProject, you can add custom fields to work packages, user profiles and even time log entries. These settings have been moved to their respective sections:'
+      description: 'In WeProjectManagement, you can add custom fields to work packages, user profiles and even time log entries. These settings have been moved to their respective sections:'
       heading: Settings moved
     placeholder_version_select: La sélection d'un lot de travaux ou d'un projet est requise en premier lieu
     reorder_alphabetical: Réorganiser les valeurs par ordre alphabétique
@@ -3244,7 +3244,7 @@ fr:
       consent: J'accepte les [conditions d'utilisation](tos_url) et la [politique de confidentialité](privacy_url).
       domain_caption: Le jeton sera valable pour votre nom d'hôte actuellement configuré.
       not_found: Vous avez demandé un jeton d'essai, mais cette demande n'est plus disponible. Veuillez réessayer.
-      receive_newsletter: Je souhaite recevoir la [lettre d'information](newsletter_url) d'OpenProject.
+      receive_newsletter: Je souhaite recevoir la [lettre d'information](newsletter_url) d'WeProjectManagement.
       request_again: Demander à nouveau
       resend_action: Renvoyer l'e-mail de confirmation
       successfully_saved: Votre jeton d'essai Enterprise a été récupéré avec succès.
@@ -3267,7 +3267,7 @@ fr:
         premium_features: Add-ons Enterprise
         premium_features_text: Des tableaux agiles, un thème et un logo personnalisés, des graphiques, des flux de travail intelligents avec des actions personnalisées, une recherche plein texte pour les pièces jointes des lots de travaux et des champs personnalisés à sélection multiple.
         professional_support: Assistance professionnelle
-        professional_support_text: Bénéficiez d'une assistance fiable et de qualité de la part d'ingénieurs d'assistance expérimentés ayant une connaissance approfondie de l'utilisation d'OpenProject dans des environnements critiques.
+        professional_support_text: Bénéficiez d'une assistance fiable et de qualité de la part d'ingénieurs d'assistance expérimentés ayant une connaissance approfondie de l'utilisation d'WeProjectManagement dans des environnements critiques.
       buy_now_button: Acheter maintenant
       calculated_values:
         description: Les valeurs calculées vous permettent de créer un attribut basé sur une formule mathématique en utilisant des valeurs numériques et d'autres attributs de projet et champs personnalisés.
@@ -3281,7 +3281,7 @@ fr:
       customize_life_cycle:
         description: Créez et organisez des phases de projet différentes de celles fournies par la planification du cycle de projet PM2.
       define_custom_style:
-        description: Personnalisez votre installation OpenProject avec votre propre logo et vos propres couleurs.
+        description: Personnalisez votre installation WeProjectManagement avec votre propre logo et vos propres couleurs.
         more_info: 'Remarque : le logo utilisé sera accessible publiquement.'
         title: Thème de couleur et logo personnalisés
       edit_attribute_groups:
@@ -3291,7 +3291,7 @@ fr:
           related: Ajouter un tableau des lots de travaux associés
           rename: Renommer les sections d'attributs
       hide_banner: Masquer cette bannière
-      homescreen_description: 'Les abonnements Enterprise complémentent l''édition Community d''OpenProject avec des [add-ons Enterprise](enterprise_url) supplémentaires et une assistance professionnelle, ce qui s''avère idéal pour les organisations qui utilisent OpenProject dans un environnement critique.
+      homescreen_description: 'Les abonnements Enterprise complémentent l''édition Community d''WeProjectManagement avec des [add-ons Enterprise](enterprise_url) supplémentaires et une assistance professionnelle, ce qui s''avère idéal pour les organisations qui utilisent WeProjectManagement dans un environnement critique.
 
         '
       homescreen_subline: En optant pour une formule d'abonnement supérieure, vous soutiendrez également un projet open source.
@@ -3302,14 +3302,14 @@ fr:
         description: " "
         title: Écrire des commentaires internes qu'un petit groupe peut voir
       mcp_server:
-        description: Introduisez OpenProject dans vos flux de travail d'IA avec un serveur MCP sécurisé.
+        description: Introduisez WeProjectManagement dans vos flux de travail d'IA avec un serveur MCP sécurisé.
       meeting_templates:
         description: Définissez des modèles de réunion avec une structure d'ordre du jour définie et gagnez du temps en les réutilisant lors de la création de nouvelles réunions.
       nextcloud_sso:
         description: Activez l'authentification transparente et sécurisée pour votre stockage Nextcloud avec l'authentification unique. Simplifiez la gestion des accès et augmentez la commodité des utilisateurs.
         title: Authentification unique pour le stockage Nextcloud
       placeholder_users:
-        description: 'Les utilisateurs fictifs permettent d''assigner des lots de travaux à des utilisateurs qui ne font pas partie de votre projet. Ils peuvent être utiles dans différents scénarios ; par exemple, si vous devez suivre des tâches pour une ressource qui n''est pas encore nommée ou disponible, ou si vous ne souhaitez pas donner à cette personne accès à OpenProject tout en souhaitant suivre les tâches qui lui sont assignées.
+        description: 'Les utilisateurs fictifs permettent d''assigner des lots de travaux à des utilisateurs qui ne font pas partie de votre projet. Ils peuvent être utiles dans différents scénarios ; par exemple, si vous devez suivre des tâches pour une ressource qui n''est pas encore nommée ou disponible, ou si vous ne souhaitez pas donner à cette personne accès à WeProjectManagement tout en souhaitant suivre les tâches qui lui sont assignées.
 
           '
         title: Utilisateurs fictifs
@@ -3326,7 +3326,7 @@ fr:
       readonly_work_packages:
         description: Marquer les lots de travaux comme étant en lecture seule pour des statuts spécifiques.
       scim_api:
-        description: Automatisez la gestion des utilisateurs dans OpenProject en intégrant de manière transparente des services d'identité externes tels que Microsoft Entra ou Keycloak via notre API de serveur SCIM. Disponible à partir de l'abonnement Enterprise.
+        description: Automatisez la gestion des utilisateurs dans WeProjectManagement en intégrant de manière transparente des services d'identité externes tels que Microsoft Entra ou Keycloak via notre API de serveur SCIM. Disponible à partir de l'abonnement Enterprise.
         title: Clients SCIM
       sso_auth_providers:
         description: Permettez aux utilisateurs de se connecter via des fournisseurs SSO externes utilisant SAML ou OpenID Connect pour assurer un accès transparent et une intégration fluide avec les systèmes d'identité existants.
@@ -3335,7 +3335,7 @@ fr:
       trial_text: Cette fonction est incluse dans votre version d'essai Enterprise active.
       unlimited: Illimité
       virus_scanning:
-        description: Assurez-vous que les fichiers téléversés dans OpenProject sont analysés pour détecter les virus avant d'être accessibles aux autres utilisateurs.
+        description: Assurez-vous que les fichiers téléversés dans WeProjectManagement sont analysés pour détecter les virus avant d'être accessibles aux autres utilisateurs.
       weighted_item_lists:
         description: Les listes d'éléments pondérés vous permettent de créer une liste à laquelle sont associées des valeurs numériques sous-jacentes.
       work_package_sharing:
@@ -3379,7 +3379,7 @@ fr:
   error_check_user_and_role: Veuillez choisir un utilisateur et un rôle.
   error_code: Erreur %{code}
   error_color_could_not_be_saved: La couleur n'a pas pu être enregistrée
-  error_cookie_missing: Le cookie OpenProject est manquant. Assurez-vous que les cookies sont activés, sans quoi cette application ne fonctionnera pas correctement.
+  error_cookie_missing: Le cookie WeProjectManagement est manquant. Assurez-vous que les cookies sont activés, sans quoi cette application ne fonctionnera pas correctement.
   error_custom_option_not_found: L'option n'existe pas.
   error_enterprise_activation_user_limit: Votre compte n'a pas pu être activé (limite d'utilisateurs atteinte). Veuillez contacter votre administrateur pour obtenir l'accès.
   error_enterprise_plan_needed: Vous avez besoin de souscrire à l'abonnement Enterprise %{plan} pour effectuer cette action.
@@ -3393,7 +3393,7 @@ fr:
   error_journal_attribute_not_present: Le journal ne contient pas l'attribut %{attribute}.
   error_menu_item_not_created: L'élément de menu n'a pas pu être ajouté
   error_menu_item_not_saved: L'élément de menu n'a pas pu être sauvegardé
-  error_migrations_are_pending: Votre installation OpenProject a des migrations de base de données en attente. Vous n'avez probablement pas exécuté les migrations lors de votre dernière mise à jour. Veuillez consulter le guide de mise à jour afin de mettre votre installation correctement à jour.
+  error_migrations_are_pending: Votre installation WeProjectManagement a des migrations de base de données en attente. Vous n'avez probablement pas exécuté les migrations lors de votre dernière mise à jour. Veuillez consulter le guide de mise à jour afin de mettre votre installation correctement à jour.
   error_migrations_visit_upgrade_guides: Veuillez consulter notre documentation du guide de mise à jour
   error_must_be_project_member: doit être membre du projet
   error_no_default_work_package_status: Aucun statut de lot de travaux par défaut n'est défini. Veuillez vérifier votre configuration (Allez dans "Administration -> Statuts des lots de travaux").
@@ -3457,7 +3457,7 @@ fr:
   export:
     demo:
       button_text: Générer un PDF de démo
-      footer: Généré par OpenProject
+      footer: Généré par WeProjectManagement
       heading: PDF de démo
     dialog:
       columns:
@@ -3552,8 +3552,8 @@ fr:
   external_link_warning:
     continue_button: Continuer vers le site web externe
     continue_message: Voulez-vous vraiment accéder au lien externe suivant ?
-    title: Vous quittez OpenProject
-    warning_message: Vous êtes sur le point de quitter OpenProject et de visiter un site web externe. Veuillez noter que les sites web externes ne sont pas sous notre contrôle et peuvent avoir des politiques de confidentialité et de sécurité différentes.
+    title: Vous quittez WeProjectManagement
+    warning_message: Vous êtes sur le point de quitter WeProjectManagement et de visiter un site web externe. Veuillez noter que les sites web externes ne sont pas sous notre contrôle et peuvent avoir des politiques de confidentialité et de sécurité différentes.
   extraction:
     available:
       catdoc: Catdoc disponible (optionnel)
@@ -3763,7 +3763,7 @@ fr:
       projects: Les projets visibles les plus récents de cette instance.
       users: Les utilisateurs enregistrés les plus récents de cette instance.
     blocks:
-      community: Communauté OpenProject
+      community: Communauté WeProjectManagement
       new_features:
         '17_9':
           new_features_list:
@@ -3808,7 +3808,7 @@ fr:
       upsell:
         title: Passer à la version Enterprise
     links:
-      blog: Blog OpenProject
+      blog: Blog WeProjectManagement
       faq: FAQ
       forums: Forum de la communauté
       glossary: Lexique
@@ -3900,7 +3900,7 @@ fr:
       meeting_outcome_recorded_html: "<strong>Ajouté comme résultat dans la réunion</strong> %{meeting_title_information}"
       progress_mode_changed_to_status_based: Mise à jour du calcul de la progression
       status_changed: Statut « %{status_name} »
-      system_update: 'Mise à jour du système OpenProject :'
+      system_update: 'Mise à jour du système WeProjectManagement :'
       total_percent_complete_mode_changed_to_simple_average: Le calcul des totaux de % réalisé est désormais basé sur une simple moyenne des seules valeurs de % réalisé.
       total_percent_complete_mode_changed_to_work_weighted_average: Le calcul des totaux de % réalisé est désormais pondéré par le travail.
       work_package_duplicate_closed: 'Doublon de lot de travaux mis à jour :'
@@ -4070,7 +4070,7 @@ fr:
   label_custom_field_plural: Champs personnalisés
   label_custom_pdf_export_settings: Paramètres d'exportation PDF personnalisés
   label_custom_style: Apparence
-  label_custom_style_description: Choisissez l'apparence d'OpenProject avec des thèmes, sélectionnez les couleurs par défaut à utiliser dans l'application et l'apparence des exportations.
+  label_custom_style_description: Choisissez l'apparence d'WeProjectManagement avec des thèmes, sélectionnez les couleurs par défaut à utiliser dans l'application et l'apparence des exportations.
   label_custom_touch_icon: Icône de contact personnalisé
   label_dashboard: Tableau de bord
   label_database_version: Version de PostgreSQL
@@ -4094,7 +4094,7 @@ fr:
   label_deleted_custom_option: "(option supprimée)"
   label_deleted_version: "(deleted version)"
   label_departments: Organisation
-  label_departments_description_html: 'Définissez la structure de votre entreprise en créant des services et des sous-services de manière hiérarchique. Cela vous permet de refléter les lignes de rapport et de maintenir une vue d''ensemble claire et structurée de votre organisation au sein d''OpenProject. Vous pouvez également importer une structure d''organisation existante via [Synchronisation de service LDAP](ldap_docs_article).
+  label_departments_description_html: 'Définissez la structure de votre entreprise en créant des services et des sous-services de manière hiérarchique. Cela vous permet de refléter les lignes de rapport et de maintenir une vue d''ensemble claire et structurée de votre organisation au sein d''WeProjectManagement. Vous pouvez également importer une structure d''organisation existante via [Synchronisation de service LDAP](ldap_docs_article).
 
     '
   label_descending: Décroissant
@@ -4359,7 +4359,7 @@ fr:
   label_open_menu: Ouvrir le menu
   label_open_work_packages: ouverts
   label_open_work_packages_plural: ouverts
-  label_openproject_website: Site web OpenProject
+  label_openproject_website: Site web WeWorld Tech
   label_operator_all: n'est pas vide
   label_operator_equals_all: est (ET)
   label_operator_equals_or: est (OU)
@@ -4705,25 +4705,25 @@ fr:
   label_zen_mode: Mode zen
   ldap_auth_sources:
     attribute_texts:
-      admin_map_html: 'Facultatif : La clé d''attribut dans LDAP qui, <strong>si elle est présente</strong>, marque l''utilisateur OpenProject comme administrateur. Laisser vide en cas de doute.'
+      admin_map_html: 'Facultatif : La clé d''attribut dans LDAP qui, <strong>si elle est présente</strong>, marque l''utilisateur WeProjectManagement comme administrateur. Laisser vide en cas de doute.'
       base_dn: |
-        Entrez le DN de base de la sous-arborescence LDAP dans laquelle voulez qu'OpenProject recherche des utilisateurs et des groupes.
-        OpenProject filtrera les noms d'utilisateur fournis dans cette sous-arborescence seulement.
+        Entrez le DN de base de la sous-arborescence LDAP dans laquelle voulez qu'WeProjectManagement recherche des utilisateurs et des groupes.
+        WeProjectManagement filtrera les noms d'utilisateur fournis dans cette sous-arborescence seulement.
         Exemple : ou=utilisateurs,dc=exemple,dc=com
       filter_string: |
         Ajouter un filtre RFC4515 optionnel à appliquer aux résultats renvoyés pour les utilisateurs filtrés dans le LDAP.
-        Cela peut être utilisé pour restreindre l'ensemble des utilisateurs qui sont trouvés par OpenProject pour l'authentification et la synchronisation de groupe.
+        Cela peut être utilisé pour restreindre l'ensemble des utilisateurs qui sont trouvés par WeProjectManagement pour l'authentification et la synchronisation de groupe.
       filter_string_concat: |
-        OpenProject filtrera toujours l'attribut de connexion fourni par l'utilisateur pour identifier l'enregistrement. Si vous fournissez un filtre ici,
+        WeProjectManagement filtrera toujours l'attribut de connexion fourni par l'utilisateur pour identifier l'enregistrement. Si vous fournissez un filtre ici,
         il sera concaténé avec un ET. Par défaut, un fourre-tout (objectClass=*) sera utilisé comme filtre.
-      generic_map: La clé d'attribut dans LDAP qui est mappée à l'attribut OpenProject `%{attribute}`
+      generic_map: La clé d'attribut dans LDAP qui est mappée à l'attribut WeProjectManagement `%{attribute}`
       host: Nom d'hôte ou adresse IP du serveur LDAP
       login_map: La clé d'attribut dans LDAP qui est utilisée pour identifier la connexion utilisateur unique. Habituellement, ce sera `uid` ou `samAccountName`.
       name: Nom arbitraire de la connexion LDAP
       onthefly_register: |
-        Si vous cochez cette case, OpenProject créera automatiquement de nouveaux utilisateurs à partir de leurs entrées LDAP
-        lorsqu'ils s'authentifieront pour la première fois avec OpenProject.
-        Laissez ceci non coché pour permettre uniquement aux comptes existants dans OpenProject de s'authentifier via LDAP!
+        Si vous cochez cette case, WeProjectManagement créera automatiquement de nouveaux utilisateurs à partir de leurs entrées LDAP
+        lorsqu'ils s'authentifieront pour la première fois avec WeProjectManagement.
+        Laissez ceci non coché pour permettre uniquement aux comptes existants dans WeProjectManagement de s'authentifier via LDAP!
       system_user_dn_html: |
         Saisissez le DN de l'utilisateur système utilisé pour l'accès en lecture seule.
         <br>
@@ -4738,7 +4738,7 @@ fr:
     sync_failed: 'Échec de la synchronisation à partir de LDAP : %{message}.'
     system_account: Compte système
     system_account_legend: |
-      OpenProject nécessite un accès en lecture seule via un compte système pour rechercher des utilisateurs et des groupes dans votre arborescence LDAP.
+      WeProjectManagement nécessite un accès en lecture seule via un compte système pour rechercher des utilisateurs et des groupes dans votre arborescence LDAP.
       Veuillez spécifier les informations d'identification pour cet utilisateur système dans la section suivante.
     technical_warning: |
       Ce formulaire LDAP nécessite une connaissance technique de votre configuration LDAP/Active Directory.
@@ -4761,8 +4761,8 @@ fr:
         '
     user_settings: Mapping des attributs
     user_settings_legend: |
-      Les champs suivants sont liés à la façon dont les utilisateurs sont créés dans OpenProject à partir d'entrées LDAP et
-      quels attributs LDAP sont utilisés pour définir les attributs d'un utilisateur OpenProject (mapping d'attributs).
+      Les champs suivants sont liés à la façon dont les utilisateurs sont créés dans WeProjectManagement à partir d'entrées LDAP et
+      quels attributs LDAP sont utilisés pour définir les attributs d'un utilisateur WeProjectManagement (mapping d'attributs).
   link: lien
   links:
     configuration_guide: Guide de configuration
@@ -4833,7 +4833,7 @@ fr:
         catalogue_stale_settings: The connection settings changed after the model list was last refreshed. Refresh the models on the Models tab.
         chat_failed: The server refused a request for %{model} with status %{status}.
         connection_disabled: The connection is configured but switched off, so no feature will use it.
-        connection_error: The server could not be reached. Please ensure it is running and reachable from OpenProject.
+        connection_error: The server could not be reached. Please ensure it is running and reachable from WeProjectManagement.
         default_model_missing: "%{model} is no longer offered by the server."
         default_model_unset: No default model has been chosen on the Models tab, so features fall back to their own selection.
         empty_completion: "%{model} answered with an empty message."
@@ -4853,7 +4853,7 @@ fr:
         request_timed_out: The server did not respond in time.
         server_error: The server responded with status %{status}.
         ssrf_filtered: The endpoint resolves to a blocked address.
-        unsupported_api_format: "%{api_format} needs credentials that OpenProject cannot store."
+        unsupported_api_format: "%{api_format} needs credentials that WeProjectManagement cannot store."
       features:
         bindings_resolvable: Every feature has a usable model
         header: AI features
@@ -5001,20 +5001,20 @@ fr:
   mail_body_backup_token_info: Le jeton précédent n'est plus valide.
   mail_body_backup_token_reset_admin_info: Le jeton de sauvegarde pour l'utilisateur « %{user} » a été réinitialisé.
   mail_body_backup_token_reset_user_info: Votre jeton de sauvegarde a été réinitialisé.
-  mail_body_backup_token_warning: Si ce n'était pas vous, connectez-vous immédiatement à OpenProject et réinitialisez-le à nouveau.
+  mail_body_backup_token_warning: Si ce n'était pas vous, connectez-vous immédiatement à WeProjectManagement et réinitialisez-le à nouveau.
   mail_body_backup_waiting_period: Le nouveau jeton sera activé dans %{hours} heures.
   mail_body_group_reminder: '%{count} lot(s) de travaux assigné(s) au groupe "%{group}" arrive(nt) à échéance dans %{days} jours :'
-  mail_body_incoming_email_error: L'e-mail que vous avez envoyé à OpenProject n'a pas pu être traité.
+  mail_body_incoming_email_error: L'e-mail que vous avez envoyé à WeProjectManagement n'a pas pu être traité.
   mail_body_incoming_email_error_in_reply_to: Le %{received_at} %{from_email} a écrit
   mail_body_incoming_email_error_logs: Journaux
   mail_body_lost_password: 'Pour changer votre mot de passe, cliquez sur le lien suivant:'
   mail_body_register: 'Bienvenue sur %{app_title}. Veuillez activer votre compte en cliquant sur ce lien :'
-  mail_body_register_closing: Votre équipe OpenProject
+  mail_body_register_closing: Votre équipe WeProjectManagement
   mail_body_register_ending: Restez connecté ! Cordialement,
   mail_body_register_header_title: E-mail d'invitation du membre du projet
   mail_body_register_links_html: |
     N'hésitez pas à parcourir notre chaîne youtube (%{youtube_link}) où nous fournissons un webinaire (%{webinar_link})
-    et des vidéos de « Démarrage » (%{get_started_link}) pour rendre vos premières étapes dans OpenProject aussi faciles que possible.
+    et des vidéos de « Démarrage » (%{get_started_link}) pour rendre vos premières étapes dans WeProjectManagement aussi faciles que possible.
     <br />
     Si vous avez d'autres questions, consultez notre documentation (%{documentation_link}) ou contactez votre administrateur.
   mail_body_register_user: 'Chère/cher %{name}, '
@@ -5049,14 +5049,14 @@ fr:
   mail_subject_account_activation_request: Requête pour l'activation du compte %{value}
   mail_subject_backup_ready: Votre sauvegarde est prête
   mail_subject_backup_token_reset: Réinitialisation du jeton de sauvegarde
-  mail_subject_incoming_email_error: Un e-mail que vous avez envoyé à OpenProject n'a pas pu être traité.
+  mail_subject_incoming_email_error: Un e-mail que vous avez envoyé à WeProjectManagement n'a pas pu être traité.
   mail_subject_lost_password: Votre mot de passe %{value}
   mail_subject_register: Votre activation du compte %{value}
   mail_subject_wiki_content_added: Page wiki '%{id}' a été ajouté
   mail_subject_wiki_content_updated: Page wiki '%{id}' a été mise à jour
   mail_user_activation_limit_reached:
     message_html: |
-      Un nouvel utilisateur (%{email}) a essayé de créer un compte sur un environnement OpenProject que vous gérez (%{host}).
+      Un nouvel utilisateur (%{email}) a essayé de créer un compte sur un environnement WeProjectManagement que vous gérez (%{host}).
       L'utilisateur ne peut pas activer son compte puisque la limite d'utilisateurs a été atteinte.
     steps:
       a: Mettez à jour votre plan de paiement ([here](upgrade_url))
@@ -5065,7 +5065,7 @@ fr:
     subject: Limite d'activation de l'utilisateur atteinte
   mcp_configurations:
     server_url_component:
-      caption: L'URL à laquelle le serveur MCP OpenProject sera joignable. Requis pour la configuration des clients MCP.
+      caption: L'URL à laquelle le serveur MCP WeProjectManagement sera joignable. Requis pour la configuration des clients MCP.
       label: URL du serveur
   members:
     columns:
@@ -5193,7 +5193,7 @@ fr:
   my_account:
     access_tokens:
       access_tokens: Jetons d'accès
-      description: Les jetons de fournisseur sont émis par OpenProject, ce qui permet à d'autres applications d'y accéder. Les jetons clients sont émis par d'autres applications, permettant à OpenProject d'y accéder.
+      description: Les jetons de fournisseur sont émis par WeProjectManagement, ce qui permet à d'autres applications d'y accéder. Les jetons clients sont émis par d'autres applications, permettant à WeProjectManagement d'y accéder.
       expired_on: Expired on %{date}
       headers:
         action: Action
@@ -5203,7 +5203,7 @@ fr:
         blank_title: Aucun jeton iCalendar
         disabled_text: Les abonnements iCalendar ne sont pas activés par l'administrateur. Veuillez contacter votre administrateur pour utiliser cette fonctionnalité.
         table_title: Jetons iCalendar
-        text_hint_link: Les jetons iCalendar permettent aux utilisateurs de [s'abonner aux calendriers OpenProject](docs_url) et d'afficher des informations à jour sur les lots de travaux provenant de clients externes.
+        text_hint_link: Les jetons iCalendar permettent aux utilisateurs de [s'abonner aux calendriers WeProjectManagement](docs_url) et d'afficher des informations à jour sur les lots de travaux provenant de clients externes.
         title: iCalendar
       indefinite_expiration: Jamais
       no_results:
@@ -5215,7 +5215,7 @@ fr:
         blank_title: Aucun jeton d'application OAuth
         last_refreshed_at: Dernière actualisation le
         table_title: Jetons d'application OAuth
-        text_hint: Les jetons d'application OAuth permettent aux applications tierces de se connecter à cette instance d'OpenProject.
+        text_hint: Les jetons d'application OAuth permettent aux applications tierces de se connecter à cette instance d'WeProjectManagement.
         title: OAuth
       oauth_client:
         blank_description: Il n'y a pas encore de jetons clients OAuth.
@@ -5225,7 +5225,7 @@ fr:
         remove_token: Voulez-vous vraiment supprimer ce jeton ? Vous devrez vous reconnecter à %{integration}.
         removed: Le jeton client OAuth a été supprimé.
         table_title: Jetons clients OAuth
-        text_hint: Les jetons clients OAuth permettent à cette instance d'OpenProject de se connecter à des applications externes, telles que des stockages de fichiers.
+        text_hint: Les jetons clients OAuth permettent à cette instance d'WeProjectManagement de se connecter à des applications externes, telles que des stockages de fichiers.
         title: OAuth
         unknown_integration: Inconnu
       simple_revoke_confirmation: Voulez-vous vraiment révoquer ce jeton ?
@@ -5243,7 +5243,7 @@ fr:
         disabled_text: Les jetons API ne sont pas activés par l'administrateur. Veuillez contacter votre administrateur pour utiliser cette fonctionnalité.
         static_token_name: Jeton API
         table_title: Jetons API
-        text_hint: Les jetons API permettent aux applications tierces de communiquer avec cette instance d'OpenProject via les API REST.
+        text_hint: Les jetons API permettent aux applications tierces de communiquer avec cette instance d'WeProjectManagement via les API REST.
         title: API
       token/rss:
         add_button: Jeton RSS
@@ -5252,7 +5252,7 @@ fr:
         disabled_text: Les jetons RSS ne sont pas activés par l'administrateur. Veuillez contacter votre administrateur pour utiliser cette fonctionnalité.
         static_token_name: Jeton RSS
         table_title: Jetons RSS
-        text_hint: Les jetons RSS permettent aux utilisateurs de se tenir au courant des derniers changements dans cette instance d'OpenProject via un lecteur RSS externe.
+        text_hint: Les jetons RSS permettent aux utilisateurs de se tenir au courant des derniers changements dans cette instance d'WeProjectManagement via un lecteur RSS externe.
         title: RSS
     email_reminders:
       daily_reminders:
@@ -5335,7 +5335,7 @@ fr:
       no_results_content_text: Ajouter une actualité
       no_results_title_text: Il n'y a actuellement aucune actualité à publier.
   no_results_title_text: Il n'y a actuellement rien à afficher.
-  noscript_description: Vous devez activer JavaScript afin d'utiliser OpenProject!
+  noscript_description: Vous devez activer JavaScript afin d'utiliser WeProjectManagement!
   noscript_heading: JavaScript désactivé
   noscript_learn_more: En savoir plus
   note: Note
@@ -5361,7 +5361,7 @@ fr:
   notice_account_updated: Le compte a été mis à jour avec succès.
   notice_account_wrong_password: Mot de passe incorrect
   notice_activation_failed: Le compte n'a pas pu être activé.
-  notice_attachment_migration_wiki_page: 'Cette page a été générée automatiquement durant la mise à jour de OpenProject. Elle contient toutes les pièces jointes précédemment associées à la %{container_type} « %{container_name} ».
+  notice_attachment_migration_wiki_page: 'Cette page a été générée automatiquement durant la mise à jour de WeProjectManagement. Elle contient toutes les pièces jointes précédemment associées à la %{container_type} « %{container_name} ».
 
     '
   notice_auth_stage_error: Échec de l'étape d'authentification '%{stage}'.
@@ -5478,7 +5478,7 @@ fr:
         redirect_uri_html: 'Les URL autorisées où peuvent être redirigés les utilisateurs. Une entrée par ligne. <br/> Si vous enregistrez une application de bureau, utilisez l''URL suivante.
 
           '
-        register_intro: Si vous développez une application client OAuth API pour OpenProject, vous pouvez l'enregistrer en utilisant ce formulaire pour qu'elle soit utilisée par tous les utilisateurs.
+        register_intro: Si vous développez une application client OAuth API pour WeProjectManagement, vous pouvez l'enregistrer en utilisant ce formulaire pour qu'elle soit utilisée par tous les utilisateurs.
         scopes: Vérifiez les portées auxquelles vous voulez que l'application accorde l'accès. Si aucune portée n'est cochée, api_v3 est supposé.
       named: Application OAuth '%{name}'
       new: Nouvelle application Oauth
@@ -5491,18 +5491,18 @@ fr:
       cancel: Annuler et refuser l'autorisation.
       prompt_html: Autoriser <strong>%{application_name}</strong> à utiliser votre compte <em>%{login}</em> ?
       title: Autoriser %{application_name}
-      wants_to_access_html: 'Cette application demande l''accès à votre compte OpenProject. <br/> <strong>Il a demandé les autorisations suivantes:</strong>
+      wants_to_access_html: 'Cette application demande l''accès à votre compte WeProjectManagement. <br/> <strong>Il a demandé les autorisations suivantes:</strong>
 
         '
     authorization_error: Une erreur d'autorisation s'est produite.
     client_credentials: Utilisateur utilisé pour les informations d'identification client
-    client_credentials_impersonation_html: 'Par défaut, OpenProject fournit l''autorisation OAuth 2.0 via %{authorization_code_flow_link}. Vous pouvez activer optionnellement %{client_credentials_flow_link}, mais vous devez fournir un utilisateur avec lequel les requêtes de nom seront effectuées.
+    client_credentials_impersonation_html: 'Par défaut, WeProjectManagement fournit l''autorisation OAuth 2.0 via %{authorization_code_flow_link}. Vous pouvez activer optionnellement %{client_credentials_flow_link}, mais vous devez fournir un utilisateur avec lequel les requêtes de nom seront effectuées.
 
       '
     client_credentials_impersonation_set_to: Utilisateur d'informations d'identification client défini sur
     client_credentials_impersonation_warning: 'Remarque : Les clients qui utilisent le flux « Informations d''identification client » dans cette application auront les droits de cet utilisateur'
     client_id: Id du client
-    client_secret_notice: 'Il s''agit de la seule opportunité d''imprimer la clé secrète du client. Veuillez en prendre note et la garder dans un lieu sûr. Elle doit être considérée comme un mot de passe et ne peut pas être récupérée par OpenProject ultérieurement.
+    client_secret_notice: 'Il s''agit de la seule opportunité d''imprimer la clé secrète du client. Veuillez en prendre note et la garder dans un lieu sûr. Elle doit être considérée comme un mot de passe et ne peut pas être récupérée par WeProjectManagement ultérieurement.
 
       '
     confirm_revoke_my_application:
@@ -5523,14 +5523,14 @@ fr:
     my_registered_applications: Applications OAuth enregistrées
     scopes:
       api_v3: Accès complet à l'API v3
-      api_v3_text: L'application recevra un accès complet en lecture et écriture à l'API v3 d'OpenProject pour effectuer des actions en votre nom.
+      api_v3_text: L'application recevra un accès complet en lecture et écriture à l'API v3 d'WeProjectManagement pour effectuer des actions en votre nom.
       mcp: Accès au MCP
-      mcp_text: L'application aura accès aux points de terminaison MCP d'OpenProject. Il s'agit d'un sous-ensemble limité de l'APIv3, adapté à une utilisation avec des agents d'IA.
+      mcp_text: L'application aura accès aux points de terminaison MCP d'WeProjectManagement. Il s'agit d'un sous-ensemble limité de l'APIv3, adapté à une utilisation avec des agents d'IA.
   oauth_client:
     errors:
       oauth_authorization_code_grant_had_errors: Échec de l'octroi de l'autorisation OAuth2
       oauth_client_not_found: Client OAuth2 introuvable dans le point de terminaison « callback » (redirect_uri).
-      oauth_client_not_found_explanation: 'Cette erreur apparaît si vous mettez à jour client_id et client_secret dans OpenProject, sans actualiser le champ « URL » dans le fournisseur OAuth2.
+      oauth_client_not_found_explanation: 'Cette erreur apparaît si vous mettez à jour client_id et client_secret dans WeProjectManagement, sans actualiser le champ « URL » dans le fournisseur OAuth2.
 
         '
       oauth_code_not_present: "« Code » OAuth2 introuvable dans le point de terminaison « callback » (redirect_uri)."
@@ -5543,12 +5543,12 @@ fr:
       oauth_returned_json_error: OAuth2 a renvoyé une erreur JSON
       oauth_returned_standard_error: OAuth2 a renvoyé une erreur interne
       oauth_state_not_present: "« État » OAuth2 introuvable dans le point de terminaison « callback » (redirect_uri)."
-      oauth_state_not_present_explanation: 'L''attribut « state » est utilisé pour indiquer à OpenProject où continuer après une autorisation OAuth2 réussie. Un « state » manquant est une erreur interne qui peut apparaître pendant l''installation. Veuillez contacter votre administrateur système.
+      oauth_state_not_present_explanation: 'L''attribut « state » est utilisé pour indiquer à WeProjectManagement où continuer après une autorisation OAuth2 réussie. Un « state » manquant est une erreur interne qui peut apparaître pendant l''installation. Veuillez contacter votre administrateur système.
 
         '
       rack_oauth2:
         client_secret_invalid: La clé secrète du client est incorrecte (client_secret_invalid)
-        invalid_client: Le serveur d'autorisation OAuth2 ne reconnaît pas OpenProject (invalid_client).
+        invalid_client: Le serveur d'autorisation OAuth2 ne reconnaît pas WeProjectManagement (invalid_client).
         invalid_grant: Le serveur d'autorisation OAuth2 vous demande d'autoriser à nouveau (invalid_grant).
         invalid_request: 'Le serveur d''autorisation OAuth2 a répondu avec « invalid_request ». Cette erreur apparaît si vous essayez d''autoriser plusieurs fois ou en cas de problème technique.
 
@@ -5575,7 +5575,7 @@ fr:
   onboarding:
     heading_getting_started: Avoir une vue d'ensemble
     select_language: Veuillez sélectionner votre langue
-    text_getting_started_description: Obtenez un aperçu rapide de la gestion de projet et de la collaboration en équipe avec OpenProject. Vous pouvez redémarrer cette vidéo à partir du menu d'aide.
+    text_getting_started_description: Obtenez un aperçu rapide de la gestion de projet et de la collaboration en équipe avec WeProjectManagement. Vous pouvez redémarrer cette vidéo à partir du menu d'aide.
     welcome: Bienvenue sur %{app_title}
   op_dry_validation:
     errors:
@@ -5797,7 +5797,7 @@ fr:
   permission_view_all_principals_explanation: 'Permet aux utilisateurs de voir tous les utilisateurs et groupes du système, même s''ils ne sont pas membres d''un projet ou d''un groupe.
 
     '
-  permission_view_changesets: Voir révisions du dépôt dans OpenProject
+  permission_view_changesets: Voir révisions du dépôt dans WeProjectManagement
   permission_view_commit_author_statistics: Voir les statistiques des auteurs de «commit»
   permission_view_dashboards: Voir les tableaux de bord
   permission_view_internal_comments: Voir les commentaires internes
@@ -5845,10 +5845,10 @@ fr:
     default: "-"
     templated_hint: Généré automatiquement par le type %{type}
   plugin_openproject_auth_plugins:
-    description: Intégration des fournisseurs de stratégie OmniAuth pour l'authentification dans OpenProject.
-    name: Plugins d'authentification OpenProject
+    description: Intégration des fournisseurs de stratégie OmniAuth pour l'authentification dans WeProjectManagement.
+    name: Plugins d'authentification WeProjectManagement
   plugin_openproject_auth_saml:
-    description: Ajoute le fournisseur SAML OmniAuth à OpenProject
+    description: Ajoute le fournisseur SAML OmniAuth à WeProjectManagement
     name: OmniAuth SAML / authentification unique
   portfolio:
     count:
@@ -6209,7 +6209,7 @@ fr:
     delete_sucessful: Le dépôt a été supprimé.
     destroy_dialog:
       description: Le dépôt « %{repository_type} » disponible à l'adresse %{path}, ainsi que l'ensemble de son contenu, seront définitivement supprimés.
-      description_not_managed: Le dépôt %{repository_type} lié à l'adresse %{url} sera retiré du projet. Son contenu ne sera pas supprimé, car ce dépôt n'est pas géré par OpenProject.
+      description_not_managed: Le dépôt %{repository_type} lié à l'adresse %{url} sera retiré du projet. Son contenu ne sera pas supprimé, car ce dépôt n'est pas géré par WeProjectManagement.
       heading: Supprimer le dépôt %{repository_type} ?
       heading_not_managed: Supprimer le lien vers ce dépôt %{repository_type} ?
       title: Supprimer le dépôt
@@ -6224,8 +6224,8 @@ fr:
       filesystem_access_failed: 'Une erreur s''est produite lors de l''accès au dépôt sur le système de fichiers : %{message}'
       managed_delete: Impossible de supprimer le dépôt géré.
       managed_delete_local: 'Impossible de supprimer le dépôt local sur le système de fichiers à l''emplacement %{path} : %{error_message}'
-      not_manageable: Ce fournisseur de dépôt ne peut pas être géré par OpenProject.
-      path_permission_failed: 'Une erreur s''est produite en essayant de créer le chemin d''accès suivant: %{path}. Veuillez vous assurer que OpenProject peut écrire dans ce dossier.'
+      not_manageable: Ce fournisseur de dépôt ne peut pas être géré par WeProjectManagement.
+      path_permission_failed: 'Une erreur s''est produite en essayant de créer le chemin d''accès suivant: %{path}. Veuillez vous assurer que WeProjectManagement peut écrire dans ce dossier.'
       remote_call_failed: 'L''appel au service distant a échoué avec le message «%{message} » (Code : %{code})'
       remote_invalid_response: Une réponse incorrecte a été reçue du service distant.
       remote_save_failed: Le dépôt n'a pas pu être enregistré avec les paramètres récupérés du service distant.
@@ -6236,11 +6236,11 @@ fr:
         managed_url: Ceci est l'URL du dépôt (local) Git géré.
         path: Spécifier le chemin vers votre répertoire Git (par exemple, %{example_path}). Vous pouvez également utiliser des répertoires distants qui sont clonés dans une copie locale en indiquant une valeur commençant par http(s):// ou file://.
         path_encoding: 'Outrepasser le paramètre d''encodage de chemin d''accès Git (défaut: UTF-8)'
-      local_introduction: Si vous avez un dépôt Git existant, vous pouvez le lier à OpenProject pour y accéder depuis l'application.
+      local_introduction: Si vous avez un dépôt Git existant, vous pouvez le lier à WeProjectManagement pour y accéder depuis l'application.
       local_title: Lier à un dépôt local Git existant
       local_url: URL locale
-      managed_introduction: Laisser OpenProject créer et intégrer automatiquement un dépôt local Git.
-      managed_title: Dépôt Git intégré à OpenProject
+      managed_introduction: Laisser WeProjectManagement créer et intégrer automatiquement un dépôt local Git.
+      managed_title: Dépôt Git intégré à WeProjectManagement
       managed_url: URL gérée
       path: Chemin d'accès au dépôt Git
       path_encoding: Encodage du chemin d'accès
@@ -6253,7 +6253,7 @@ fr:
     scm_types:
       existing: Lier à un dépôt existant
       local: Lier à un dépôt local existant
-      managed: Créer un nouveau dépôt dans OpenProject
+      managed: Créer un nouveau dépôt dans WeProjectManagement
     scm_vendor: Système de gestion de contrôle de sources
     settings:
       automatic_managed_repos: Création automatique des dépôts gérés
@@ -6261,7 +6261,7 @@ fr:
       automatic_managed_repos_text: En définissant un fournisseur ici, les projets nouvellement créés recevront automatiquement un dépôt géré de ce fournisseur.
     storage:
       not_available: La consommation d'espace disque n'est pas disponible pour ce dépôt.
-      oauth_application_details_html: 'La clé secrète du client ne sera plus accessible après la fermeture de cette fenêtre. Veuillez copier ces valeurs dans les paramètres d''intégration Nextcloud OpenProject :'
+      oauth_application_details_html: 'La clé secrète du client ne sera plus accessible après la fermeture de cette fenêtre. Veuillez copier ces valeurs dans les paramètres d''intégration Nextcloud WeProjectManagement :'
       oauth_application_details_link_text: Aller à la page des paramètres
       setup_documentation_details: 'Si vous avez besoin d''aide pour configurer un nouvel espace de stockage des fichiers, veuillez consulter la documentation : '
       setup_documentation_details_link_text: Configuration des espaces de stockage des fichiers
@@ -6270,7 +6270,7 @@ fr:
         Garder les dernières informations de l'espace disque requis pour un dépôt pendant N minutes.
         Etant donné que l'opération de comptabilisation de l'espace disque requis pour un dépôt peut être coûteuse, augmentez cette valeur pour réduire l'impact sur les performances.
     subversion:
-      existing_introduction: Si vous avez un dépôt Subversion existant, vous pouvez le lier avec OpenProject pour y accéder depuis l'application.
+      existing_introduction: Si vous avez un dépôt Subversion existant, vous pouvez le lier avec WeProjectManagement pour y accéder depuis l'application.
       existing_title: Dépôt Subversion existant
       existing_url: URL existante
       instructions:
@@ -6278,8 +6278,8 @@ fr:
         url: |-
           Entrez l'URL du dépôt. Celle-ci peut soit cibler un dépôt local (commençant par %{local_proto}), ou un dépôt distant.
           Les schémas d'URL suivants sont supportés :
-      managed_introduction: Laisser OpenProject créer et intégrer automatiquement un dépôt local Subversion.
-      managed_title: Dépôt Subversion intégré à OpenProject
+      managed_introduction: Laisser WeProjectManagement créer et intégrer automatiquement un dépôt local Subversion.
+      managed_title: Dépôt Subversion intégré à WeProjectManagement
       managed_url: URL gérée
       password: Mot de passe du dépôt
       username: Nom d'utilisateur du dépôt
@@ -6361,12 +6361,12 @@ fr:
   setting_antivirus_scan_action: Action sur le fichier infecté
   setting_antivirus_scan_mode: Mode analyse
   setting_api_tokens_enabled: Activer les jetons d'API
-  setting_api_tokens_enabled_caption: 'Décidez si les utilisateurs peuvent créer des jetons d''API personnels dans les paramètres de leur compte. Ces jetons peuvent être utilisés pour accéder aux différentes API d''OpenProject, telles que APIv3 et MCP.
+  setting_api_tokens_enabled_caption: 'Décidez si les utilisateurs peuvent créer des jetons d''API personnels dans les paramètres de leur compte. Ces jetons peuvent être utilisés pour accéder aux différentes API d''WeProjectManagement, telles que APIv3 et MCP.
 
     '
   setting_apiv3_cors_enabled: Activer CORS
   setting_apiv3_cors_origins: Origines autorisées de l'API V3 Cross-Origin Resource Sharing (CORS)
-  setting_apiv3_cors_origins_instructions_html: 'Si CORS est activé, ce sont les origines qui sont autorisées à accéder à l''API OpenProject. <br/> Veuillez vérifier la [documentation sur l''en-tête original](docs_url) pour connaître la façon de spécifier les valeurs attendues.
+  setting_apiv3_cors_origins_instructions_html: 'Si CORS est activé, ce sont les origines qui sont autorisées à accéder à l''API WeProjectManagement. <br/> Veuillez vérifier la [documentation sur l''en-tête original](docs_url) pour connaître la façon de spécifier les valeurs attendues.
 
     '
   setting_apiv3_cors_title: Partage croisé des ressources (CORS)
@@ -6603,7 +6603,7 @@ fr:
       modes:
         clamav_host_html: Entrez le nom d'hôte et le port du démon clamd séparés par des deux-points, par exemple, %{example}
         clamav_socket_html: Entrez le socket du démon clamd, par exemple %{example}
-        description_html: 'Sélectionnez le mode dans lequel l''intégration du scanner antivirus doit fonctionner. <br/> <ul> <li><strong>%{disabled_option}</strong>: Les fichiers importés ne sont pas scannés pour les virus.</li> <li><strong>%{socket_option}</strong>: Vous avez installé ClamAV sur le même serveur qu''OpenProject et le démon de scan clamd tourne en arrière-plan.</li> <li><strong>%{host_option}</strong>: Vous envoyez les fichiers à un hôte externe pour réaliser le scan antivirus .</li> </ul>
+        description_html: 'Sélectionnez le mode dans lequel l''intégration du scanner antivirus doit fonctionner. <br/> <ul> <li><strong>%{disabled_option}</strong>: Les fichiers importés ne sont pas scannés pour les virus.</li> <li><strong>%{socket_option}</strong>: Vous avez installé ClamAV sur le même serveur qu''WeProjectManagement et le démon de scan clamd tourne en arrière-plan.</li> <li><strong>%{host_option}</strong>: Vous envoyez les fichiers à un hôte externe pour réaliser le scan antivirus .</li> </ul>
 
           '
       remaining_quarantined_files_html: 'L''analyse des virus a été désactivée. Il reste %{file_count} fichier(s) en quarantaine. Pour les consulter, veuillez visiter ce lien : %{link}
@@ -6639,7 +6639,7 @@ fr:
 
         '
       registration: Inscription
-      remapping_existing_users_hint: 'Si cette option est activée, tout fournisseur d''identité configuré peut connecter les utilisateurs existants à partir de leur nom d''utilisateur, même si l''utilisateur ne s''est encore jamais connecté via ce fournisseur. Cela peut être utile lors de la migration de l''instance OpenProject vers un nouveau fournisseur SSO, mais n''est pas recommandé avec un fournisseur qui n''est pas considéré comme fiable par tous les utilisateurs de l''instance.
+      remapping_existing_users_hint: 'Si cette option est activée, tout fournisseur d''identité configuré peut connecter les utilisateurs existants à partir de leur nom d''utilisateur, même si l''utilisateur ne s''est encore jamais connecté via ce fournisseur. Cela peut être utile lors de la migration de l''instance WeProjectManagement vers un nouveau fournisseur SSO, mais n''est pas recommandé avec un fournisseur qui n''est pas considéré comme fiable par tous les utilisateurs de l''instance.
 
         '
       sso: Authentification unique (SSO)
@@ -6656,8 +6656,8 @@ fr:
       not_writable: Ce paramètre n'est pas accessible en écriture et ne peut être modifié que par un administrateur système.
     experimental:
       feature_flags: Indicateurs de fonctionnalités
-      save_confirmation: Attention ! Risque de perte de données ! Activez les fonctionnalités expérimentales uniquement si vous pouvez vous permettre de perturber votre installation OpenProject et de perdre vos données.
-      warning_toast: Les indicateurs de fonctionnalités sont des paramètres qui permettent d'activer des fonctionnalités qui sont encore en cours de développement. Elles ne doivent être utilisées qu'à des fins de test. Elles ne seront jamais activées sur les installations OpenProject contenant des données importantes. Ces fonctionnalités vont très probablement corrompre vos données. Utilisez-les à vos propres risques.
+      save_confirmation: Attention ! Risque de perte de données ! Activez les fonctionnalités expérimentales uniquement si vous pouvez vous permettre de perturber votre installation WeProjectManagement et de perdre vos données.
+      warning_toast: Les indicateurs de fonctionnalités sont des paramètres qui permettent d'activer des fonctionnalités qui sont encore en cours de développement. Elles ne doivent être utilisées qu'à des fins de test. Elles ne seront jamais activées sur les installations WeProjectManagement contenant des données importantes. Ces fonctionnalités vont très probablement corrompre vos données. Utilisez-les à vos propres risques.
     general: Général
     highlighting:
       mode_long:
@@ -6667,7 +6667,7 @@ fr:
         status: Ligne entière par Statut
         type: Ligne entière par Type
     icalendar:
-      enable_subscriptions_text_html: Permet aux utilisateurs disposant des autorisations nécessaires de s'abonner aux calendriers OpenProject et d'accéder aux informations du lot de travaux par le biais d'un client de calendrier externe. <strong>Note :</strong> veuillez lire les abonnements à <a href="%{link}" target="_blank">iCalendar</a> pour comprendre les risques potentiels de sécurité avant de l'activer.
+      enable_subscriptions_text_html: Permet aux utilisateurs disposant des autorisations nécessaires de s'abonner aux calendriers WeProjectManagement et d'accéder aux informations du lot de travaux par le biais d'un client de calendrier externe. <strong>Note :</strong> veuillez lire les abonnements à <a href="%{link}" target="_blank">iCalendar</a> pour comprendre les risques potentiels de sécurité avant de l'activer.
     language_name_being_default: "%{language_name} (par défaut)"
     notifications:
       delay_minutes_explanation: L'envoi d'e-mails peut être retardé pour permettre aux utilisateurs ayant des notifications configurées dans l'application de confirmer la notification dans l'application avant l'envoi. Les utilisateurs qui lisent une notification dans l'application ne recevront pas d'e-mail pour la notification déjà lue.
@@ -6702,14 +6702,14 @@ fr:
               label: Panneau latéral
     project_initiation_request:
       blankslate:
-        description: OpenProject peut générer un assistant étape par étape pour aider les chefs de projet à remplir une demande de lancement de projet. Vous pouvez choisir les attributs du projet à inclure et ce qu'il faut faire avec le document de sortie. Activez-le ici pour commencer à configurer l'assistant.
+        description: WeProjectManagement peut générer un assistant étape par étape pour aider les chefs de projet à remplir une demande de lancement de projet. Vous pouvez choisir les attributs du projet à inclure et ce qu'il faut faire avec le document de sortie. Activez-le ici pour commencer à configurer l'assistant.
         title: Demande de lancement non activée
       disable_dialog:
         checkbox_message: Je comprends que cette action n'est pas réversible
         confirmation_message: L'assistant de demande de lancement ne sera plus disponible pour les nouveaux projets basés sur ce modèle. Les chefs de projet et les propriétaires de projet devront configurer et remplir manuellement les informations pertinentes dans la vue d'ensemble du projet.
         heading: Désactiver cette demande de lancement de projet ?
         title: Désactiver la demande de lancement de projet
-      header_description: 'OpenProject peut générer un assistant étape par étape pour aider les chefs de projet à remplir une demande de lancement de projet. Vous pouvez choisir les attributs du projet à inclure et créer un artefact PDF.
+      header_description: 'WeProjectManagement peut générer un assistant étape par étape pour aider les chefs de projet à remplir une demande de lancement de projet. Vous pouvez choisir les attributs du projet à inclure et créer un artefact PDF.
 
         '
       name:
@@ -6920,7 +6920,7 @@ fr:
     array:
       sentence_connector: et
       skip_last_comma: faux
-  text_access_token_hint: Les jetons d'accès vous permettent d'octroyer aux applications externes un accès aux ressources dans OpenProject.
+  text_access_token_hint: Les jetons d'accès vous permettent d'octroyer aux applications externes un accès aux ressources dans WeProjectManagement.
   text_accessibility_hint: Le mode d'accessibilité est conçu pour les utilisateurs aveugles, atteints d'un handicap moteur ou qui possèdent une vue déficiente. Pour ces derniers, les éléments actifs sont mis spécialement en évidence. Veuillez noter que le module de backlogs n'est pas disponible dans ce mode.
   text_analyze: 'Analyse suivante: %{subject}'
   text_are_you_sure: Êtes-vous sûr ?
@@ -7019,7 +7019,7 @@ fr:
     Il est fortement recommandé de charger la configuration par défaut. Vous serez capable de la modifier une fois chargée.
   text_no_notes: Il n'existe aucun commentaire pour ce lot de travaux.
   text_no_roles_defined: Il n'y a pas de rôles définis.
-  text_notice_security_badge_displayed_html: 'Remarque : si cette option est activée, un badge indiquant l''état de votre installation s''affichera dans le panneau <a href="%{information_panel_path}">%{information_panel_label}</a> administration et sur la page d''accueil. Il n''est affiché que pour les administrateurs. <br/>Le badge vérifiera votre version actuelle d''OpenProject par rapport à la base de données officielle d''OpenProject pour vous avertir de toute mise à jour ou vulnérabilité connue. Pour plus d''informations sur ce que la vérification fournit, quelles données sont nécessaires pour fournir les mises à jour disponibles, et comment désactiver cette vérification, veuillez visiter <a href="%{more_info_url}">la documentation de configuration</a>.
+  text_notice_security_badge_displayed_html: 'Remarque : si cette option est activée, un badge indiquant l''état de votre installation s''affichera dans le panneau <a href="%{information_panel_path}">%{information_panel_label}</a> administration et sur la page d''accueil. Il n''est affiché que pour les administrateurs. <br/>Le badge vérifiera votre version actuelle d''WeProjectManagement par rapport à la base de données officielle d''WeProjectManagement pour vous avertir de toute mise à jour ou vulnérabilité connue. Pour plus d''informations sur ce que la vérification fournit, quelles données sont nécessaires pour fournir les mises à jour disponibles, et comment désactiver cette vérification, veuillez visiter <a href="%{more_info_url}">la documentation de configuration</a>.
 
     '
   text_notice_too_many_values_are_inperformant: 'Remarque : L''affichage de plus de 100 articles par page peut augmenter le temps de chargement de la page.'
@@ -7042,7 +7042,7 @@ fr:
   text_regexp_multiline: L'expression régulière est appliquée en mode multi-ligne, e.g. ^---\\s+
   text_rename_wiki_page: Renommer la page wiki
   text_repository_usernames_mapping: |-
-    Définir ou modifier les associations entre les utilisateurs d'OpenProject et les utilisateurs trouvés dans le dépôt.
+    Définir ou modifier les associations entre les utilisateurs d'WeProjectManagement et les utilisateurs trouvés dans le dépôt.
     Les utilisateurs ayant des noms ou des adresses e-mail identiques sont automatiquement associés.
   text_setup_mail_configuration: Configurer votre fournisseur de messagerie
   text_status_changed_by_changeset: Appliqué dans « changeset » %{value}.
@@ -7504,7 +7504,7 @@ fr:
     all: tous
     assign_random_password: Assigner un mot de passe aléatoire (envoyé à l'utilisateur par e-mail)
     authentication_provider: Fournisseur d'authentification
-    authentication_settings_disabled_due_to_external_authentication: 'Cet utilisateur s''authentifie via un fournisseur d''authentification externe, il n''y a aucun mot de passe dans OpenProject à changer.
+    authentication_settings_disabled_due_to_external_authentication: 'Cet utilisateur s''authentifie via un fournisseur d''authentification externe, il n''y a aucun mot de passe dans WeProjectManagement à changer.
 
       '
     authorization_rejected: Vous n'êtes pas autorisé à vous authentifier.
@@ -7700,7 +7700,7 @@ fr:
 
         '
       title: Incohérence dans la configuration du mode HTTPS
-  warning_imminent_user_limit_html: 'Vous avez invité plus d''utilisateurs que ne le permet votre abonnement actuel. Les utilisateurs invités peuvent ne pas être en mesure de rejoindre votre environnement OpenProject. Veuillez [mettre à niveau votre abonnement](upgrade_url) ou bloquer les utilisateurs existants afin de permettre aux utilisateurs invités et enregistrés de rejoindre votre environnement.
+  warning_imminent_user_limit_html: 'Vous avez invité plus d''utilisateurs que ne le permet votre abonnement actuel. Les utilisateurs invités peuvent ne pas être en mesure de rejoindre votre environnement WeProjectManagement. Veuillez [mettre à niveau votre abonnement](upgrade_url) ou bloquer les utilisateurs existants afin de permettre aux utilisateurs invités et enregistrés de rejoindre votre environnement.
 
     '
   warning_protocol_mismatch_html: ''

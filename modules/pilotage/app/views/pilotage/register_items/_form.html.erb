@@ -1,0 +1,68 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: item %>
+<%= form_with model: item, url: (item.persisted? ? project_pilotage_register_item_path(@project, item) : project_pilotage_register_items_path(@project, kind: @kind)),
+              scope: :pilotage_register_item, class: "pilotage-form", data: { turbo: false } do |f| %>
+  <% if item.errors.any? %>
+    <%= render(Primer::Alpha::Banner.new(scheme: :danger, mb: 3)) { item.errors.full_messages.join(", ") } %>
+  <% end %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :title, label: t("pilotage.attributes.title"), required: true } %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :description, kind: :textarea, label: t("pilotage.attributes.description") } %>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :status, kind: :select, options: Pilotage::RegisterItem::STATUSES.map { |s| [t("pilotage.registers.states.#{s}"), s] }, include_blank: false, label: t("pilotage.attributes.status") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :priority, kind: :select, options: Pilotage::RegisterItem::PRIORITIES.map { |v, k| [t("pilotage.registers.priorities.#{k}"), v] }, include_blank: false, label: t("pilotage.attributes.priority") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :owner_id, kind: :select, options: pilotage_user_options(@project), label: t("pilotage.attributes.owner") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :due_date, kind: :date, label: t("pilotage.attributes.due_date") } %>
+  </div>
+  <% if %w[risk impact].include?(@kind) %>
+    <div class="pilotage-form__row">
+      <%= render partial: "pilotage/shared/field", locals: { form: f, name: :probability, kind: :select, options: (1..5).map { |v| [v, v] }, label: t("pilotage.attributes.probability"), hint: t("pilotage.registers.scale_hint") } %>
+      <%= render partial: "pilotage/shared/field", locals: { form: f, name: :impact, kind: :select, options: (1..5).map { |v| [v, v] }, label: t("pilotage.attributes.impact"), hint: t("pilotage.registers.scale_hint") } %>
+    </div>
+  <% end %>
+  <% fields = item.detail_fields %>
+  <% if fields.any? %>
+    <h4><%= t("pilotage.registers.details_title") %></h4>
+    <div class="pilotage-form__row">
+      <%= f.fields_for :details, OpenStruct.new(item.details) do |d| %>
+        <% fields.each do |field| %>
+          <div class="FormControl">
+            <label class="FormControl-label" for="details_<%= field %>"><%= t("pilotage.registers.details.#{field}", default: field.humanize) %></label>
+            <% if field == "entity_id" %>
+              <%= d.select field, pilotage_entity_options, { include_blank: true, selected: item.detail(field) }, id: "details_#{field}", class: "FormControl-select" %>
+            <% elsif field == "session_id" %>
+              <%= d.select field, Pilotage::Session.includes(:instance).order(held_on: :desc).limit(100).map { |s| ["#{format_date(s.held_on)} · #{s.title}", s.id] }, { include_blank: true, selected: item.detail(field) }, id: "details_#{field}", class: "FormControl-select" %>
+            <% elsif field == "instance" || field == "decision_instance" %>
+              <%= d.select field, Pilotage::Instance.ordered.map { |i| [i.name, i.name] }, { include_blank: true, selected: item.detail(field) }, id: "details_#{field}", class: "FormControl-select" %>
+            <% elsif %w[influence support level severity].include?(field) %>
+              <%= d.select field, %w[low medium high].map { |v| [t("pilotage.registers.levels.#{v}"), v] }, { include_blank: true, selected: item.detail(field) }, id: "details_#{field}", class: "FormControl-select" %>
+            <% elsif field == "phase" %>
+              <%= d.select field, Pilotage::Lifecycle::KEYS, { include_blank: true, selected: item.detail(field) }, id: "details_#{field}", class: "FormControl-select" %>
+            <% elsif field == "measured_on" %>
+              <%= d.date_field field, value: item.detail(field), id: "details_#{field}", class: "FormControl-input" %>
+            <% elsif %w[mitigation contingency rationale resolution acceptance impact_scope].include?(field) %>
+              <%= d.text_area field, value: item.detail(field), id: "details_#{field}", rows: 2, class: "FormControl-textarea" %>
+            <% else %>
+              <%= d.text_field field, value: item.detail(field), id: "details_#{field}", class: "FormControl-input" %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="pilotage-form__actions">
+    <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary)) { t(:button_save) } %>
+    <%= render(Primer::Beta::Button.new(tag: :a, href: project_pilotage_register_items_path(@project, kind: @kind))) { t(:button_cancel) } %>
+  </div>
+<% end %>

@@ -1,0 +1,47 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title @project.name, "#{@item.reference} #{@item.title}" %>
+<% can_manage = User.current.allowed_in_project?(:manage_pilotage, @project) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: "#{@item.reference} · #{@item.title}", project: @project,
+                                             breadcrumbs: [{ href: project_pilotage_register_items_path(@project, kind: @item.kind), text: pilotage_kind_label(@item.kind) }],
+                                             actions: [
+                                               ({ label: t(:button_edit), href: edit_project_pilotage_register_item_path(@project, @item), icon: :pencil } if can_manage),
+                                               ({ label: t(:button_delete), href: project_pilotage_register_item_path(@project, @item), icon: :trash, scheme: :danger, data: { turbo_method: :delete, turbo_confirm: t(:text_are_you_sure) } } if can_manage)
+                                             ].compact)) %>
+<div class="pilotage-grid-2">
+  <div class="pilotage-card">
+    <table class="pilotage-table">
+      <tr><th><%= t("pilotage.attributes.kind") %></th><td><%= pilotage_kind_label(@item.kind) %></td></tr>
+      <tr><th><%= t("pilotage.attributes.status") %></th><td><%= pilotage_state_label(@item.status, scope: "registers") %></td></tr>
+      <tr><th><%= t("pilotage.attributes.priority") %></th><td><%= t("pilotage.registers.priorities.#{@item.priority_key}") %></td></tr>
+      <tr><th><%= t("pilotage.attributes.owner") %></th><td><%= pilotage_user(@item.owner) %></td></tr>
+      <tr><th><%= t("pilotage.attributes.due_date") %></th><td><%= pilotage_date(@item.due_date) %></td></tr>
+      <% if @item.closed_on %><tr><th><%= t("pilotage.attributes.closed_on") %></th><td><%= format_date(@item.closed_on) %></td></tr><% end %>
+      <% if @item.criticality %><tr><th><%= t("pilotage.attributes.criticality") %></th><td><%= pilotage_health_label(@item.criticality_level, text: "#{@item.criticality} (#{@item.probability} × #{@item.impact})") %></td></tr><% end %>
+      <% if @item.entity %><tr><th><%= t("pilotage.attributes.entity") %></th><td><%= link_to @item.entity.name, pilotage_entity_path(@item.entity) %></td></tr><% end %>
+      <tr><th><%= t("pilotage.attributes.created_by") %></th><td><%= pilotage_user(@item.created_by) %> · <%= format_date(@item.created_at) %></td></tr>
+    </table>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.description") %></h3>
+    <%= simple_format(@item.description.presence || "–") %>
+    <% details = @item.detail_fields.filter_map { |f| v = @item.detail(f); [f, v] if v.present? && !%w[entity_id session_id].include?(f) } %>
+    <% if details.any? %>
+      <h3 class="pilotage-card__title"><%= t("pilotage.registers.details_title") %></h3>
+      <table class="pilotage-table">
+        <% details.each do |field, value| %><tr><th><%= t("pilotage.registers.details.#{field}", default: field.humanize) %></th><td><%= simple_format(value.to_s) %></td></tr><% end %>
+      </table>
+    <% end %>
+  </div>
+</div>

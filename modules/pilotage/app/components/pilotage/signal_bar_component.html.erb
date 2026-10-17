@@ -1,0 +1,29 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<div class="pilotage-signal-bar">
+  <% if title.present? %>
+    <div class="pilotage-signal-bar__title"><%= title %></div>
+  <% end %>
+  <div class="pilotage-signal-bar__track" role="img" aria-label="<%= levels.map { |l| "#{t("pilotage.health.#{l}")}: #{counts.fetch(l, 0)}" }.join(', ') %>">
+    <% levels.each do |level| %>
+      <% next if width(level).zero? %>
+      <span class="pilotage-signal-bar__segment pilotage-signal-bar__segment--<%= level %>" style="width: <%= width(level) %>%"></span>
+    <% end %>
+  </div>
+  <div class="pilotage-signal-bar__legend">
+    <% levels.each do |level| %>
+      <span><span class="pilotage-dot pilotage-dot--<%= level %>"></span> <%= t("pilotage.health.#{level}") %> <strong><%= counts.fetch(level, 0) %></strong></span>
+    <% end %>
+  </div>
+</div>

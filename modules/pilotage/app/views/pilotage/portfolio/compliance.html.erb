@@ -1,0 +1,50 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_pilotage"), t("pilotage.label_compliance") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_compliance"), description: t("pilotage.compliance.description",
+                                                                                                    a: Setting.pilotage_cadence_a_days, b: Setting.pilotage_cadence_b_days, c: Setting.pilotage_cadence_c_days))) %>
+<% if User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+  <%= form_with url: pilotage_compliance_remind_path, method: :post, data: { turbo: false } do |f| %>
+    <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary, mb: 3)) { t("pilotage.compliance.remind_all") } %>
+  <% end %>
+<% end %>
+<table class="pilotage-table">
+  <thead>
+    <tr>
+      <th><%= Project.model_name.human %></th>
+      <th><%= t("pilotage.attributes.project_class") %></th>
+      <th class="num"><%= t("pilotage.compliance.cadence") %></th>
+      <th><%= t("pilotage.compliance.last_validated") %></th>
+      <th class="num"><%= t("pilotage.compliance.age") %></th>
+      <th><%= t("pilotage.signals.reporting") %></th>
+      <th><%= t("pilotage.attributes.correspondent") %></th>
+      <th><%= t("pilotage.attributes.manager") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @rows.each do |row| %>
+      <% last = row.signals.details[:last_validated_at] %>
+      <tr>
+        <td><%= link_to row.project.name, project_pilotage_status_reports_path(row.project) %></td>
+        <td><%= pilotage_class_label(row.project_class) %></td>
+        <td class="num"><%= row.profile&.reporting_cadence_days || Pilotage::Classification.cadence_days("C") %> j</td>
+        <td><%= last ? format_date(last.to_date) : t("pilotage.compliance.never") %></td>
+        <td class="num"><%= row.signals.details[:report_age_days] || "–" %></td>
+        <td><%= pilotage_health_label(row.signals.reporting) %></td>
+        <td><%= pilotage_user(row.profile&.correspondent) %></td>
+        <td><%= pilotage_user(row.profile&.manager) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

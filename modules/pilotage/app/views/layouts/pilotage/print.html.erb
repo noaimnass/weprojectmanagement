@@ -1,0 +1,88 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= yield(:print_title).presence || t("pilotage.label_pilotage") %> · <%= Setting.app_title %></title>
+  <style>
+    :root { --violet: #6C2BD9; --violet-dark: #3F1880; --ink: #24292F; --muted: #59636E; --line: #D1D9E0;
+            --green: #1F883D; --amber: #BF8700; --red: #CF222E; --soft: #F3EEFC; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: #fff; font-size: 12px; }
+    .print-toolbar { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--line); padding: 8px 16px; display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+    .print-toolbar button, .print-toolbar a { font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: #fff; color: var(--ink); text-decoration: none; cursor: pointer; }
+    .print-toolbar button.primary { background: var(--violet); border-color: var(--violet); color: #fff; }
+    .page { width: 1123px; max-width: 100%; min-height: 794px; margin: 16px auto; padding: 36px 44px; background: #fff; border: 1px solid var(--line); position: relative; page-break-after: always; }
+    .page:last-child { page-break-after: auto; }
+    .page--cover { background: linear-gradient(135deg, var(--violet-dark), var(--violet)); color: #fff; display: flex; flex-direction: column; justify-content: center; }
+    .page--cover h1 { font-size: 40px; margin: 0 0 12px; }
+    .page--cover p { font-size: 18px; opacity: .9; margin: 4px 0; }
+    .page__header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--violet); padding-bottom: 8px; margin-bottom: 16px; }
+    .page__header h2 { margin: 0; font-size: 20px; color: var(--violet-dark); }
+    .page__header img { height: 28px; }
+    .page__footer { position: absolute; bottom: 14px; left: 44px; right: 44px; display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+    h3 { font-size: 14px; margin: 14px 0 6px; color: var(--violet-dark); }
+    table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 5px 6px; text-align: left; vertical-align: top; }
+    th { background: var(--soft); color: var(--violet-dark); font-weight: 600; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 8px 0 14px; }
+    .kpi { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+    .kpi__label { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+    .kpi__value { font-size: 22px; font-weight: 600; }
+    .kpi--green .kpi__value { color: var(--green); } .kpi--amber .kpi__value { color: var(--amber); } .kpi--red .kpi__value { color: var(--red); }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--muted); vertical-align: middle; margin-right: 4px; }
+    .dot--green { background: var(--green); } .dot--amber { background: var(--amber); } .dot--red { background: var(--red); }
+    .pill { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; background: var(--soft); color: var(--violet-dark); }
+    .pill--green { background: #DAFBE1; color: var(--green); } .pill--amber { background: #FFF8C5; color: var(--amber); } .pill--red { background: #FFEBE9; color: var(--red); }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .muted { color: var(--muted); }
+    .empty { color: var(--muted); font-style: italic; }
+    .signals { display: flex; gap: 10px; }
+    .signal { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+    .signal__label { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+    .bar { height: 10px; border-radius: 5px; background: var(--soft); overflow: hidden; }
+    .bar > span { display: block; height: 100%; background: var(--violet); }
+    .phases { display: flex; gap: 3px; }
+    .phase { flex: 1; text-align: center; border: 1px solid var(--line); border-radius: 5px; padding: 4px 2px; font-size: 10px; }
+    .phase--passed { background: var(--violet); color: #fff; border-color: var(--violet); }
+    .phase--current { border: 2px solid var(--violet); font-weight: 600; }
+    .masterplan svg { width: 100%; height: auto; }
+    .masterplan .lane-label { font-weight: 600; } .masterplan .month-label { fill: var(--muted); }
+    .masterplan .grid-line { stroke: var(--line); } .masterplan .today-line { stroke: var(--red); stroke-dasharray: 3 3; }
+    .masterplan .segment { fill: #C9B4F2; stroke: var(--violet); } .masterplan .segment--done { fill: var(--violet); }
+    .masterplan .segment--red { fill: #FFEBE9; stroke: var(--red); } .masterplan .segment--amber { fill: #FFF8C5; stroke: var(--amber); }
+    .masterplan .baseline { stroke: var(--muted); stroke-width: 2; }
+    .masterplan .variance--late { fill: var(--red); font-weight: 600; } .masterplan .variance--early { fill: var(--green); font-weight: 600; }
+    @page { size: A4 landscape; margin: 10mm; }
+    @media print {
+      .print-toolbar { display: none; }
+      .page { border: 0; margin: 0; width: auto; min-height: auto; padding: 10mm 12mm; }
+      .page__footer { position: fixed; bottom: 4mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-toolbar">
+    <span><strong><%= yield(:print_title) %></strong> <span class="muted">· <%= format_date(Date.current) %></span></span>
+    <span>
+      <a href="<%= yield(:print_back).presence || pilotage_cockpit_path %>"><%= t(:button_back) %></a>
+      <button class="primary" type="button" onclick="window.print()"><%= t("pilotage.reports.print") %></button>
+    </span>
+  </div>
+  <%= yield %>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_pilotage"), t("pilotage.label_workload") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_workload"), description: t("pilotage.workload.description", hours: @workload.capacity.to_i))) %>
+<%= render partial: "pilotage/portfolio/filters", locals: { summary: @summary, path: pilotage_workload_path, show_grouping: false } %>
+<div class="pilotage-kpi-grid">
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.workload.people"), value: @workload.people.size, scheme: :accent)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.workload.overloads"), value: @workload.overload_count, scheme: @workload.overload_count.positive? ? :red : :green)) %>
+</div>
+<% if @workload.people.empty? %>
+  <%= render(Primer::Beta::Blankslate.new(border: true)) do |bs| %>
+    <% bs.with_visual_icon(icon: :people) %>
+    <% bs.with_heading(tag: :h3) { t("pilotage.workload.empty_title") } %>
+    <% bs.with_description { t("pilotage.workload.empty_description") } %>
+  <% end %>
+<% else %>
+  <div style="overflow-x: auto">
+    <table class="pilotage-table">
+      <thead>
+        <tr>
+          <th><%= t("pilotage.workload.person") %></th>
+          <% @workload.months.each do |m| %><th class="num"><%= l(m, format: "%b %y") %></th><% end %>
+          <th class="num"><%= t(:label_total) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @workload.people.each do |person| %>
+          <tr>
+            <td><%= person.name %></td>
+            <% @workload.months.each do |m| %>
+              <% h = @workload.hours(person, m) %>
+              <td class="num <%= 'overload' if @workload.overloaded?(person, m) %>"><%= h.zero? ? "" : h.round %></td>
+            <% end %>
+            <td class="num"><strong><%= @workload.total(person).round %></strong></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

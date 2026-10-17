@@ -1,0 +1,28 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: profile, milestones %>
+<% by_key = milestones.index_by(&:key) %>
+<div class="pilotage-phases">
+  <% Pilotage::Lifecycle::KEYS.each_with_index do |key, index| %>
+    <% review = by_key[key] %>
+    <% classes = ["pilotage-phase"] %>
+    <% classes << "pilotage-phase--passed" if review&.passed? || index < profile.phase_index %>
+    <% classes << "pilotage-phase--current" if key == profile.phase %>
+    <% classes << "pilotage-phase--late" if review&.late? %>
+    <div class="<%= classes.join(' ') %>" title="<%= Pilotage::Lifecycle.label(profile.category, key) %><%= review&.planned_on ? " · #{format_date(review.planned_on)}" : '' %>">
+      <div><strong><%= key %></strong></div>
+      <div class="pilotage-muted"><%= review&.effective_date ? format_date(review.effective_date) : "–" %></div>
+    </div>
+  <% end %>
+</div>

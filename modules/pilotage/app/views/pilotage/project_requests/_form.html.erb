@@ -1,0 +1,35 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: request_item %>
+<%= form_with model: request_item, url: (request_item.persisted? ? pilotage_project_request_path(request_item) : pilotage_project_requests_path),
+              scope: :pilotage_project_request, class: "pilotage-form", data: { turbo: false } do |f| %>
+  <% if request_item.errors.any? %><%= render(Primer::Alpha::Banner.new(scheme: :danger, mb: 3)) { request_item.errors.full_messages.join(", ") } %><% end %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :title, label: t("pilotage.attributes.title"), required: true } %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :description, kind: :textarea, label: t("pilotage.attributes.description") } %>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :entity_id, kind: :select, options: pilotage_entity_options, label: t("pilotage.attributes.pilot_entity") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :category, kind: :select, options: pilotage_category_options, label: t("pilotage.attributes.category") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :strategic_axis, kind: :select, options: pilotage_axis_options, label: t("pilotage.attributes.strategic_axis") } %>
+  </div>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :estimated_budget, kind: :number, step: 0.01, min: 0, label: "#{t('pilotage.attributes.estimated_budget')} (#{Setting.pilotage_currency})" } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :estimated_duration_months, kind: :number, min: 0, label: t("pilotage.attributes.estimated_duration_months") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :entities_count, kind: :number, min: 1, label: t("pilotage.attributes.entities_count") } %>
+  </div>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :expected_benefits, kind: :textarea, label: t("pilotage.attributes.expected_benefits") } %>
+  <div class="pilotage-form__actions">
+    <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary)) { request_item.persisted? ? t(:button_save) : t("pilotage.project_requests.submit") } %>
+    <%= render(Primer::Beta::Button.new(tag: :a, href: pilotage_project_requests_path)) { t(:button_cancel) } %>
+  </div>
+<% end %>

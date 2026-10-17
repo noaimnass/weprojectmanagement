@@ -1,0 +1,56 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_pilotage"), t("pilotage.label_organisation") %>
+<% can_manage = User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_organisation"), description: t("pilotage.entities.description"),
+                                             actions: [({ label: t("pilotage.entities.new"), href: new_pilotage_entity_path, icon: :plus, scheme: :primary } if can_manage)].compact)) %>
+<div class="pilotage-grid-2">
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.entities.tree") %></h3>
+    <% if @tree.empty? %>
+      <p class="pilotage-muted"><%= t("pilotage.entities.empty") %></p>
+    <% else %>
+      <table class="pilotage-table">
+        <thead><tr><th><%= t("pilotage.attributes.name") %></th><th><%= t("pilotage.attributes.kind") %></th><th><%= t("pilotage.attributes.head") %></th><th class="num"><%= t("pilotage.attributes.headcount") %></th><th class="num"><%= t("pilotage.cockpit.projects") %></th></tr></thead>
+        <tbody>
+          <% @tree.each do |entity, depth| %>
+            <tr>
+              <td style="padding-left: <%= 8 + depth * 18 %>px"><%= link_to entity.name, pilotage_entity_path(entity) %><% if entity.code.present? %> <span class="pilotage-muted"><%= entity.code %></span><% end %></td>
+              <td><%= t("pilotage.entities.kinds.#{entity.kind}") %></td>
+              <td><%= pilotage_user(entity.head) %></td>
+              <td class="num"><%= entity.headcount || "–" %></td>
+              <td class="num"><%= @projects_by_entity[entity.id] || 0 %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.entities.portfolio_by_entity") %></h3>
+    <% grouped = @summary.grouped %>
+    <% if grouped.values.flatten.empty? %><p class="pilotage-muted">–</p><% else %>
+      <table class="pilotage-table">
+        <thead><tr><th><%= t("pilotage.attributes.pilot_entity") %></th><th class="num"><%= t("pilotage.cockpit.projects") %></th><th class="num"><%= t("pilotage.health.red") %></th><th class="num"><%= t("pilotage.health.amber") %></th><th class="num"><%= t("pilotage.health.green") %></th><th class="num"><%= t("pilotage.attributes.budget_total") %></th></tr></thead>
+        <tbody>
+          <% grouped.each do |name, rows| %>
+            <tr><td><%= name.presence || t("pilotage.portfolio.ungrouped") %></td><td class="num"><%= rows.size %></td>
+              <td class="num"><%= rows.count { |r| r.health == "red" } %></td><td class="num"><%= rows.count { |r| r.health == "amber" } %></td><td class="num"><%= rows.count { |r| r.health == "green" } %></td>
+              <td class="num"><%= pilotage_money(rows.sum { |r| r.profile&.budget_total || 0 }, unit: true) %></td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>

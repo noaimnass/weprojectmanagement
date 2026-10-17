@@ -1,0 +1,61 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title @project.name, t("pilotage.label_milestone_reviews") %>
+<% can_manage = User.current.allowed_in_project?(:manage_pilotage, @project) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_milestone_reviews"), project: @project, description: t("pilotage.milestones.description"))) %>
+<div class="pilotage-section pilotage-card">
+  <%= render partial: "pilotage/shared/phases", locals: { profile: @profile, milestones: @reviews.to_a } %>
+</div>
+<% if @reviews.empty? %>
+  <%= render(Primer::Beta::Blankslate.new(border: true)) do |bs| %>
+    <% bs.with_visual_icon(icon: :milestone) %>
+    <% bs.with_heading(tag: :h3) { t("pilotage.milestones.empty_title") } %>
+    <% bs.with_description { t("pilotage.milestones.empty_description") } %>
+    <% if can_manage %>
+      <% bs.with_primary_action(tag: :a, href: create_defaults_project_pilotage_milestone_reviews_path(@project), data: { turbo_method: :post }) { t("pilotage.milestones.create_defaults") } %>
+    <% end %>
+  <% end %>
+<% else %>
+  <table class="pilotage-table">
+    <thead>
+      <tr>
+        <th><%= t("pilotage.attributes.milestone") %></th>
+        <th><%= t("pilotage.attributes.planned_on") %></th>
+        <th><%= t("pilotage.attributes.forecast_on") %></th>
+        <th><%= t("pilotage.attributes.actual_on") %></th>
+        <th><%= t("pilotage.attributes.decision") %></th>
+        <th><%= t("pilotage.attributes.reviewed_by") %></th>
+        <th><%= t("pilotage.attributes.work_package") %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reviews.each do |review| %>
+        <tr>
+          <td><strong><%= review.key %></strong> <%= review.label %></td>
+          <td><%= pilotage_date(review.planned_on) %><% if review.late? %> <%= pilotage_health_label("red", text: t("pilotage.milestones.late_by", days: review.days_late)) %><% end %></td>
+          <td><%= pilotage_date(review.forecast_on) %></td>
+          <td><%= pilotage_date(review.actual_on) %></td>
+          <td><%= pilotage_state_label(review.decision, scope: "milestones") %></td>
+          <td><%= pilotage_user(review.reviewed_by) %></td>
+          <td><%= review.work_package ? link_to("##{review.work_package.id} #{review.work_package.subject}", work_package_path(review.work_package)) : "–" %></td>
+          <td><% if can_manage %><%= link_to t(:button_edit), edit_project_pilotage_milestone_review_path(@project, review) %><% end %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% if can_manage && @reviews.size < Pilotage::Lifecycle::KEYS.size %>
+    <p><%= link_to t("pilotage.milestones.create_defaults"), create_defaults_project_pilotage_milestone_reviews_path(@project), data: { turbo_method: :post } %></p>
+  <% end %>
+<% end %>

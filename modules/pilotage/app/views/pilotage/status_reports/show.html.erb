@@ -1,0 +1,66 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title @project.name, t("pilotage.label_status_reports") %>
+<% can_manage = User.current.allowed_in_project?(:manage_pilotage, @project) %>
+<% can_validate = User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: "#{t('pilotage.label_status_report')} · #{format_date(@report.period_start)} → #{format_date(@report.period_end)}", project: @project,
+                                             breadcrumbs: [{ href: project_pilotage_status_reports_path(@project), text: t("pilotage.label_status_reports") }],
+                                             actions: [({ label: t(:button_edit), href: edit_project_pilotage_status_report_path(@project, @report), icon: :pencil } if can_manage && @report.editable?)].compact)) %>
+<div class="pilotage-kpi-grid">
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.health"), value: t("pilotage.health.#{@report.health}"), scheme: @report.health.to_sym)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.signals.schedule"), value: t("pilotage.health.#{@report.schedule_signal}"), scheme: @report.schedule_signal.to_sym)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.signals.budget"), value: t("pilotage.health.#{@report.budget_signal}"), scheme: @report.budget_signal.to_sym)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.signals.scope"), value: t("pilotage.health.#{@report.scope_signal}"), scheme: @report.scope_signal.to_sym)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.signals.risk"), value: t("pilotage.health.#{@report.risk_signal}"), scheme: @report.risk_signal.to_sym)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.progress"), value: @report.progress, unit: " %")) %>
+</div>
+<div class="pilotage-grid-2">
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.summary") %></h3>
+    <%= simple_format(@report.summary.presence || "–") %>
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.highlights") %></h3>
+    <%= simple_format(@report.highlights.presence || "–") %>
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.next_steps") %></h3>
+    <%= simple_format(@report.next_steps.presence || "–") %>
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.decisions_needed") %></h3>
+    <%= simple_format(@report.decisions_needed.presence || "–") %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.reports.workflow") %></h3>
+    <table class="pilotage-table">
+      <tr><th><%= t("pilotage.attributes.state") %></th><td><%= pilotage_state_label(@report.state, scope: "reports") %></td></tr>
+      <tr><th><%= t("pilotage.attributes.submitted_by") %></th><td><%= pilotage_user(@report.submitted_by) %><%= @report.submitted_at ? " · #{format_time(@report.submitted_at)}" : "" %></td></tr>
+      <tr><th><%= t("pilotage.attributes.validated_by") %></th><td><%= pilotage_user(@report.validated_by) %><%= @report.validated_at ? " · #{format_time(@report.validated_at)}" : "" %></td></tr>
+      <% if @report.validation_comment.present? %><tr><th><%= t("pilotage.attributes.validation_comment") %></th><td><%= simple_format(@report.validation_comment) %></td></tr><% end %>
+    </table>
+    <% if @report.editable? && can_manage %>
+      <%= form_with url: submit_project_pilotage_status_report_path(@project, @report), method: :patch, data: { turbo: false } do |f| %>
+        <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary, mt: 2)) { t("pilotage.reports.submit") } %>
+      <% end %>
+    <% end %>
+    <% if @report.state == "submitted" && can_validate %>
+      <p class="pilotage-muted"><%= t("pilotage.reports.validation_rule") %></p>
+      <%= form_with url: validate_project_pilotage_status_report_path(@project, @report), method: :patch, class: "pilotage-form", data: { turbo: false } do |f| %>
+        <div class="FormControl">
+          <label class="FormControl-label" for="pilotage-validation-comment"><%= t("pilotage.attributes.validation_comment") %></label>
+          <%= f.text_area :comment, id: "pilotage-validation-comment", rows: 2, class: "FormControl-textarea" %>
+        </div>
+        <div class="pilotage-form__actions">
+          <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary)) { t("pilotage.reports.validate") } %>
+          <%= render(Primer::Beta::Button.new(type: :submit, scheme: :danger, formaction: reject_project_pilotage_status_report_path(@project, @report))) { t("pilotage.reports.reject") } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+# WeProjectManagement — production stack (all-in-one image built from this repository)
+# by WeWorld Tech (weworld.tech). Usage: see deploy/README.md
+name: weprojectmanagement
+
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: weprojectmanagement
+      POSTGRES_USER: weprojectmanagement
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Définir DB_PASSWORD dans deploy/.env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U weprojectmanagement -d weprojectmanagement"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    image: weprojectmanagement:latest
+    build:
+      context: ..
+      dockerfile: docker/prod/Dockerfile
+      target: all-in-one
+      args:
+        BIM_SUPPORT: "false"
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      DATABASE_URL: postgres://weprojectmanagement:${DB_PASSWORD}@db/weprojectmanagement?pool=20&encoding=unicode&reconnect=true
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?Définir SECRET_KEY_BASE dans deploy/.env}
+      OPENPROJECT_HOST__NAME: ${APP_HOST:-localhost:8080}
+      OPENPROJECT_HTTPS: ${APP_HTTPS:-false}
+      OPENPROJECT_DEFAULT__LANGUAGE: ${APP_LANGUAGE:-fr}
+      OPENPROJECT_APP__TITLE: ${APP_TITLE:-WeProjectManagement}
+      OPENPROJECT_RAILS__CACHE__STORE: memcache
+      OPENPROJECT_CACHE__MEMCACHE__SERVER: cache:11211
+      OPENPROJECT_SEED__LOCALE: ${APP_LANGUAGE:-fr}
+      OPENPROJECT_SEED__ADMIN__USER__PASSWORD: ${ADMIN_PASSWORD:-admin}
+      OPENPROJECT_SEED__ADMIN__USER__PASSWORD__RESET: "true"
+      OPENPROJECT_SEED__ADMIN__USER__NAME: "Administrateur WeProjectManagement"
+      OPENPROJECT_SEED__ADMIN__USER__MAIL: ${ADMIN_MAIL:-admin@example.com}
+      OPENPROJECT_DEFAULT__PROJECTS__MODULES: "work_package_tracking news wiki calendar_view gantt pilotage"
+      OPENPROJECT_EMAIL__DELIVERY__METHOD: ${MAIL_METHOD:-smtp}
+      OPENPROJECT_SMTP__ADDRESS: ${SMTP_ADDRESS:-}
+      OPENPROJECT_SMTP__PORT: ${SMTP_PORT:-587}
+      OPENPROJECT_SMTP__DOMAIN: ${SMTP_DOMAIN:-}
+      OPENPROJECT_SMTP__USER__NAME: ${SMTP_USER:-}
+      OPENPROJECT_SMTP__PASSWORD: ${SMTP_PASSWORD:-}
+      OPENPROJECT_SMTP__AUTHENTICATION: ${SMTP_AUTH:-plain}
+      OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO: "true"
+      OPENPROJECT_MAIL__FROM: ${MAIL_FROM:-weprojectmanagement@example.com}
+    volumes:
+      - opdata:/var/openproject/assets
+
+  cache:
+    image: memcached:1.6-alpine
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  opdata:

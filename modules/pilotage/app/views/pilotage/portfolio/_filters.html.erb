@@ -1,0 +1,43 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: summary, path, show_grouping %>
+<%= form_with url: path, method: :get, class: "pilotage-filters", data: { turbo: false } do |f| %>
+  <div class="FormControl">
+    <label class="FormControl-label" for="pilotage-filter-q"><%= t(:label_search) %></label>
+    <%= f.text_field :q, value: params[:q], id: "pilotage-filter-q", class: "FormControl-input" %>
+  </div>
+  <div class="FormControl">
+    <label class="FormControl-label" for="pilotage-filter-category"><%= t("pilotage.attributes.category") %></label>
+    <%= f.select :category, pilotage_category_options, { include_blank: t(:label_all), selected: params[:category] }, id: "pilotage-filter-category", class: "FormControl-select" %>
+  </div>
+  <div class="FormControl">
+    <label class="FormControl-label" for="pilotage-filter-class"><%= t("pilotage.attributes.project_class") %></label>
+    <%= f.select :project_class, OpenProject::Pilotage::Defaults::CLASSES, { include_blank: t(:label_all), selected: params[:project_class] }, id: "pilotage-filter-class", class: "FormControl-select" %>
+  </div>
+  <div class="FormControl">
+    <label class="FormControl-label" for="pilotage-filter-entity"><%= t("pilotage.attributes.pilot_entity") %></label>
+    <%= f.select :entity_id, pilotage_entity_options, { include_blank: t(:label_all), selected: params[:entity_id] }, id: "pilotage-filter-entity", class: "FormControl-select" %>
+  </div>
+  <div class="FormControl">
+    <label class="FormControl-label" for="pilotage-filter-health"><%= t("pilotage.attributes.health") %></label>
+    <%= f.select :health, OpenProject::Pilotage::Defaults::HEALTH.map { |h| [t("pilotage.health.#{h}"), h] }, { include_blank: t(:label_all), selected: params[:health] }, id: "pilotage-filter-health", class: "FormControl-select" %>
+  </div>
+  <% if local_assigns.fetch(:show_grouping, false) %>
+    <div class="FormControl">
+      <label class="FormControl-label" for="pilotage-filter-group"><%= t("pilotage.portfolio.group_by") %></label>
+      <%= f.select :group_by, Pilotage::PortfolioSummary::GROUPINGS.map { |g| [t("pilotage.portfolio.groupings.#{g}"), g] }, { selected: summary.grouping }, id: "pilotage-filter-group", class: "FormControl-select" %>
+    </div>
+  <% end %>
+  <%= render(Primer::Beta::Button.new(type: :submit, scheme: :default)) { t(:button_apply) } %>
+<% end %>

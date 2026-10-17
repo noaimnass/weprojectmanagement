@@ -1,0 +1,43 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# locals: rows (PortfolioSummary rows), show_signals (bool) %>
+<table class="pilotage-table">
+  <thead>
+    <tr>
+      <th><%= Project.model_name.human %></th>
+      <th><%= t("pilotage.attributes.project_class") %></th>
+      <th><%= t("pilotage.attributes.phase") %></th>
+      <th><%= t("pilotage.attributes.health") %></th>
+      <th><%= t("pilotage.attributes.signals") %></th>
+      <th class="num"><%= t("pilotage.attributes.progress") %></th>
+      <th><%= t("pilotage.attributes.manager") %></th>
+      <th><%= t("pilotage.attributes.end_on") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% rows.each do |row| %>
+      <tr>
+        <td><%= link_to row.project.name, project_pilotage_cockpit_path(row.project) %>
+          <% if row.signals.false_green %><span class="pilotage-muted">· <%= t("pilotage.portfolio.false_green") %></span><% end %></td>
+        <td><%= pilotage_class_label(row.project_class) %></td>
+        <td><%= row.phase %></td>
+        <td><%= pilotage_health_label(row.health) %></td>
+        <td><%= render partial: "pilotage/shared/signals", locals: { signals: row.signals } %></td>
+        <td class="num"><%= pilotage_percent(row.signals.progress) %></td>
+        <td><%= pilotage_user(row.profile&.manager) %></td>
+        <td><%= pilotage_date(row.profile&.end_on) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,66 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_project_requests"), @request_item.title %>
+<% can_manage = User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: @request_item.title,
+                                             breadcrumbs: [{ href: pilotage_project_requests_path, text: t("pilotage.label_project_requests") }],
+                                             actions: [
+                                               ({ label: t(:button_edit), href: edit_pilotage_project_request_path(@request_item), icon: :pencil } if can_manage && !%w[converted].include?(@request_item.state)),
+                                               ({ label: t("pilotage.project_requests.convert"), href: convert_pilotage_project_request_path(@request_item), icon: :rocket, scheme: :primary, data: { turbo_method: :post, turbo_confirm: t(:text_are_you_sure) } } if can_manage && @request_item.state == "go"),
+                                               ({ label: t("pilotage.project.open_cockpit"), href: project_pilotage_cockpit_path(@request_item.project), icon: :pulse, scheme: :primary } if @request_item.project)
+                                             ].compact)) %>
+<div class="pilotage-grid-2">
+  <div class="pilotage-card">
+    <table class="pilotage-table">
+      <tr><th><%= t("pilotage.attributes.state") %></th><td><%= pilotage_state_label(@request_item.state, scope: "project_requests") %></td></tr>
+      <tr><th><%= t("pilotage.attributes.requester") %></th><td><%= pilotage_user(@request_item.requester) %></td></tr>
+      <tr><th><%= t("pilotage.attributes.pilot_entity") %></th><td><%= @request_item.entity ? link_to(@request_item.entity.name, pilotage_entity_path(@request_item.entity)) : "–" %></td></tr>
+      <tr><th><%= t("pilotage.attributes.category") %></th><td><%= Pilotage::Lifecycle.category_label(@request_item.category).presence || "–" %></td></tr>
+      <tr><th><%= t("pilotage.attributes.strategic_axis") %></th><td><%= Pilotage::Lifecycle.axis_label(@request_item.strategic_axis).presence || "–" %></td></tr>
+      <tr><th><%= t("pilotage.attributes.estimated_budget") %></th><td><%= pilotage_money(@request_item.estimated_budget, unit: true) %></td></tr>
+      <tr><th><%= t("pilotage.attributes.estimated_duration_months") %></th><td><%= @request_item.estimated_duration_months || "–" %></td></tr>
+      <tr><th><%= t("pilotage.attributes.entities_count") %></th><td><%= @request_item.entities_count %></td></tr>
+      <tr><th><%= t("pilotage.attributes.eligibility") %></th><td>
+        <% @request_item.eligibility.each do |criterion, ok| %><div><%= pilotage_signal_dot(ok ? "green" : "red") %> <%= t("pilotage.project_requests.criteria.#{criterion}") %></div><% end %>
+        <strong><%= @request_item.eligible? ? t("pilotage.project_requests.eligible") : t("pilotage.project_requests.not_eligible") %></strong> · <%= t("pilotage.attributes.suggested_class") %> <%= pilotage_class_label(@request_item.suggested_class) %>
+      </td></tr>
+      <tr><th><%= t("pilotage.attributes.submitted_at") %></th><td><%= @request_item.submitted_at ? format_time(@request_item.submitted_at) : "–" %></td></tr>
+      <% if @request_item.qualified_at %><tr><th><%= t("pilotage.project_requests.qualified_by") %></th><td><%= pilotage_user(@request_item.qualified_by) %> · <%= format_time(@request_item.qualified_at) %><br><%= simple_format(@request_item.qualification_notes.to_s) %></td></tr><% end %>
+      <% if @request_item.decided_at %><tr><th><%= t("pilotage.attributes.decision") %></th><td><%= format_time(@request_item.decided_at) %> (<%= @request_item.decision_delay_days %> j)<br><%= simple_format(@request_item.decision_notes.to_s) %></td></tr><% end %>
+    </table>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.description") %></h3>
+    <%= simple_format(@request_item.description.presence || "–") %>
+    <h3 class="pilotage-card__title"><%= t("pilotage.attributes.expected_benefits") %></h3>
+    <%= simple_format(@request_item.expected_benefits.presence || "–") %>
+    <% if can_manage && @request_item.state == "submitted" %>
+      <h3 class="pilotage-card__title"><%= t("pilotage.project_requests.qualify") %></h3>
+      <%= form_with url: qualify_pilotage_project_request_path(@request_item), method: :patch, class: "pilotage-form", data: { turbo: false } do |f| %>
+        <div class="FormControl"><label class="FormControl-label" for="pilotage-qualify-notes"><%= t("pilotage.attributes.notes") %></label><%= f.text_area :notes, id: "pilotage-qualify-notes", rows: 2, class: "FormControl-textarea" %></div>
+        <div class="pilotage-form__actions"><%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary)) { t("pilotage.project_requests.qualify") } %></div>
+      <% end %>
+    <% end %>
+    <% if can_manage && @request_item.state == "qualified" %>
+      <h3 class="pilotage-card__title"><%= t("pilotage.project_requests.decide") %></h3>
+      <%= form_with url: decide_pilotage_project_request_path(@request_item), method: :patch, class: "pilotage-form", data: { turbo: false } do |f| %>
+        <div class="FormControl"><label class="FormControl-label" for="pilotage-decide-notes"><%= t("pilotage.attributes.notes") %></label><%= f.text_area :notes, id: "pilotage-decide-notes", rows: 2, class: "FormControl-textarea" %></div>
+        <div class="pilotage-form__actions">
+          <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary, name: "decision", value: "go")) { t("pilotage.project_requests.states.go") } %>
+          <%= render(Primer::Beta::Button.new(type: :submit, scheme: :danger, name: "decision", value: "no_go")) { t("pilotage.project_requests.states.no_go") } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_governance"), @instance.name %>
+<% can_manage = User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: @instance.name, description: "#{t("pilotage.governance.levels.#{@instance.level}")}#{@instance.periodicity.present? ? " · #{t("pilotage.governance.periodicities.#{@instance.periodicity}")}" : ''}",
+                                             breadcrumbs: [{ href: pilotage_governance_path, text: t("pilotage.label_governance") }],
+                                             actions: [
+                                               ({ label: t("pilotage.governance.new_session"), href: new_pilotage_instance_session_path(@instance), icon: :plus, scheme: :primary } if can_manage),
+                                               ({ label: t(:button_edit), href: edit_pilotage_instance_path(@instance), icon: :pencil } if can_manage)
+                                             ].compact)) %>
+<% if @instance.description.present? %><div class="pilotage-card pilotage-section"><%= simple_format(@instance.description) %></div><% end %>
+<% if @sessions.empty? %>
+  <p class="pilotage-muted"><%= t("pilotage.governance.no_sessions") %></p>
+<% else %>
+  <table class="pilotage-table">
+    <thead><tr><th><%= t("pilotage.attributes.held_on") %></th><th><%= t("pilotage.attributes.title") %></th><th><%= Project.model_name.human %></th><th><%= t("pilotage.attributes.state") %></th></tr></thead>
+    <tbody><% @sessions.each do |s| %><tr><td><%= format_date(s.held_on) %></td><td><%= link_to s.title, pilotage_instance_session_path(@instance, s) %></td><td><%= s.project&.name || "–" %></td><td><%= pilotage_state_label(s.state, scope: "governance") %></td></tr><% end %></tbody>
+  </table>
+  <%= pagination_links_full @sessions %>
+<% end %>

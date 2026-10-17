@@ -1,0 +1,36 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title @project.name, "#{@review.key} #{@review.label}" %>
+<%= render(Pilotage::PageHeaderComponent.new(title: "#{@review.key} · #{@review.label}", project: @project,
+                                             breadcrumbs: [{ href: project_pilotage_milestone_reviews_path(@project), text: t("pilotage.label_milestone_reviews") }])) %>
+<%= form_with model: @review, url: project_pilotage_milestone_review_path(@project, @review), method: :patch, scope: :pilotage_milestone_review, class: "pilotage-form", data: { turbo: false } do |f| %>
+  <% if @review.errors.any? %><%= render(Primer::Alpha::Banner.new(scheme: :danger, mb: 3)) { @review.errors.full_messages.join(", ") } %><% end %>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :label, label: t("pilotage.attributes.milestone"), required: true } %>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :planned_on, kind: :date, label: t("pilotage.attributes.planned_on") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :forecast_on, kind: :date, label: t("pilotage.attributes.forecast_on") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :actual_on, kind: :date, label: t("pilotage.attributes.actual_on") } %>
+  </div>
+  <div class="pilotage-form__row">
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :decision, kind: :select, options: Pilotage::MilestoneReview::DECISIONS.map { |d| [t("pilotage.milestones.states.#{d}"), d] }, include_blank: false, label: t("pilotage.attributes.decision"), hint: t("pilotage.milestones.decision_hint") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :decided_on, kind: :date, label: t("pilotage.attributes.decided_on") } %>
+    <%= render partial: "pilotage/shared/field", locals: { form: f, name: :work_package_id, kind: :select, options: @project.work_packages.visible.joins(:type).where(types: { is_milestone: true }).order(:due_date).limit(100).map { |wp| ["##{wp.id} #{wp.subject}", wp.id] }, label: t("pilotage.attributes.work_package"), hint: t("pilotage.milestones.work_package_hint") } %>
+  </div>
+  <%= render partial: "pilotage/shared/field", locals: { form: f, name: :notes, kind: :textarea, label: t("pilotage.attributes.notes") } %>
+  <div class="pilotage-form__actions">
+    <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary)) { t(:button_save) } %>
+    <%= render(Primer::Beta::Button.new(tag: :a, href: project_pilotage_milestone_reviews_path(@project))) { t(:button_cancel) } %>
+    <%= render(Primer::Beta::Button.new(tag: :a, scheme: :danger, href: project_pilotage_milestone_review_path(@project, @review), data: { turbo_method: :delete, turbo_confirm: t(:text_are_you_sure) })) { t(:button_delete) } %>
+  </div>
+<% end %>

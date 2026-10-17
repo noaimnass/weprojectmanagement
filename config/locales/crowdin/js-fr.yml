@@ -80,7 +80,7 @@ fr:
         '
       options: Options
       request_backup: Demander une sauvegarde
-      title: Sauvegarder OpenProject
+      title: Sauvegarder WeProjectManagement
     baseline:
       apply: Appliquer
       clear: Effacer
@@ -684,7 +684,7 @@ fr:
           lists_basic: Ici, vous pouvez créer plusieurs listes (colonnes) dans votre tableau agile.
           lists_kanban: Ici, vous pouvez créer plusieurs listes (colonnes) dans votre tableau. Cette fonctionnalité vous permet de créer un <b>tableau Kanban</b>, par exemple.
           overview: Sélectionnez <b>Tableaux</b> pour changer de vue et gérer votre projet à l'aide de la vue des tableaux agiles.
-        help_menu: Le menu Aide (?) fournit des <b>ressources d'aide supplémentaires</b>. Vous y trouverez un guide utilisateur, des vidéos pratiques et plus encore. <br> Profitez de votre travail avec OpenProject !
+        help_menu: Le menu Aide (?) fournit des <b>ressources d'aide supplémentaires</b>. Vous y trouverez un guide utilisateur, des vidéos pratiques et plus encore. <br> Profitez de votre travail avec WeProjectManagement !
         members: Invitez de nouveaux <b>membres</b> à rejoindre votre projet.
         quick_add_button: Cliquez sur l'icône plus (+) dans l'en-tête de navigation pour <b>créer un nouveau projet</b> ou <b>inviter des collègues</b>.
         sidebar_arrow: Utilisez la flèche de retour dans le coin supérieur gauche pour revenir au <b>menu principal</b> du projet.

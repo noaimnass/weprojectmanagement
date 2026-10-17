@@ -1,0 +1,41 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<%# Simple Primer-styled form field. locals: form, name, kind (:text, :textarea, :select, :date, :number, :checkbox), options, label, hint, required, step, min, max, rows %>
+<% kind ||= :text %>
+<% label ||= form.object.class.human_attribute_name(name) %>
+<% field_id = "#{form.object_name}_#{name}".parameterize(separator: "_") %>
+<div class="FormControl">
+  <% unless kind == :checkbox %>
+    <label class="FormControl-label" for="<%= field_id %>"><%= label %><% if local_assigns[:required] %> <span class="FormControl-label-required">*</span><% end %></label>
+  <% end %>
+  <% if kind == :textarea %>
+    <%= form.text_area name, id: field_id, class: "FormControl-textarea", rows: local_assigns[:rows] || 4 %>
+  <% elsif kind == :select %>
+    <%= form.select name, options, { include_blank: local_assigns.fetch(:include_blank, true) }, id: field_id, class: "FormControl-select" %>
+  <% elsif kind == :date %>
+    <%= form.date_field name, id: field_id, class: "FormControl-input" %>
+  <% elsif kind == :number %>
+    <%= form.number_field name, id: field_id, class: "FormControl-input", step: local_assigns[:step] || 1, min: local_assigns[:min], max: local_assigns[:max] %>
+  <% elsif kind == :checkbox %>
+    <label class="FormControl-label" for="<%= field_id %>"><%= form.check_box name, id: field_id %> <%= label %></label>
+  <% else %>
+    <%= form.text_field name, id: field_id, class: "FormControl-input", required: local_assigns[:required] %>
+  <% end %>
+  <% if local_assigns[:hint].present? %>
+    <span class="FormControl-caption"><%= hint %></span>
+  <% end %>
+  <% if form.object.errors[name].any? %>
+    <span class="FormControl-inlineValidation"><%= form.object.errors.full_messages_for(name).join(", ") %></span>
+  <% end %>
+</div>

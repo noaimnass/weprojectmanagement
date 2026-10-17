@@ -1,0 +1,90 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_pilotage"), t("pilotage.label_portfolio") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_portfolio"),
+                                             description: t("pilotage.portfolio.description"),
+                                             actions: [
+                                               { label: t("pilotage.portfolio.export_csv"), href: pilotage_portfolio_path(**params.permit(*Pilotage::PortfolioSummary::FILTERS).to_h.symbolize_keys, format: :csv), icon: :download },
+                                               { label: t("pilotage.label_master_plan"), href: pilotage_master_plan_path, icon: :graph }
+                                             ])) %>
+
+<%= render partial: "pilotage/portfolio/filters", locals: { summary: @summary, path: pilotage_portfolio_path, show_grouping: true } %>
+
+<% counts = @summary.counts_by_health %>
+<div class="pilotage-kpi-grid">
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.cockpit.projects"), value: @summary.rows.size, scheme: :accent)) %>
+  <% @summary.counts_by_class.each do |klass, count| %>
+    <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.classes.#{klass}"), value: count)) %>
+  <% end %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.health.red"), value: counts["red"], scheme: :red)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.health.amber"), value: counts["amber"], scheme: :amber)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.health.green"), value: counts["green"], scheme: :green)) %>
+</div>
+
+<% if @summary.rows.empty? %>
+  <%= render(Primer::Beta::Blankslate.new(border: true)) do |bs| %>
+    <% bs.with_visual_icon(icon: :project) %>
+    <% bs.with_heading(tag: :h3) { t("pilotage.portfolio.empty_title") } %>
+    <% bs.with_description { t("pilotage.portfolio.empty_description") } %>
+  <% end %>
+<% else %>
+  <% @summary.grouped.each do |group, rows| %>
+    <div class="pilotage-section">
+      <% if group.present? || @summary.grouping != "none" %>
+        <h3 class="pilotage-section__title"><%= group.presence || t("pilotage.portfolio.ungrouped") %> <span class="pilotage-muted"><%= rows.size %></span></h3>
+      <% end %>
+      <table class="pilotage-table">
+        <thead>
+          <tr>
+            <th><%= Project.model_name.human %></th>
+            <th><%= t("pilotage.attributes.category") %></th>
+            <th><%= t("pilotage.attributes.project_class") %></th>
+            <th><%= t("pilotage.attributes.phase") %></th>
+            <th><%= t("pilotage.attributes.declared_health") %></th>
+            <th><%= t("pilotage.attributes.health") %></th>
+            <th><%= t("pilotage.attributes.signals") %></th>
+            <th class="num"><%= t("pilotage.attributes.progress") %></th>
+            <th class="num"><%= t("pilotage.attributes.budget_total") %></th>
+            <th class="num"><%= t("pilotage.attributes.budget_consumption") %></th>
+            <th><%= t("pilotage.attributes.manager") %></th>
+            <th><%= t("pilotage.attributes.pilot_entity") %></th>
+            <th><%= t("pilotage.attributes.end_on") %></th>
+            <th class="num"><%= t("pilotage.attributes.variance") %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% rows.each do |row| %>
+            <% p = row.profile %>
+            <tr>
+              <td><%= link_to row.project.name, project_pilotage_cockpit_path(row.project) %></td>
+              <td><%= Pilotage::Lifecycle.category_label(row.category) %></td>
+              <td><%= pilotage_class_label(row.project_class) %></td>
+              <td><%= row.phase %></td>
+              <td><%= pilotage_health_label(row.signals.declared_health) %><% if row.signals.false_green %> <span title="<%= t('pilotage.portfolio.false_green_hint') %>">⚠</span><% end %></td>
+              <td><%= pilotage_health_label(row.health) %></td>
+              <td><%= render partial: "pilotage/shared/signals", locals: { signals: row.signals } %></td>
+              <td class="num"><%= pilotage_percent(row.signals.progress) %></td>
+              <td class="num"><%= pilotage_money(p&.budget_total, unit: true) %></td>
+              <td class="num"><%= pilotage_percent(p&.budget_consumption_ratio) %></td>
+              <td><%= pilotage_user(p&.manager) %></td>
+              <td><%= row.entity&.name || "–" %></td>
+              <td><%= pilotage_date(p&.end_on) %></td>
+              <td class="num"><%= p&.schedule_variance_days ? format("%+d", p.schedule_variance_days) : "–" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+<% end %>

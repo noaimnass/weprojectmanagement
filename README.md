@@ -1,96 +1,41 @@
-# OpenProject
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/opf/openproject)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/opf/openproject)
-![GitHub branch checks state](https://img.shields.io/github/checks-status/opf/openproject/dev)
-[![Github Tests](https://github.com/opf/openproject/actions/workflows/test-core.yml/badge.svg?branch=dev)](https://github.com/opf/openproject/actions/workflows/test-core.yml)
+<p align="center"><img src="app/assets/images/logo_weprojectmanagement.png" alt="WeProjectManagement" width="420"></p>
 
-**We empower teams to achieve great things together for the good of society.**
+# WeProjectManagement
 
-OpenProject is a web-based open source project management software for teams and organizations that require transparency, flexibility, and data sovereignty.
-Manage projects, portfolios, products, tasks, bugs, agile workflows, roadmaps, and team collaboration in a single platform. OpenProject can be self-hosted and is designed for organizations looking for an open source enterprise-ready alternative to tools such as Jira, MS Project, Monday, Asana, YouTrack while maintaining full control over their data and infrastructure.
+**Solution complète de gestion de projets, de programmes et de portefeuilles**, éditée par [WeWorld Tech](https://weworld.tech) : planification agile, lots de travaux, feuilles de route, Gantt, suivi du temps, budgets, réunions, documents, wiki, tableaux, calendriers, intégrations — et une couche de **Pilotage** best-in-class (cockpit, PMO 360, registres, revues de jalon, reporting cadencé, demandes de projet, organisation 360, gouvernance, rapports).
 
-OpenProject is trusted by organizations worldwide, including enterprises, public institutions, and highly regulated industries.
+WeProjectManagement est un **dérivé de [OpenProject](https://www.openproject.org)** (© OpenProject GmbH, et avant lui ChiliProject et Redmine), publié sous **GNU GPL v3**. Le code OpenProject est intégralement conservé ; WeProjectManagement y ajoute une identité, une méthode de pilotage et un module dédié. Voir [docs/weprojectmanagement/LICENCE-ET-MARQUES.md](docs/weprojectmanagement/LICENCE-ET-MARQUES.md).
 
-![Screenshot of OpenProject, showing the GitHub tab on a work package](GitHub-tab-new.png)
+## Ce que WeProjectManagement ajoute
 
-**OpenProject's key features include:**
+| Couche | Contenu |
+|---|---|
+| **Identité weworld** | Logo et icônes WeProjectManagement, thème violet (clair / sombre), trois thèmes prêts à l'emploi, modèles de courriels et d'exports PDF aux couleurs de la marque, nom produit dans l'interface (FR, EN). |
+| **Pilotage › Cockpit** | Situation du portefeuille, météo des quatre signaux (délais, budget, risques, reporting), projets critiques et faux verts, horizon glissant des jalons, arbitrages, « Mon espace », indicateurs du dispositif. |
+| **Pilotage › PMO 360** | Portefeuille consolidé avec filtres et regroupements, santé déclarée vs calculée, export CSV ; master plan SVG sur une échelle commune avec écart de fin ; plan de charge mensuel par personne ; conformité du reporting et relances. |
+| **Pilotage › Projet** | Fiche de pilotage (classe A/B/C automatique, catégorie, axe, acteurs, budget, dates, référence), cockpit projet, neuf registres (risques, problèmes, décisions, actions, changements, livrables, bénéfices, parties prenantes, impacts) avec export / import CSV, revues de jalon P0–P8 avec Go / No-Go, rapports d'avancement soumis et validés par le PMO, flash report imprimable. |
+| **Pilotage › Portefeuille** | Demandes de projet (éligibilité, qualification, décision en Tour de contrôle, conversion en projet P0), organisation 360 (entités, responsables, effectifs, budgets, projets pilotés et impactés), gouvernance (instances en cascade, séances, agenda mensuel, relevé de décisions), dossier Tour de contrôle (9 pages) et rapport exécutif prêts pour PDF, référentiel de la méthode. |
+| **Administration** | Paramètres du pilotage (devise, unité, seuils, classes, cadences, catégories, axes, libellés de jalons par catégorie), tâches `rake pilotage:*`. |
 
-* [Project and portfolio management](https://www.openproject.org/collaboration-software-features/project-portfolio-management/)
-* [Agile boards, Kanban, Scrum, SAFe](https://www.openproject.org/collaboration-software-features/agile-project-management/)
-* [Project planning and scheduling with Gantt charts](https://www.openproject.org/collaboration-software-features/project-planning-scheduling/)
-* [Product and release planning](https://www.openproject.org/collaboration-software-features/product-development/)
-* [Task management and team collaboration](https://www.openproject.org/collaboration-software-features/task-management/)
-* [Time tracking, cost reporting, and budgeting](https://www.openproject.org/collaboration-software-features/time-tracking/)
-* [Bug tracking](https://www.openproject.org/collaboration-software-features/#bug-tracking)
-* [Team collaboration, wikis, forums, news](https://www.openproject.org/collaboration-software-features/team-collaboration/)
-* [Meeting agendas and meeting minutes](https://www.openproject.org/collaboration-software-features/meeting-management/)
-* [Integrations: Nextcloud, XWiki, GitHub, GitLab, and more](https://www.openproject.org/integrations/)
+Le module Pilotage est un plugin standard (`modules/pilotage`) : il suit les conventions OpenProject (engine, permissions, menus, ViewComponent + Primer, Hotwire) et ne modifie pas le cœur.
 
-More information can be found on our [website](https://www.openproject.org).
+## Fonctionnalités premium
 
-## Start now with OpenProject
+Les add-ons Enterprise d'OpenProject GmbH restent activables avec un jeton officiel (Administration › Édition Enterprise). La couche premium propre à WeProjectManagement est le module **Pilotage**, développé par WeWorld Tech et livré sans jeton.
 
-- **Free Trial**: [Start a 14-days free trial of OpenProject](https://start.openproject.com/).
-- **Community Edition**, free of charge: Download OpenProject and get started with the self-hosted Community edition. If you want to run an instance of OpenProject in production (or for evaluation), refer to our in-depth [installation guides](https://www.openproject.org/download-and-installation/).
-- **Enterprise Edition**: Sign up for the Enterprise version, choose between cloud or on-premises and benefit from comprehensive support and Enterprise add-ons.
-- **Documentation**: Explore our [comprehensive documentation](https://www.openproject.org/docs/) to help you get up and running quickly.
-- **Training**: [Book one of our training or consulting offers](https://www.openproject.org/training-and-consulting/#training-signup) to get your team on board in no time.
+## Démarrer
 
-## Report bugs
+- **Production (Docker)** : [deploy/README.md](deploy/README.md).
+- **Développement** : identique à OpenProject — Ruby 4.0.7, Node 24, PostgreSQL 16+, puis `bundle install`, `cd frontend && npm ci`, `bundle exec rails db:migrate`, `bin/dev`. Voir [docs/development](docs/development/).
+- **Après installation** : `bundle exec rake pilotage:seed_governance` (instances), `rake pilotage:enable_all` (fiches et jalons sur les projets existants), `rake pilotage:demo` (données fictives, instances de démonstration seulement).
 
-You found a bug? Please [report it](https://www.openproject.org/docs/development/report-a-bug/) to our [OpenProject Community](https://community.openproject.org/projects/openproject). Thank you!
+## Documentation
 
-## Contribute
+- [Module Pilotage — guide fonctionnel](docs/weprojectmanagement/PILOTAGE.md)
+- [Licence, marques et jeton Enterprise](docs/weprojectmanagement/LICENCE-ET-MARQUES.md)
+- [Journal des modifications WeProjectManagement](docs/weprojectmanagement/CHANGELOG.md)
+- Documentation OpenProject (valable pour tout le socle) : https://www.openproject.org/docs/ — ancien README : [README.openproject.md](README.openproject.md)
 
-OpenProject is supported by its Community members, both companies and individuals.
+## Licence
 
-We are always looking for new members to our Community, so if you are interested in improving OpenProject we would be glad to welcome and support you getting into the code. There are guides as well, e.g. a [Quick Start for Developers](https://www.openproject.org/docs/development/development-environment/), but don't hesitate to simply [contact us](https://www.openproject.org/contact) if you have questions.
-
-Working on OpenProject comes with the satisfaction of working on a widely used open source application.
-
-Also, if you do not want to be limited to working on open source in your free time, OpenProject GmbH, the company contributing to the OpenProject development, [is hiring](https://www.openproject.org/career/).
-
-
-## Stay in contact
-
-Here you can find our [contact information](https://www.openproject.org/contact/). As we regularly update OpenProject, we recommend staying in touch – here is where you can find us:
-
-- [OpenProject Community](https://www.openproject.org/blog/community-instance/) with [forum discussions](https://community.openproject.org/projects/openproject/forums): The open instance where we develop our features – transparent and open for discussions, bug reports or feature requests.
-- [LinkedIn](https://www.linkedin.com/company/18706985)
-- [Reddit](https://www.reddit.com/r/openproject/)
-- [Fosstodon](https://fosstodon.org/@openproject)
-- [Bluesky](https://bsky.app/profile/openproject.bsky.social)
-
-## Security / responsible disclosure
-
-We take security very seriously at OpenProject. We value any kind of feedback that
-will keep our Community secure. If you happen to come across a security issue we urge
-you to disclose it to us privately to allow our users and Community enough time to
-upgrade. Security issues will always take precedence over anything else in the pipeline.
-
-For more information on how to disclose a security vulnerability, [please see this page](docs/security-and-privacy/statement-on-security/README.md).
-
-## License
-
-OpenProject is licensed under the terms of the GNU General Public License version 3.
-See [COPYRIGHT](COPYRIGHT) and [LICENSE](LICENSE) files for details.
-
-## Credits
-
-### Icons
-
-Thanks to Vincent Le Moign and his fabulous Minicons icons on [webalys.com](http://www.webalys.com/minicons/icons-free-pack.php).
-
-### OpenProject icon font
-
-Published and created by the OpenProject Foundation (OPF) under [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/)
-with icons from the following sources
-[Minicons Free Vector Icons Pack](http://www.webalys.com/minicons) and
-[User Interface Design framework](http://www.webalys.com/design-interface-application-framework.php) both by webalys
-
-**Creative Commons License**
-
-OpenProject Icon Font by the OpenProject Foundation (OPF) is licensed under Creative Commons Attribution 3.0 Unported License
-and Free for both personal and commercial use. You can copy, adapt, remix, distribute or transmit it.
-
-Under this condition: provide a mention of the "OpenProject Foundation" and a link back to OpenProject www.openproject.org.
+GNU General Public License v3 — voir [LICENSE](LICENSE) et [COPYRIGHT](COPYRIGHT). OpenProject est une marque d'OpenProject GmbH ; WeProjectManagement et weworld sont des marques de WeWorld Tech.

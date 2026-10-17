@@ -1,0 +1,91 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title (@project&.name || t("pilotage.label_pilotage")), pilotage_kind_label(@kind) %>
+<% can_manage = @project && User.current.allowed_in_project?(:manage_pilotage, @project) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_registers"), project: @project,
+                                             actions: [
+                                               ({ label: t("pilotage.registers.new", kind: pilotage_kind_label(@kind)), href: new_project_pilotage_register_item_path(@project, kind: @kind), icon: :plus, scheme: :primary } if can_manage),
+                                               ({ label: t("pilotage.registers.export"), href: export_project_pilotage_register_items_path(@project, kind: @kind), icon: :download } if @project),
+                                               ({ label: t("pilotage.registers.import.title"), href: import_project_pilotage_register_items_path(@project, kind: @kind), icon: :upload } if can_manage)
+                                             ].compact)) %>
+
+<%= render(Primer::Alpha::UnderlineNav.new(label: t("pilotage.label_registers"), mb: 3)) do |nav| %>
+  <% Pilotage::RegisterItem::KINDS.each do |kind| %>
+    <% nav.with_tab(selected: kind == @kind, href: pilotage_register_path_for(@project, kind)) do |tab| %>
+      <% tab.with_text { pilotage_kind_label(kind) } %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= form_with url: pilotage_register_path_for(@project, @kind), method: :get, class: "pilotage-filters", data: { turbo: false } do |f| %>
+  <div class="FormControl">
+    <label class="FormControl-label" for="pilotage-reg-q"><%= t(:label_search) %></label>
+    <%= f.text_field :q, value: params[:q], id: "pilotage-reg-q", class: "FormControl-input" %>
+  </div>
+  <div class="FormControl">
+    <label class="FormControl-label" for="pilotage-reg-status"><%= t("pilotage.attributes.status") %></label>
+    <%= f.select :status, [[t(:label_all), ""], [t("pilotage.registers.open"), "open"], [t("pilotage.registers.closed"), "closed"]], { selected: params[:status] }, id: "pilotage-reg-status", class: "FormControl-select" %>
+  </div>
+  <%= render(Primer::Beta::Button.new(type: :submit)) { t(:button_apply) } %>
+<% end %>
+
+<% if @items.empty? %>
+  <%= render(Primer::Beta::Blankslate.new(border: true)) do |bs| %>
+    <% bs.with_visual_icon(icon: :"list-unordered") %>
+    <% bs.with_heading(tag: :h3) { t("pilotage.registers.empty", kind: pilotage_kind_label(@kind)) } %>
+  <% end %>
+<% else %>
+  <table class="pilotage-table">
+    <thead>
+      <tr>
+        <th><%= t("pilotage.attributes.reference") %></th>
+        <% unless @project %><th><%= Project.model_name.human %></th><% end %>
+        <th><%= t("pilotage.attributes.title") %></th>
+        <th><%= t("pilotage.attributes.status") %></th>
+        <th><%= t("pilotage.attributes.priority") %></th>
+        <% if %w[risk impact].include?(@kind) %><th class="num"><%= t("pilotage.attributes.criticality") %></th><% end %>
+        <% if @kind == "benefit" %><th><%= t("pilotage.registers.details.target_value") %></th><th><%= t("pilotage.registers.details.measured_value") %></th><% end %>
+        <% if %w[stakeholder impact].include?(@kind) %><th><%= t("pilotage.attributes.entity") %></th><% end %>
+        <% if @kind == "deliverable" %><th><%= t("pilotage.registers.details.phase") %></th><% end %>
+        <th><%= t("pilotage.attributes.owner") %></th>
+        <th><%= t("pilotage.attributes.due_date") %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @items.each do |item| %>
+        <tr>
+          <td><%= link_to item.reference, project_pilotage_register_item_path(item.project, item) %></td>
+          <% unless @project %><td><%= link_to item.project.name, project_pilotage_cockpit_path(item.project) %></td><% end %>
+          <td><%= link_to item.title, project_pilotage_register_item_path(item.project, item) %></td>
+          <td><%= pilotage_state_label(item.status, scope: "registers") %></td>
+          <td><%= t("pilotage.registers.priorities.#{item.priority_key}") %></td>
+          <% if %w[risk impact].include?(@kind) %><td class="num"><%= item.criticality ? pilotage_health_label(item.criticality_level, text: item.criticality.to_s) : "–" %></td><% end %>
+          <% if @kind == "benefit" %><td><%= item.detail(:target_value) %> <%= item.detail(:unit) %></td><td><%= item.detail(:measured_value).presence || "–" %></td><% end %>
+          <% if %w[stakeholder impact].include?(@kind) %><td><%= item.entity&.name || "–" %></td><% end %>
+          <% if @kind == "deliverable" %><td><%= item.detail(:phase) %></td><% end %>
+          <td><%= pilotage_user(item.owner) %></td>
+          <td><%= item.overdue? ? pilotage_health_label("red", text: format_date(item.due_date)) : pilotage_date(item.due_date) %></td>
+          <td>
+            <% if User.current.allowed_in_project?(:manage_pilotage, item.project) %>
+              <%= link_to t(:button_edit), edit_project_pilotage_register_item_path(item.project, item) %>
+              <% if item.open? %> · <%= link_to t("pilotage.registers.close"), close_project_pilotage_register_item_path(item.project, item), data: { turbo_method: :patch } %><% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= pagination_links_full @items %>
+<% end %>

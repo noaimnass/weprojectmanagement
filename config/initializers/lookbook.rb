@@ -38,8 +38,8 @@ Rails.application.configure do
 
   # Branding
   config.lookbook.project_name = "OpenProject Lookbook"
-  config.lookbook.project_logo = Rails.root.join("app/assets/images/icon_logo_white.svg").read
-  config.lookbook.ui_favicon = Rails.root.join("app/assets/images/icon_logo.svg").read
+  config.lookbook.project_logo = Rails.root.join("app/assets/images/icon_weprojectmanagement_white.svg").read
+  config.lookbook.ui_favicon = Rails.root.join("app/assets/images/icon_weprojectmanagement.svg").read
   config.lookbook.ui_theme = "blue"
   config.lookbook.ui_theme_overrides = {
     header_bg: "#1A67A3"

@@ -1,0 +1,91 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_pilotage"), t("pilotage.label_reference") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.label_reference"), description: t("pilotage.reference.description"))) %>
+<div class="pilotage-ref">
+  <h3><%= t("pilotage.reference.method_title") %></h3>
+  <%= simple_format(t("pilotage.reference.method_text")) %>
+
+  <h3><%= t("pilotage.label_lifecycle") %></h3>
+  <p class="pilotage-muted"><%= t("pilotage.reference.lifecycle_text") %></p>
+  <table class="pilotage-table">
+    <thead><tr><th><%= t("pilotage.attributes.milestone") %></th><th><%= t("pilotage.reference.generic_label") %></th><% @categories.each do |c| %><th><%= Pilotage::Lifecycle.category_label(c) %></th><% end %></tr></thead>
+    <tbody>
+      <% Pilotage::Lifecycle::KEYS.each do |key| %>
+        <tr><td><strong><%= key %></strong></td><td><%= t("pilotage.lifecycle.#{key}") %></td><% @categories.each do |c| %><td><%= Pilotage::Lifecycle.label(c, key) %></td><% end %></tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h3><%= t("pilotage.reference.eligibility_title") %></h3>
+  <ul>
+    <li><%= t("pilotage.project_requests.criteria.budget") %> : ≥ <%= Setting.pilotage_eligibility_budget %> M<%= Setting.pilotage_currency %></li>
+    <li><%= t("pilotage.project_requests.criteria.duration") %> : ≥ <%= Setting.pilotage_eligibility_months %> <%= t("pilotage.reference.months") %></li>
+    <li><%= t("pilotage.project_requests.criteria.entities") %> : ≥ <%= Setting.pilotage_eligibility_entities %></li>
+  </ul>
+  <p class="pilotage-muted"><%= t("pilotage.reference.eligibility_text") %></p>
+
+  <h3><%= t("pilotage.reference.classes_title") %></h3>
+  <table class="pilotage-table">
+    <thead><tr><th><%= t("pilotage.attributes.project_class") %></th><th><%= t("pilotage.reference.rule") %></th><th><%= t("pilotage.compliance.cadence") %></th></tr></thead>
+    <tbody>
+      <tr><td><%= t("pilotage.classes.A") %></td><td><%= t("pilotage.reference.class_a_rule", budget: Setting.pilotage_class_a_budget, entities: Setting.pilotage_class_a_entities, entities_budget: Setting.pilotage_class_a_entities_budget, currency: Setting.pilotage_currency) %></td><td><%= Setting.pilotage_cadence_a_days %> j</td></tr>
+      <tr><td><%= t("pilotage.classes.B") %></td><td><%= t("pilotage.reference.class_b_rule", budget: Setting.pilotage_class_b_budget, entities: Setting.pilotage_class_b_entities, entities_budget: Setting.pilotage_class_b_entities_budget, currency: Setting.pilotage_currency) %></td><td><%= Setting.pilotage_cadence_b_days %> j</td></tr>
+      <tr><td><%= t("pilotage.classes.C") %></td><td><%= t("pilotage.reference.class_c_rule") %></td><td><%= Setting.pilotage_cadence_c_days %> j</td></tr>
+    </tbody>
+  </table>
+
+  <h3><%= t("pilotage.reference.signals_title") %></h3>
+  <table class="pilotage-table">
+    <thead><tr><th><%= t("pilotage.attributes.signal") %></th><th><%= t("pilotage.health.green") %></th><th><%= t("pilotage.health.amber") %></th><th><%= t("pilotage.health.red") %></th></tr></thead>
+    <tbody>
+      <% %w[schedule budget risk reporting].each do |s| %>
+        <tr><td><%= t("pilotage.signals.#{s}") %></td><td><%= t("pilotage.reference.rules.#{s}.green") %></td><td><%= t("pilotage.reference.rules.#{s}.amber") %></td><td><%= t("pilotage.reference.rules.#{s}.red") %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+  <p class="pilotage-muted"><%= t("pilotage.reference.health_text") %></p>
+
+  <h3><%= t("pilotage.label_governance") %></h3>
+  <p><%= t("pilotage.governance.cascade") %></p>
+  <% if @instances.any? %>
+    <ul><% @instances.each do |i| %><li><strong><%= i.name %></strong> · <%= t("pilotage.governance.levels.#{i.level}") %><%= i.periodicity.present? ? " · #{t("pilotage.governance.periodicities.#{i.periodicity}")}" : '' %></li><% end %></ul>
+  <% end %>
+  <p class="pilotage-muted"><%= t("pilotage.reference.reporting_cycle") %></p>
+
+  <h3><%= t("pilotage.label_registers") %></h3>
+  <table class="pilotage-table">
+    <tbody>
+      <% Pilotage::RegisterItem::KINDS.each do |kind| %>
+        <tr><td><strong><%= pilotage_kind_label(kind) %></strong></td><td><%= t("pilotage.reference.registers.#{kind}") %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h3><%= t("pilotage.indicators.title") %></h3>
+  <ul>
+    <% %i[reporting_up_to_date validations_in_time milestones_held financial_ref benefits_measured false_greens decision_delay correspondents].each do |key| %>
+      <li><strong><%= t("pilotage.indicators.#{key}") %></strong> — <%= t("pilotage.indicators.definitions.#{key}") %></li>
+    <% end %>
+  </ul>
+
+  <h3><%= t("pilotage.reference.glossary_title") %></h3>
+  <table class="pilotage-table">
+    <tbody>
+      <% %w[false_green baseline control_tower correspondent class flash arbitration].each do |term| %>
+        <tr><td><strong><%= t("pilotage.reference.glossary.#{term}.term") %></strong></td><td><%= t("pilotage.reference.glossary.#{term}.definition") %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

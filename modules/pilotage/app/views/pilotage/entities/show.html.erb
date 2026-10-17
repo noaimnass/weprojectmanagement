@@ -1,0 +1,77 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_organisation"), @entity.name %>
+<% can_manage = User.current.allowed_globally?(:manage_pilotage_portfolio) %>
+<%= render(Pilotage::PageHeaderComponent.new(title: @entity.name, description: @entity.full_name,
+                                             breadcrumbs: [{ href: pilotage_entities_path, text: t("pilotage.label_organisation") }],
+                                             actions: [
+                                               ({ label: t(:button_edit), href: edit_pilotage_entity_path(@entity), icon: :pencil } if can_manage),
+                                               ({ label: t("pilotage.entities.new_child"), href: new_pilotage_entity_path(parent_id: @entity.id), icon: :plus } if can_manage)
+                                             ].compact)) %>
+<div class="pilotage-kpi-grid">
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.kind"), value: t("pilotage.entities.kinds.#{@entity.kind}"), hint: @entity.code)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.head"), value: pilotage_user(@entity.head))) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.headcount"), value: @entity.headcount)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.attributes.budget"), value: pilotage_money(@entity.budget, unit: true), hint: @entity.cost_center)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.entities.piloted_projects"), value: @summary.rows.size, scheme: :accent)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.entities.impacting_projects"), value: @impacting.size)) %>
+</div>
+<% if @entity.description.present? %><div class="pilotage-card pilotage-section"><%= simple_format(@entity.description) %></div><% end %>
+<div class="pilotage-grid-2 pilotage-section">
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.entities.piloted_projects") %></h3>
+    <% if @summary.rows.empty? %><p class="pilotage-muted">–</p><% else %>
+      <%= render partial: "pilotage/shared/project_list", locals: { rows: @summary.rows } %>
+    <% end %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.entities.impacting_projects") %></h3>
+    <% if @impacting.empty? %><p class="pilotage-muted">–</p><% else %>
+      <ul><% @impacting.each do |p| %><li><%= link_to p.name, project_pilotage_cockpit_path(p) %></li><% end %></ul>
+    <% end %>
+    <h3 class="pilotage-card__title"><%= t("pilotage.registers.kinds.stakeholder") %></h3>
+    <% if @stakeholders.empty? %><p class="pilotage-muted">–</p><% else %>
+      <ul><% @stakeholders.each do |s| %><li><%= link_to "#{s.title}", project_pilotage_register_item_path(s.project, s) %> <span class="pilotage-muted">· <%= s.project.name %> · <%= s.detail(:role) %></span></li><% end %></ul>
+    <% end %>
+    <h3 class="pilotage-card__title"><%= t("pilotage.entities.children") %></h3>
+    <% if @children.empty? %><p class="pilotage-muted">–</p><% else %>
+      <ul><% @children.each do |c| %><li><%= link_to c.name, pilotage_entity_path(c) %></li><% end %></ul>
+    <% end %>
+  </div>
+</div>
+<div class="pilotage-grid-2 pilotage-section">
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.registers.kinds.benefit") %></h3>
+    <% if @benefits.empty? %><p class="pilotage-muted">–</p><% else %>
+      <table class="pilotage-table">
+        <% @benefits.each do |b| %><tr><td><%= link_to b.title, project_pilotage_register_item_path(b.project, b) %></td><td class="pilotage-muted"><%= b.project.name %></td><td><%= b.detail(:target_value) %> <%= b.detail(:unit) %></td><td><%= b.detail(:measured_value).presence || "–" %></td></tr><% end %>
+      </table>
+    <% end %>
+  </div>
+  <div class="pilotage-card">
+    <h3 class="pilotage-card__title"><%= t("pilotage.label_project_requests") %></h3>
+    <% if @requests.empty? %><p class="pilotage-muted">–</p><% else %>
+      <ul><% @requests.each do |r| %><li><%= link_to r.title, pilotage_project_request_path(r) %> <%= pilotage_state_label(r.state, scope: "project_requests") %></li><% end %></ul>
+    <% end %>
+  </div>
+</div>
+<% if @workload.people.any? %>
+  <div class="pilotage-card pilotage-section">
+    <h3 class="pilotage-card__title"><%= t("pilotage.label_workload") %></h3>
+    <table class="pilotage-table">
+      <thead><tr><th><%= t("pilotage.workload.person") %></th><% @workload.months.each do |m| %><th class="num"><%= l(m, format: "%b %y") %></th><% end %></tr></thead>
+      <tbody><% @workload.people.each do |person| %><tr><td><%= person.name %></td><% @workload.months.each do |m| %><% h = @workload.hours(person, m) %><td class="num <%= 'overload' if @workload.overloaded?(person, m) %>"><%= h.zero? ? "" : h.round %></td><% end %></tr><% end %></tbody>
+    </table>
+  </div>
+<% end %>

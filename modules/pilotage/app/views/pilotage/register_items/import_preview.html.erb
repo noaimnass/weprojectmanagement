@@ -1,0 +1,41 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title @project.name, t("pilotage.registers.import.title") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: "#{t('pilotage.registers.import.title')} · #{pilotage_kind_label(@kind)}", project: @project,
+                                             breadcrumbs: [{ href: project_pilotage_register_items_path(@project, kind: @kind), text: pilotage_kind_label(@kind) }])) %>
+<div class="pilotage-kpi-grid">
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.registers.import.creations"), value: @preview.creations.size, scheme: :green)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.registers.import.updates"), value: @preview.updates.size, scheme: :accent)) %>
+  <%= render(Pilotage::KpiTileComponent.new(label: t("pilotage.registers.import.errors"), value: @preview.errors.size, scheme: @preview.errors.any? ? :red : :default)) %>
+</div>
+<% if @preview.errors.any? %>
+  <%= render(Primer::Alpha::Banner.new(scheme: :danger, mb: 3)) { safe_join(@preview.errors, tag.br) } %>
+<% end %>
+<table class="pilotage-table">
+  <thead><tr><th><%= t("pilotage.attributes.reference") %></th><th><%= t("pilotage.attributes.title") %></th><th><%= t("pilotage.attributes.status") %></th><th><%= t("pilotage.attributes.owner") %></th><th><%= t("pilotage.attributes.due_date") %></th></tr></thead>
+  <tbody>
+    <% @preview.rows.first(50).each do |row| %>
+      <tr><td><%= row["reference"].presence || t("pilotage.registers.import.new_reference") %></td><td><%= row["title"] %></td><td><%= row["status"] %></td><td><%= row["owner"] %></td><td><%= row["due_date"] %></td></tr>
+    <% end %>
+  </tbody>
+</table>
+<% if @preview.errors.empty? %>
+  <%= form_with url: import_confirm_project_pilotage_register_items_path(@project, kind: @kind), method: :post, data: { turbo: false } do |f| %>
+    <%= f.hidden_field :content, value: @encoded %>
+    <div class="pilotage-form__actions">
+      <%= render(Primer::Beta::Button.new(type: :submit, scheme: :primary)) { t("pilotage.registers.import.confirm") } %>
+      <%= render(Primer::Beta::Button.new(tag: :a, href: import_project_pilotage_register_items_path(@project, kind: @kind))) { t(:button_cancel) } %>
+    </div>
+  <% end %>
+<% end %>

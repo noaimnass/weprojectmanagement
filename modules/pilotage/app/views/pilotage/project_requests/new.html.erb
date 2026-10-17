@@ -1,0 +1,16 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_project_requests"), t("pilotage.project_requests.new") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.project_requests.new"), breadcrumbs: [{ href: pilotage_project_requests_path, text: t("pilotage.label_project_requests") }])) %>
+<%= render partial: "pilotage/project_requests/form", locals: { request_item: @request_item } %>

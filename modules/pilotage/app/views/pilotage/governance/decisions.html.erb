@@ -1,0 +1,39 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% html_title t("pilotage.label_governance"), t("pilotage.governance.decisions") %>
+<%= render(Pilotage::PageHeaderComponent.new(title: t("pilotage.governance.decisions"), description: t("pilotage.governance.decisions_description"),
+                                             breadcrumbs: [{ href: pilotage_governance_path, text: t("pilotage.label_governance") }])) %>
+<%= form_with url: pilotage_governance_decisions_path, method: :get, class: "pilotage-filters", data: { turbo: false } do |f| %>
+  <div class="FormControl">
+    <label class="FormControl-label" for="pilotage-dec-instance"><%= t("pilotage.governance.instance") %></label>
+    <%= f.select :instance, @instances.map { |i| [i.name, i.name] }, { include_blank: t(:label_all), selected: params[:instance] }, id: "pilotage-dec-instance", class: "FormControl-select" %>
+  </div>
+  <%= render(Primer::Beta::Button.new(type: :submit)) { t(:button_apply) } %>
+<% end %>
+<% if @decisions.empty? %>
+  <%= render(Primer::Beta::Blankslate.new(border: true)) do |bs| %>
+    <% bs.with_visual_icon(icon: :law) %>
+    <% bs.with_heading(tag: :h3) { t("pilotage.governance.no_decisions") } %>
+  <% end %>
+<% else %>
+  <table class="pilotage-table">
+    <thead><tr><th><%= t("pilotage.attributes.reference") %></th><th><%= Project.model_name.human %></th><th><%= t("pilotage.attributes.decision") %></th><th><%= t("pilotage.governance.instance") %></th><th><%= t("pilotage.attributes.owner") %></th><th><%= t("pilotage.attributes.status") %></th><th><%= t("pilotage.attributes.created_at") %></th></tr></thead>
+    <tbody>
+      <% @decisions.each do |d| %>
+        <tr><td><%= link_to d.reference, project_pilotage_register_item_path(d.project, d) %></td><td><%= d.project.name %></td><td><%= d.title %></td><td><%= d.detail(:instance) %></td><td><%= pilotage_user(d.owner) %></td><td><%= pilotage_state_label(d.status, scope: "registers") %></td><td><%= format_date(d.created_at) %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= pagination_links_full @decisions %>
+<% end %>

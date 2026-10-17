@@ -207,13 +207,13 @@ module CustomStylesHelper
   end
 
   def default_logo_urls
-    desktop_light = asset_path(I18n.locale == :ru ? "logo-white-bg-ua.png" : "logo_openproject_white_big.png")
+    desktop_light = asset_path("logo_weprojectmanagement_white.png")
     desktop_light_high_contrast = if OpenProject::Configuration.bim?
                                     asset_path("bim/logo_openproject_bim_big_coloured.png")
                                   else
-                                    asset_path(I18n.locale == :ru ? "logo-black-bg-ua.png" : "logo_openproject.png")
+                                    asset_path("logo_weprojectmanagement.png")
                                   end
-    mobile_white = asset_path("icon_logo_white.svg")
+    mobile_white = asset_path("icon_weprojectmanagement_white.svg")
 
     {
       desktop: {
@@ -222,9 +222,9 @@ module CustomStylesHelper
         dark: desktop_light
       },
       mobile: {
-        light: asset_path("icon_logo.svg"),
+        light: asset_path("icon_weprojectmanagement.svg"),
         white: mobile_white,
-        light_high_contrast: asset_path("icon_logo.svg"),
+        light_high_contrast: asset_path("icon_weprojectmanagement.svg"),
         dark: mobile_white
       }
     }
@@ -257,10 +257,7 @@ module CustomStylesHelper
   def locale_aware_theme_logo(custom_style)
     return if custom_style.theme_logo.blank?
 
-    logo = custom_style.theme_logo
-    logo = "logo-black-bg-ua.png" if I18n.locale == :ru && logo == "logo_openproject.png"
-
-    asset_path(logo)
+    asset_path(custom_style.theme_logo)
   end
 
   def custom_logo_upload(custom_style, mode:, field:)

@@ -1,0 +1,79 @@
+<%#-- copyright
+WeProjectManagement — Pilotage module, by WeWorld Tech (weworld.tech).
+Copyright (C) WeWorld Tech
+
+WeProjectManagement is a derivative work of OpenProject.
+OpenProject is an open source project management software.
+Copyright (C) the OpenProject GmbH
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License version 3.
+
+See COPYRIGHT and LICENSE files for more details.
+++#%>
+<% content_for :print_title, t("pilotage.label_executive_report") %>
+<% counts = @summary.counts_by_health %>
+<% subject = t("pilotage.label_executive_report") %>
+
+<section class="page page--cover">
+  <h1><%= t("pilotage.label_executive_report") %></h1>
+  <p><%= t("pilotage.reports.portfolio") %> · <%= format_date(Date.current) %></p>
+  <p><%= Setting.app_title %></p>
+</section>
+
+<section class="page">
+  <%= render partial: "pilotage/reports/page_header", locals: { title: t("pilotage.reports.situation") } %>
+  <div class="kpis">
+    <div class="kpi"><div class="kpi__label"><%= t("pilotage.cockpit.projects") %></div><div class="kpi__value"><%= @summary.rows.size %></div></div>
+    <div class="kpi kpi--red"><div class="kpi__label"><%= t("pilotage.health.red") %></div><div class="kpi__value"><%= counts["red"] %></div></div>
+    <div class="kpi kpi--amber"><div class="kpi__label"><%= t("pilotage.health.amber") %></div><div class="kpi__value"><%= counts["amber"] %></div></div>
+    <div class="kpi kpi--green"><div class="kpi__label"><%= t("pilotage.health.green") %></div><div class="kpi__value"><%= counts["green"] %></div></div>
+    <div class="kpi"><div class="kpi__label"><%= t("pilotage.cockpit.average_progress") %></div><div class="kpi__value"><%= pilotage_percent(@summary.average_progress) %></div></div>
+    <div class="kpi"><div class="kpi__label"><%= t("pilotage.cockpit.budget") %></div><div class="kpi__value"><%= pilotage_money(@summary.total_budget, unit: true) %></div></div>
+    <div class="kpi"><div class="kpi__label"><%= t("pilotage.cockpit.spent") %></div><div class="kpi__value"><%= pilotage_money(@summary.total_spent, unit: true) %></div></div>
+    <div class="kpi"><div class="kpi__label"><%= t("pilotage.portfolio.false_greens") %></div><div class="kpi__value"><%= @summary.false_greens.size %></div></div>
+  </div>
+  <h3><%= t("pilotage.label_master_plan") %></h3>
+  <div class="masterplan"><%= render(Pilotage::MasterPlanComponent.new(plan: @plan, print: true)) %></div>
+  <%= render partial: "pilotage/reports/page_footer", locals: { page: 2, total: 4, subject: } %>
+</section>
+
+<section class="page">
+  <%= render partial: "pilotage/reports/page_header", locals: { title: t("pilotage.reports.projects_overview") } %>
+  <table>
+    <thead><tr><th><%= Project.model_name.human %></th><th><%= t("pilotage.attributes.project_class") %></th><th><%= t("pilotage.attributes.phase") %></th><th><%= t("pilotage.attributes.health") %></th><th class="num"><%= t("pilotage.attributes.progress") %></th><th class="num"><%= t("pilotage.attributes.budget_consumption") %></th><th><%= t("pilotage.attributes.end_on") %></th><th><%= t("pilotage.reports.last_summary") %></th></tr></thead>
+    <tbody>
+      <% @summary.rows.each do |row| %>
+        <% report = @reports[row.project.id] %>
+        <tr>
+          <td><%= row.project.name %></td><td><%= row.project_class %></td><td><%= row.phase %></td>
+          <td><span class="pill pill--<%= row.health %>"><%= t("pilotage.health.#{row.health}") %></span></td>
+          <td class="num"><%= pilotage_percent(row.signals.progress) %></td>
+          <td class="num"><%= pilotage_percent(row.profile&.budget_consumption_ratio) %></td>
+          <td><%= pilotage_date(row.profile&.end_on) %></td>
+          <td class="muted"><%= report ? truncate(report.summary.to_s, length: 160) : "–" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= render partial: "pilotage/reports/page_footer", locals: { page: 3, total: 4, subject: } %>
+</section>
+
+<section class="page">
+  <%= render partial: "pilotage/reports/page_header", locals: { title: t("pilotage.reports.top_risks_and_indicators") } %>
+  <div class="cols">
+    <div>
+      <h3><%= t("pilotage.reports.top_risks") %></h3>
+      <% if @top_risks.empty? %><p class="empty">–</p><% else %>
+        <table><thead><tr><th><%= Project.model_name.human %></th><th><%= t("pilotage.attributes.title") %></th><th class="num"><%= t("pilotage.attributes.criticality") %></th><th><%= t("pilotage.attributes.owner") %></th></tr></thead>
+          <tbody><% @top_risks.each do |r| %><tr><td><%= r.project.name %></td><td><%= r.reference %> <%= r.title %></td><td class="num"><span class="pill pill--<%= r.criticality_level %>"><%= r.criticality %></span></td><td><%= pilotage_user(r.owner) %></td></tr><% end %></tbody></table>
+      <% end %>
+    </div>
+    <div>
+      <h3><%= t("pilotage.indicators.title") %></h3>
+      <table><thead><tr><th><%= t("pilotage.indicators.indicator") %></th><th class="num"><%= t("pilotage.indicators.value") %></th><th class="num"><%= t("pilotage.indicators.target") %></th></tr></thead>
+        <tbody><% @indicators.each do |ind| %><tr><td><%= t("pilotage.indicators.#{ind.key}") %></td><td class="num"><%= ind.value.nil? ? "–" : "#{ind.value}#{ind.unit == 'd' ? ' j' : ind.unit}" %></td><td class="num"><%= ind.target %><%= ind.unit == 'd' ? ' j' : ind.unit %></td></tr><% end %></tbody></table>
+    </div>
+  </div>
+  <%= render partial: "pilotage/reports/page_footer", locals: { page: 4, total: 4, subject: } %>
+</section>
