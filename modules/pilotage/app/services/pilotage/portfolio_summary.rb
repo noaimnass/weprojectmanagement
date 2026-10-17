@@ -111,7 +111,7 @@ module Pilotage
     def base_scope
       scope = (@scope || Project.allowed_to(@user, :view_pilotage)).active.where(templated: false)
       scope = scope.joins(:enabled_modules).where(enabled_modules: { name: "pilotage" })
-      scope = scope.includes(:parent, :enabled_modules)
+      scope = scope.preload(:parent, :enabled_modules)
       if filters[:q].present?
         scope = scope.where("LOWER(projects.name) LIKE :q OR LOWER(projects.identifier) LIKE :q", q: "%#{filters[:q].downcase}%")
       end
