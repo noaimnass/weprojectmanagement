@@ -57,7 +57,7 @@ Le dépôt contient une configuration Codespaces (`.devcontainer/devcontainer.js
 bash deploy/codespace.sh
 ```
 
-Le script écrit `deploy/.env` avec l'URL du Codespace, construit l'image (20 à 40 min), démarre, puis amorce les instances, le pilotage et les données de démonstration. Il affiche l'adresse finale (`https://<codespace>-8080.app.github.dev`, `admin` / `admin1234`). Onglet **Ports** : passer le port 8080 en « Public » pour montrer la démo à quelqu'un d'autre. Arrêter le Codespace quand il ne sert pas (il consomme le quota gratuit tant qu'il tourne ; il s'arrête seul après 30 minutes d'inactivité). `bash deploy/codespace.sh --no-demo` pour une instance vierge.
+Le script écrit `deploy/.env` avec l'URL du Codespace, construit l'image (20 à 40 min), démarre l'application en un seul conteneur (`deploy/docker-compose.codespace.yml` : PostgreSQL et memcached embarqués, car le réseau entre conteneurs n'est pas fiable dans un Codespace), puis amorce les instances, le pilotage et les données de démonstration. Il affiche l'adresse finale (`https://<codespace>-8080.app.github.dev`, `admin` / `admin1234`). Onglet **Ports** : passer le port 8080 en « Public » pour montrer la démo à quelqu'un d'autre. Arrêter le Codespace quand il ne sert pas (il consomme le quota gratuit tant qu'il tourne ; il s'arrête seul après 30 minutes d'inactivité). `bash deploy/codespace.sh --no-demo` pour une instance vierge.
 
 ## Premier démarrage (générique)
 

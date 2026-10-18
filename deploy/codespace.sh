@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Démarre WeProjectManagement dans un GitHub Codespace : configuration automatique de l'URL,
-# construction de l'image, démarrage, amorçage de la démo. Usage : bash deploy/codespace.sh [--no-demo|--rebuild]
+# construction de l'image, démarrage en un seul conteneur (base et cache embarqués), amorçage de la démo.
+# Usage : bash deploy/codespace.sh [--no-demo|--rebuild]
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -34,7 +35,7 @@ ENV
   echo "Fichier $ENV_FILE créé (hôte : $HOST)."
 fi
 
-COMPOSE="docker compose -f deploy/docker-compose.yml --env-file $ENV_FILE"
+COMPOSE="docker compose -f deploy/docker-compose.codespace.yml --env-file $ENV_FILE"
 if [ "${1:-}" = "--rebuild" ] || ! docker image inspect weprojectmanagement:latest >/dev/null 2>&1; then
   echo "Construction de l'image (20 à 40 minutes la première fois)…"
   $COMPOSE build
@@ -42,12 +43,17 @@ else
   echo "Image déjà construite : réutilisation (bash deploy/codespace.sh --rebuild pour reconstruire)."
 fi
 echo "Démarrage…"
-$COMPOSE up -d
-echo "Attente de la base et des migrations…"
+$COMPOSE up -d --remove-orphans
+echo "Attente de la base et des migrations (5 à 10 minutes la première fois)…"
 for i in $(seq 1 120); do
   if curl -fsS -o /dev/null http://localhost:8080/health_check 2>/dev/null; then break; fi
+  if [ $((i % 6)) -eq 0 ]; then $COMPOSE logs --tail 3 app | sed 's/^/  /'; fi
   sleep 10
 done
+if ! curl -fsS -o /dev/null http://localhost:8080/health_check 2>/dev/null; then
+  echo "L'application ne répond pas encore. Journal : $COMPOSE logs -f app" >&2
+  exit 1
+fi
 if [ "${1:-}" != "--no-demo" ]; then  # --rebuild conserve la démo
   echo "Amorçage des instances de gouvernance, du pilotage et des données de démonstration…"
   $COMPOSE exec -T app bundle exec rake pilotage:seed_governance pilotage:enable_all pilotage:demo || true
