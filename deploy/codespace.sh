@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Démarre WeProjectManagement dans un GitHub Codespace : configuration automatique de l'URL,
-# construction de l'image, démarrage, amorçage de la démo. Usage : bash deploy/codespace.sh [--no-demo]
+# construction de l'image, démarrage, amorçage de la démo. Usage : bash deploy/codespace.sh [--no-demo|--rebuild]
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -35,8 +35,12 @@ ENV
 fi
 
 COMPOSE="docker compose -f deploy/docker-compose.yml --env-file $ENV_FILE"
-echo "Construction de l'image (20 à 40 minutes la première fois)…"
-$COMPOSE build
+if [ "${1:-}" = "--rebuild" ] || ! docker image inspect weprojectmanagement:latest >/dev/null 2>&1; then
+  echo "Construction de l'image (20 à 40 minutes la première fois)…"
+  $COMPOSE build
+else
+  echo "Image déjà construite : réutilisation (bash deploy/codespace.sh --rebuild pour reconstruire)."
+fi
 echo "Démarrage…"
 $COMPOSE up -d
 echo "Attente de la base et des migrations…"
@@ -44,7 +48,7 @@ for i in $(seq 1 120); do
   if curl -fsS -o /dev/null http://localhost:8080/health_check 2>/dev/null; then break; fi
   sleep 10
 done
-if [ "${1:-}" != "--no-demo" ]; then
+if [ "${1:-}" != "--no-demo" ]; then  # --rebuild conserve la démo
   echo "Amorçage des instances de gouvernance, du pilotage et des données de démonstration…"
   $COMPOSE exec -T app bundle exec rake pilotage:seed_governance pilotage:enable_all pilotage:demo || true
 fi
