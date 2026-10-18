@@ -1,5 +1,7 @@
 # WeProjectManagement — variante « un seul conteneur » pour GitHub Codespaces et les essais locaux :
 # PostgreSQL et memcached tournent dans le conteneur de l'application (aucun réseau entre conteneurs).
+# Le mandataire Codespaces présente les requêtes avec Host: localhost:8080 et réécrit l'en-tête Origin,
+# d'où les noms d'hôte supplémentaires et l'initialiseur monté dans le conteneur.
 # Pour la production, utiliser deploy/docker-compose.yml. Usage : bash deploy/codespace.sh
 name: weprojectmanagement
 
@@ -19,6 +21,7 @@ services:
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:?Définir SECRET_KEY_BASE dans deploy/.env}
       OPENPROJECT_HOST__NAME: ${APP_HOST:-localhost:8080}
       OPENPROJECT_HTTPS: ${APP_HTTPS:-false}
+      OPENPROJECT_ADDITIONAL__HOST__NAMES: "localhost localhost:8080 127.0.0.1"
       OPENPROJECT_DEFAULT__LANGUAGE: ${APP_LANGUAGE:-fr}
       OPENPROJECT_APP__TITLE: ${APP_TITLE:-WeProjectManagement}
       OPENPROJECT_SEED__LOCALE: ${APP_LANGUAGE:-fr}
@@ -38,6 +41,7 @@ services:
     volumes:
       - pgdata_embedded:/var/openproject/pgdata
       - opdata:/var/openproject/assets
+      - ./codespace/zz_codespace_origin_check.rb:/app/config/initializers/zz_codespace_origin_check.rb:ro
 
 volumes:
   pgdata_embedded:
