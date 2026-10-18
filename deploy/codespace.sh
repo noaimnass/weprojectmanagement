@@ -45,7 +45,7 @@ fi
 echo "Démarrage…"
 $COMPOSE up -d --remove-orphans
 echo "Attente de la base et des migrations (5 à 10 minutes la première fois)…"
-ready() { [ "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/health_check 2>/dev/null)" = "200" ]; }
+ready() { [ "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/health_checks/web 2>/dev/null)" = "200" ]; }
 for i in $(seq 1 120); do
   if ready; then break; fi
   if [ $((i % 6)) -eq 0 ]; then $COMPOSE logs --tail 3 app | sed 's/^/  /'; fi
