@@ -41,7 +41,7 @@ services:
     volumes:
       - pgdata_embedded:/var/openproject/pgdata
       - opdata:/var/openproject/assets
-      - ./codespace/zz_codespace_origin_check.rb:/app/config/initializers/zz_codespace_origin_check.rb:ro
+      - ./codespace/zz_codespace_proxy.rb:/app/config/initializers/zz_codespace_proxy.rb:ro
 
 volumes:
   pgdata_embedded:
