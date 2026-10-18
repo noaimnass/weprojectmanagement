@@ -26,7 +26,6 @@ services:
       OPENPROJECT_SEED__ADMIN__USER__PASSWORD__RESET: "true"
       OPENPROJECT_SEED__ADMIN__USER__NAME: "Administrateur WeProjectManagement"
       OPENPROJECT_SEED__ADMIN__USER__MAIL: ${ADMIN_MAIL:-admin@example.com}
-      OPENPROJECT_DEFAULT__PROJECTS__MODULES: "work_package_tracking news wiki calendar_view gantt pilotage"
       OPENPROJECT_EMAIL__DELIVERY__METHOD: ${MAIL_METHOD:-smtp}
       OPENPROJECT_SMTP__ADDRESS: ${SMTP_ADDRESS:-}
       OPENPROJECT_SMTP__PORT: ${SMTP_PORT:-587}
